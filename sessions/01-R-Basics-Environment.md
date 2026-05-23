@@ -1,17 +1,15 @@
 # R Basics & Environment
 
 
-## Cartoon Illustration
-
 <p align="center">
-  <img src="../assets/r_environment.png" width="500">
+  <img src="../assets/r_environment.png" width="600">
 </p>
 
 <p align="center">
-  <em>Figure: The R environment stores objects such as x, data, and scores.</em>
+  <em>The R environment stores objects such as x, data, and scores.</em>
 </p>
 
-**Figure:** The R environment stores objects such as `x`, `data`, and `scores`.
+The R environment stores objects such as `x`, `data`, and `scores`.
 
 ---
 
