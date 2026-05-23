@@ -1,6 +1,6 @@
 # Welcome
 
-Welcome to the R Transcriptomics Tutorial.
+Welcome to the R basics, biostatics, and bioinformatics Tutorial.
 
 This tutorial introduces R programming and transcriptomics data analysis step by step.
 
