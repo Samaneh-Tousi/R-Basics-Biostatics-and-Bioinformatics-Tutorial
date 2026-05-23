@@ -1,18 +1,89 @@
 # R Basics & Environment
 
-## Understanding the R Environment
+## Introduction to RStudio
 
-The **R Environment** is the workspace where R stores all the objects you create during your session.
+Before learning R programming, it is important to understand the **RStudio interface**.
 
-These objects can include:
+RStudio is an integrated development environment (IDE) for R that helps you:
+
+- write code
+- run analyses
+- visualize results
+- manage files and packages
+
+---
+
+## The RStudio Interface
+
+<p align="center">
+  <img src="../assets/rstudio_interface.png" width="900">
+</p>
+
+<p align="center">
+  <em>Overview of the main sections of the RStudio interface.</em>
+</p>
+
+---
+
+## Main Parts of RStudio
+
+### 1. Source Pane (Top Left)
+
+The **Source Pane** is where you write and edit R scripts.
+
+You can:
+
+- save your code
+- organize analyses
+- run selected lines or entire scripts
+
+Example:
+
+```r
+x <- 5
+y <- 10
+
+x + y
+```
+
+---
+
+### 2. Console Pane (Bottom Left)
+
+The **Console** is where R executes commands immediately.
+
+You can:
+
+- test small pieces of code
+- see outputs
+- view warnings and errors
+
+Example:
+
+```r
+mean(c(1, 2, 3, 4, 5))
+```
+
+Output:
+
+```r
+[1] 3
+```
+
+---
+
+### 3. Environment Pane (Top Right)
+
+The **Environment Pane** stores all objects created during the current R session.
+
+These objects may include:
 
 - variables
 - vectors
 - data frames
 - functions
 
----
-Think of the environment as a desk with labeled boxes that hold your data and results.
+Think of the environment as a desk with labeled boxes holding your data and results.
 
 <p align="center">
   <img src="../assets/r_environment.png" width="600">
@@ -21,8 +92,6 @@ Think of the environment as a desk with labeled boxes that hold your data and re
 <p align="center">
   <em>The R environment stores objects such as x, data, and scores.</em>
 </p>
-
-The R environment stores objects such as `x`, `data`, and `scores`.
 
 ---
 
@@ -41,13 +110,13 @@ data <- data.frame(
 scores <- c(88, 92, 79, 95)
 ```
 
-After running the code above, the objects will appear in your environment.
+After running the code above, the objects will appear in your Environment pane.
 
 ---
 
 ## Viewing Objects in the Environment
 
-To see all objects currently stored in your environment:
+To display all current objects:
 
 ```r
 ls()
@@ -63,7 +132,7 @@ Example output:
 
 ## Removing Objects
 
-Remove one object:
+Remove a single object:
 
 ```r
 rm(x)
@@ -95,12 +164,37 @@ Expected output:
 
 ---
 
+### 4. Files, Plots, Packages, and Help Pane (Bottom Right)
+
+This pane contains several useful tabs:
+
+| Tab | Purpose |
+|---|---|
+| Files | Manage project files |
+| Plots | Display graphs and visualizations |
+| Packages | Install and load packages |
+| Help | Access R documentation |
+| Viewer | Display HTML outputs |
+
+---
+
+### 5. Toolbar
+
+The toolbar provides quick access to common actions such as:
+
+- creating new scripts
+- saving files
+- running code
+- installing packages
+
+---
+
 ## Why the Environment Matters
 
-Understanding the environment helps you:
+Understanding the R environment helps you:
 
 - track your variables
-- organize your analysis
+- organize analyses
 - avoid overwriting objects
 - debug errors more easily
 
@@ -112,15 +206,18 @@ Try the following:
 
 1. Create an object called `temperature`.
 2. Create a vector called `ages`.
-3. Run `ls()` to view your objects.
+3. Run `ls()` to display your objects.
 4. Remove one object using `rm()`.
+5. Check the class of your objects using `class()`.
 
 ---
 
-## Key Takeaway
+## Key Takeaways
 
-The R environment acts like your working desk:
+- RStudio helps organize coding and analysis workflows.
+- The Source pane is used to write scripts.
+- The Console runs commands immediately.
+- The Environment stores your objects.
+- The bottom-right pane helps manage files, plots, and packages.
 
-- every object you create is stored there
-- you can inspect, modify, or remove objects anytime
-- keeping the environment organized makes coding easier
+Keeping your environment organized makes coding easier and more reproducible.
