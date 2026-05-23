@@ -200,6 +200,11 @@ library(SingleCellExperiment)
 
 If no error message appears, the packages are installed correctly.
 
+# Important note: install packages only once
+
+You usually need to install an R package only one time on your computer. After the package is installed, you do not need to install it again every time you open R. Instead, you only need to load the package using library().
+
+
 # 10. Check your R session information
 
 It is good practice to record your R version and package versions.
