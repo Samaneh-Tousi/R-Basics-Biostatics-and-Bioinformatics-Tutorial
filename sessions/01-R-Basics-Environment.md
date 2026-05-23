@@ -1,16 +1,5 @@
 # R Basics & Environment
 
-
-<p align="center">
-  <img src="../assets/r_environment.png" width="600">
-</p>
-
-<p align="center">
-  <em>The R environment stores objects such as x, data, and scores.</em>
-</p>
-
-The R environment stores objects such as `x`, `data`, and `scores`.
-
 ---
 
 ## Understanding the R Environment
@@ -27,6 +16,16 @@ These objects can include:
 Think of the environment as a desk with labeled boxes that hold your data and results.
 
 ---
+
+<p align="center">
+  <img src="../assets/r_environment.png" width="600">
+</p>
+
+<p align="center">
+  <em>The R environment stores objects such as x, data, and scores.</em>
+</p>
+
+The R environment stores objects such as `x`, `data`, and `scores`.
 
 ## Creating Objects in R
 
