@@ -1,45 +1,3 @@
----
-title: "00 — Setup and Installation"
-subtitle: "Preparing your computer for transcriptomics analysis in R"
-author: "Your Name"
-format:
-  html:
-    toc: true
-    toc-depth: 3
-    number-sections: true
-    code-fold: false
-    code-tools: true
-execute:
-  eval: false
-  warning: false
-  message: false
----
-
-# Learning goals
-
-By the end of this session, you will be able to:
-
-- Install R and RStudio.
-- Install Quarto.
-- Create a clean R project.
-- Understand the recommended folder structure for this tutorial.
-- Install the main R packages used for transcriptomics analysis.
-- Check that everything is working correctly.
-
-# Why setup matters
-
-Before we start analyzing transcriptomics data, we need a clean and reproducible working environment.
-
-A good setup helps you:
-
-- avoid messy file paths,
-- keep your code organized,
-- share your analysis with others,
-- rerun your project later without confusion,
-- prepare for RNA-seq, differential expression, enrichment analysis, and single-cell RNA-seq workflows.
-
-Think of this setup session as preparing your laboratory bench before starting an experiment.
-
 # 1. Install R
 
 R is the programming language we will use.
@@ -79,106 +37,8 @@ When RStudio opens successfully, you should see four main panels:
 3. Environment / History
 4. Files / Plots / Packages / Help
 
-# 3. Install Quarto
 
-Quarto allows us to write tutorials using `.qmd` files.
-
-Download Quarto from:
-
-<https://quarto.org/docs/get-started/>
-
-After installation, restart RStudio.
-
-To check whether Quarto is installed, open the terminal in RStudio and run:
-
-```bash
-quarto check
-```
-
-You can also check from R:
-
-```r
-quarto::quarto_version()
-```
-
-If the command returns a version number, Quarto is installed correctly.
-
-# 4. Install Git
-
-Git helps us track changes in our tutorial and upload it to GitHub.
-
-Download Git from:
-
-<https://git-scm.com/downloads>
-
-After installation, check that Git is working:
-
-```bash
-git --version
-```
-
-You should see something like:
-
-```bash
-git version 2.xx.x
-```
-
-# 5. Create a GitHub account
-
-Create a GitHub account here:
-
-<https://github.com/>
-
-GitHub will be used to store and share your tutorial.
-
-Recommended repository name:
-
-```text
-r-transcriptomics-tutorial
-```
-
-# 6. Recommended project structure
-
-For this tutorial, we will use one GitHub repository with multiple sessions.
-
-Example structure:
-
-```text
-r-transcriptomics-tutorial/
-│
-├── README.md
-├── LICENSE
-├── index.qmd
-├── _quarto.yml
-│
-├── sessions/
-│   ├── 00-setup-and-installation.qmd
-│   ├── 01-r-basics.qmd
-│   ├── 02-data-cleaning.qmd
-│   ├── 03-data-visualization.qmd
-│   ├── 04-reproducibility.qmd
-│   ├── 05-statistical-analysis.qmd
-│   ├── 06-bulk-rnaseq.qmd
-│   ├── 07-differential-expression.qmd
-│   ├── 08-functional-enrichment.qmd
-│   └── 09-single-cell-rnaseq.qmd
-│
-├── data/
-│   ├── raw/
-│   └── processed/
-│
-├── results/
-│   ├── figures/
-│   └── tables/
-│
-├── scripts/
-│
-├── images/
-│
-└── references/
-```
-
-# 7. Create an RStudio project
+# 3. Create an RStudio project
 
 Open RStudio.
 
@@ -198,7 +58,7 @@ This creates an `.Rproj` file.
 
 Using an RStudio project is recommended because it keeps your working directory organized.
 
-# 8. Check your working directory
+# 4. Check your working directory
 
 In R, run:
 
@@ -216,7 +76,7 @@ For example:
 /path/to/r-transcriptomics-tutorial
 ```
 
-# 9. Install essential R packages
+# 5. Install essential R packages
 
 We will start by installing general-purpose packages.
 
@@ -239,7 +99,7 @@ install.packages(c(
 ))
 ```
 
-# 10. Install Bioconductor
+# 6. Install Bioconductor
 
 Many transcriptomics packages are installed through Bioconductor.
 
@@ -255,7 +115,7 @@ Then check that it works:
 BiocManager::version()
 ```
 
-# 11. Install bulk RNA-seq packages
+# 7. Install bulk RNA-seq packages
 
 These packages are commonly used for bulk RNA-seq and differential expression analysis.
 
@@ -281,7 +141,7 @@ Notes:
 - `clusterProfiler` is used for functional enrichment analysis.
 - `EnhancedVolcano` is used to make volcano plots.
 
-# 12. Install single-cell RNA-seq packages
+# 8. Install single-cell RNA-seq packages
 
 For single-cell RNA-seq analysis, we will mainly use `Seurat`.
 
@@ -310,7 +170,7 @@ BiocManager::install(c(
 ))
 ```
 
-# 13. Load the main packages
+# 9. Load the main packages
 
 After installation, test that the packages can be loaded.
 
@@ -340,7 +200,7 @@ library(SingleCellExperiment)
 
 If no error message appears, the packages are installed correctly.
 
-# 14. Check your R session information
+# 10. Check your R session information
 
 It is good practice to record your R version and package versions.
 
@@ -352,7 +212,7 @@ This helps make your analysis reproducible.
 
 At the end of every analysis, you should save the session information.
 
-# 15. Install optional helper packages
+# 11. Install optional helper packages
 
 These packages are not required at the beginning, but they are useful for larger projects.
 
@@ -378,7 +238,7 @@ What these packages do:
 - `rio`: helps import and export many file types.
 - `skimr`: gives useful summaries of data frames.
 
-# 16. Optional: initialize renv
+# 12. Optional: initialize renv
 
 The `renv` package helps freeze package versions in your project.
 
@@ -406,291 +266,5 @@ Later, another user can restore the same package environment using:
 ```r
 renv::restore()
 ```
-
-# 17. Create folders from R
-
-You can create the project folders manually, or you can create them using R.
-
-```r
-dir.create("sessions", showWarnings = FALSE)
-dir.create("data", showWarnings = FALSE)
-dir.create("data/raw", recursive = TRUE, showWarnings = FALSE)
-dir.create("data/processed", recursive = TRUE, showWarnings = FALSE)
-dir.create("results", showWarnings = FALSE)
-dir.create("results/figures", recursive = TRUE, showWarnings = FALSE)
-dir.create("results/tables", recursive = TRUE, showWarnings = FALSE)
-dir.create("scripts", showWarnings = FALSE)
-dir.create("images", showWarnings = FALSE)
-dir.create("references", showWarnings = FALSE)
-```
-
-Check that the folders were created:
-
-```r
-list.files()
-```
-
-# 18. Create your first Quarto file
-
-Inside the `sessions/` folder, create a file called:
-
-```text
-00-setup-and-installation.qmd
-```
-
-This file is the first session of the tutorial.
-
-You can create it manually in RStudio:
-
-```text
-File > New File > Quarto Document
-```
-
-Then save it as:
-
-```text
-sessions/00-setup-and-installation.qmd
-```
-
-# 19. Render the Quarto file
-
-To render this file, open it in RStudio and click:
-
-```text
-Render
-```
-
-Or run this in the terminal:
-
-```bash
-quarto render sessions/00-setup-and-installation.qmd
-```
-
-This will create an HTML file.
-
-# 20. Create a basic `_quarto.yml` file
-
-The `_quarto.yml` file controls the structure of your tutorial website.
-
-Create a file called `_quarto.yml` in the main project folder.
-
-Example:
-
-```yaml
-project:
-  type: website
-  output-dir: docs
-
-website:
-  title: "R Transcriptomics Tutorial"
-  navbar:
-    left:
-      - href: index.qmd
-        text: Home
-      - text: Sessions
-        menu:
-          - href: sessions/00-setup-and-installation.qmd
-            text: "00 — Setup and Installation"
-          - href: sessions/01-r-basics.qmd
-            text: "01 — R Basics"
-          - href: sessions/02-data-cleaning.qmd
-            text: "02 — Data Cleaning"
-          - href: sessions/03-data-visualization.qmd
-            text: "03 — Data Visualization"
-          - href: sessions/04-reproducibility.qmd
-            text: "04 — Reproducibility"
-          - href: sessions/05-statistical-analysis.qmd
-            text: "05 — Statistical Analysis"
-          - href: sessions/06-bulk-rnaseq.qmd
-            text: "06 — Bulk RNA-seq"
-          - href: sessions/07-differential-expression.qmd
-            text: "07 — Differential Expression"
-          - href: sessions/08-functional-enrichment.qmd
-            text: "08 — Functional Enrichment"
-          - href: sessions/09-single-cell-rnaseq.qmd
-            text: "09 — Single-cell RNA-seq"
-
-format:
-  html:
-    theme: cosmo
-    toc: true
-    number-sections: true
-    code-fold: false
-```
-
-# 21. Create a basic `index.qmd` file
-
-Create `index.qmd` in the main project folder.
-
-Example:
-
-```markdown
----
-title: "R Transcriptomics Tutorial"
-format: html
----
-
-# Welcome
-
-Welcome to the R Transcriptomics Tutorial.
-
-This tutorial introduces R programming and transcriptomics data analysis step by step.
-
-## Sessions
-
-1. Setup and installation
-2. R basics
-3. Data cleaning
-4. Data visualization
-5. Reproducibility
-6. Statistical analysis
-7. Bulk RNA-seq
-8. Differential expression analysis
-9. Functional enrichment analysis
-10. Single-cell RNA-seq
-
-## Who is this tutorial for?
-
-This tutorial is for beginners who want to learn R for transcriptomics data analysis.
-
-No advanced programming experience is required.
-```
-
-# 22. Render the full website
-
-From the terminal, run:
-
-```bash
-quarto render
-```
-
-This will build the full website and place the output in the `docs/` folder.
-
-# 23. Upload to GitHub
-
-After creating your files, open the terminal and run:
-
-```bash
-git init
-git add .
-git commit -m "Initial commit: setup tutorial structure"
-```
-
-Then connect your local project to GitHub.
-
-Example:
-
-```bash
-git branch -M main
-git remote add origin https://github.com/YOUR-USERNAME/r-transcriptomics-tutorial.git
-git push -u origin main
-```
-
-Replace `YOUR-USERNAME` with your GitHub username.
-
-# 24. Common installation problems
-
-## Problem: package does not install
-
-Try:
-
-```r
-install.packages("package_name", dependencies = TRUE)
-```
-
-For Bioconductor packages:
-
-```r
-BiocManager::install("package_name")
-```
-
-## Problem: package loads with an error
-
-Restart R:
-
-```text
-Session > Restart R
-```
-
-Then try again:
-
-```r
-library(package_name)
-```
-
-## Problem: Quarto command is not found
-
-Restart your computer after installing Quarto.
-
-Then check:
-
-```bash
-quarto check
-```
-
-## Problem: Git is not found
-
-Restart RStudio after installing Git.
-
-Then check:
-
-```bash
-git --version
-```
-
-# 25. Final setup checklist
-
-Before moving to the next session, make sure you have:
-
-- Installed R.
-- Installed RStudio.
-- Installed Quarto.
-- Installed Git.
-- Created a GitHub account.
-- Created an RStudio project.
-- Created the tutorial folder structure.
-- Installed the required R packages.
-- Tested that packages load correctly.
-- Rendered a `.qmd` file successfully.
-- Created `_quarto.yml`.
-- Created `index.qmd`.
-
-# 26. Mini exercise
-
-Create the following folders in your project:
-
-```text
-data/raw
-data/processed
-results/figures
-results/tables
-scripts
-images
-references
-```
-
-Then run:
-
-```r
-list.files(recursive = TRUE)
-```
-
-Check that your folder structure looks correct.
-
-# 27. Summary
-
-In this session, we prepared the full working environment for the R Transcriptomics Tutorial.
-
-You installed:
-
-- R
-- RStudio
-- Quarto
-- Git
-- CRAN packages
-- Bioconductor packages
-- single-cell RNA-seq packages
-
-You also created a clean project structure that will be used throughout the rest of the tutorial.
 
 In the next session, we will learn the basics of R, including objects, vectors, data frames, scripts, and packages.
