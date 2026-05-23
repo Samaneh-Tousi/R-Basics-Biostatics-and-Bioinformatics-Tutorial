@@ -1,4 +1,3 @@
-</> Markdown
 ---
 title: "00 — Setup and Installation"
 subtitle: "Preparing your computer for transcriptomics analysis in R"
