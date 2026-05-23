@@ -1,4 +1,4 @@
-# 1. Install R
+# 1. Install R, RStudio, and some R packages
 
 R is the programming language we will use.
 
