@@ -17,7 +17,7 @@ Think of the environment as a desk with labeled boxes that hold your data and re
 
 ## Cartoon Illustration
 
-![R Environment Cartoon](assets/R%20environment/a_colorful_educational_cartoon_illustration_of_the.png)
+![R Environment Cartoon](C:/Users/saman/OneDrive/Desktop/UHasselt/BIOMED/Bioinformatics Group/R workshop/R-Basics--Biostatics-and-Bioinformatics-Tutorial/assets/R environment.png)
 
 **Figure:** The R environment stores objects such as `x`, `data`, and `scores`.
 
