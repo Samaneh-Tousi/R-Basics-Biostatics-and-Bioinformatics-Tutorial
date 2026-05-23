@@ -1,8 +1,3 @@
----
-title: "R Transcriptomics Tutorial"
-format: html
----
-
 # Welcome
 
 Welcome to the R Transcriptomics Tutorial.
