@@ -1,7 +1,5 @@
 # R Basics & Environment
 
----
-
 ## Understanding the R Environment
 
 The **R Environment** is the workspace where R stores all the objects you create during your session.
@@ -13,9 +11,8 @@ These objects can include:
 - data frames
 - functions
 
-Think of the environment as a desk with labeled boxes that hold your data and results.
-
 ---
+Think of the environment as a desk with labeled boxes that hold your data and results.
 
 <p align="center">
   <img src="../assets/r_environment.png" width="600">
@@ -26,6 +23,8 @@ Think of the environment as a desk with labeled boxes that hold your data and re
 </p>
 
 The R environment stores objects such as `x`, `data`, and `scores`.
+
+---
 
 ## Creating Objects in R
 
