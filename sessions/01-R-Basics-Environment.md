@@ -83,6 +83,10 @@ These objects may include:
 - data frames
 - functions
 
+* A variable is a named object that stores a value in R.
+* A vector is a collection of values stored together in one object.
+
+
 Think of the environment as a desk with labeled boxes holding your data and results.
 
 <p align="center">
