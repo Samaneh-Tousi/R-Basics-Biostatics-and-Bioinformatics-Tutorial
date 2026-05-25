@@ -1496,29 +1496,3 @@ In this tutorial, you learned how to:
 
 ---
 
-# 35. Recommended Folder Structure
-
-A good folder structure for this tutorial is:
-
-```text
-R-tutorial/
-│
-├── sessions/
-│   ├── 00-setup-and-installation.qmd
-│   ├── 01-r-basics.qmd
-│   ├── 02-data-cleaning-dplyr-tidyr.qmd
-│   ├── 03-data-visualization-ggplot2.qmd
-│
-├── data/
-│
-├── results/
-│   └── figures/
-│
-├── assets/
-│
-├── README.md
-│
-└── R-tutorial.Rproj
-```
-
-
