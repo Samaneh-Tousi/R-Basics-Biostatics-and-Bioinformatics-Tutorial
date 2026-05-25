@@ -2,26 +2,27 @@
 
 ## Introduction
 
-Data handling and cleaning are essential skills in data science, statistics, and bioinformatics.
+Data handling and cleaning are essential skills in data science, statistics, and biomedical research.
 
-Real-world datasets are often:
+Real-world biomedical datasets are often:
 
 - incomplete
 - duplicated
 - inconsistent
 - improperly formatted
+- difficult to analyze without cleaning
 
 The `dplyr` and `tidyr` packages from the **tidyverse** provide powerful tools for cleaning and transforming data in R.
 
 In this tutorial, you will learn how to:
 
-- import datasets
+- import biomedical datasets
 - inspect data structures
 - manipulate data using `dplyr`
 - reshape data using `tidyr`
 - handle missing values
 - remove duplicates
-- build reproducible workflows
+- build reproducible cleaning workflows
 
 ---
 
@@ -31,7 +32,7 @@ By the end of this tutorial, you will be able to:
 
 - use `dplyr` for data manipulation
 - use `tidyr` for reshaping data
-- clean messy datasets
+- clean messy biomedical datasets
 - handle missing values
 - remove duplicated rows
 - export cleaned datasets
@@ -46,7 +47,7 @@ Install the package once:
 install.packages("tidyverse")
 ```
 
-> You only need to install packages once.
+> You only need to install packages once.  
 > After installation, simply load them using `library()`.
 
 Load the package:
@@ -73,32 +74,36 @@ Important packages include:
 
 ---
 
-# Creating an Example Dataset
+# Creating an Example Biomedical Dataset
+
+We will use a small biomedical dataset representing simplified gene expression measurements from RNA-seq samples.
 
 Create a file called:
 
 ```text
-data/messy_sales.csv
+data/messy_gene_expression.csv
 ```
 
 with the following content:
 
 ```csv
-Order_ID,Customer Name,Region,Product,Sales_2023,Sales_2024,Order Date
-1,Alice,North,Book,120,150,2024-01-10
-2,Bob,South,Pen,45,50,2024-01-12
-3,Charlie,East,Notebook,78,,2024-01-15
-4,Alice,North,Book,120,150,2024-01-10
-5,Diana,West,Pencil,,35,2024-01-18
-6,Eric,South,Pen,60,65,2024-01-20
+Sample_ID,Patient ID,Condition,Tissue,Gene,Expression_Rep1,Expression_Rep2,Collection Date
+S01,P001,Control,Blood,TP53,12.5,13.1,2024-01-10
+S02,P002,Treated,Blood,TP53,18.2,19.0,2024-01-12
+S03,P003,Control,Liver,BRCA1,8.7,,2024-01-15
+S04,P004,Treated,Liver,BRCA1,,15.4,2024-01-18
+S05,P005,Control,Blood,MYC,22.1,21.8,2024-01-20
+S05,P005,Control,Blood,MYC,22.1,21.8,2024-01-20
+S06,P006,Treated,Blood,MYC,30.5,31.2,2024-01-22
 ```
 
 This dataset contains:
 
-- missing values
+- missing expression values
 - duplicated rows
 - inconsistent column names
-- mixed formatting
+- sample metadata
+- gene expression measurements
 
 ---
 
@@ -109,7 +114,7 @@ Use `read_csv()` to import CSV files.
 ```r
 library(tidyverse)
 
-sales <- read_csv("data/messy_sales.csv")
+gene_expr <- read_csv("data/messy_gene_expression.csv")
 ```
 
 ---
@@ -119,7 +124,7 @@ sales <- read_csv("data/messy_sales.csv")
 ## View the first rows
 
 ```r
-head(sales)
+head(gene_expr)
 ```
 
 ---
@@ -127,7 +132,7 @@ head(sales)
 ## View dataset structure
 
 ```r
-glimpse(sales)
+glimpse(gene_expr)
 ```
 
 ---
@@ -135,7 +140,7 @@ glimpse(sales)
 ## View dimensions
 
 ```r
-dim(sales)
+dim(gene_expr)
 ```
 
 ---
@@ -143,7 +148,7 @@ dim(sales)
 ## View column names
 
 ```r
-colnames(sales)
+colnames(gene_expr)
 ```
 
 ---
@@ -151,7 +156,7 @@ colnames(sales)
 ## Generate summary statistics
 
 ```r
-summary(sales)
+summary(gene_expr)
 ```
 
 ---
@@ -178,8 +183,8 @@ Main functions include:
 Use `select()` to keep specific columns.
 
 ```r
-sales %>%
-  select(Order_ID, Product, Region)
+gene_expr %>%
+  select(Sample_ID, `Patient ID`, Condition, Gene)
 ```
 
 ---
@@ -189,17 +194,17 @@ sales %>%
 Use `filter()` to keep rows that satisfy conditions.
 
 ```r
-sales %>%
-  filter(Region == "South")
+gene_expr %>%
+  filter(Condition == "Treated")
 ```
 
-Multiple conditions:
+Filter using multiple conditions:
 
 ```r
-sales %>%
+gene_expr %>%
   filter(
-    Region == "South",
-    Sales_2024 > 50
+    Condition == "Treated",
+    Tissue == "Blood"
   )
 ```
 
@@ -210,9 +215,9 @@ sales %>%
 Use `mutate()` to create new variables.
 
 ```r
-sales %>%
+gene_expr %>%
   mutate(
-    total_sales = Sales_2023 + Sales_2024
+    mean_expression = (Expression_Rep1 + Expression_Rep2) / 2
   )
 ```
 
@@ -225,15 +230,15 @@ Sort rows using `arrange()`.
 Ascending order:
 
 ```r
-sales %>%
-  arrange(Sales_2024)
+gene_expr %>%
+  arrange(Expression_Rep2)
 ```
 
 Descending order:
 
 ```r
-sales %>%
-  arrange(desc(Sales_2024))
+gene_expr %>%
+  arrange(desc(Expression_Rep2))
 ```
 
 ---
@@ -243,10 +248,11 @@ sales %>%
 Use `rename()` to improve column names.
 
 ```r
-sales %>%
+gene_expr %>%
   rename(
-    customer_name = `Customer Name`,
-    order_date = `Order Date`
+    sample_id = Sample_ID,
+    patient_id = `Patient ID`,
+    collection_date = `Collection Date`
   )
 ```
 
@@ -257,10 +263,11 @@ sales %>%
 Use `group_by()` with `summarise()`.
 
 ```r
-sales %>%
-  group_by(Region) %>%
+gene_expr %>%
+  group_by(Condition, Gene) %>%
   summarise(
-    average_sales = mean(Sales_2024, na.rm = TRUE)
+    mean_expression_rep2 = mean(Expression_Rep2, na.rm = TRUE),
+    .groups = "drop"
   )
 ```
 
@@ -268,11 +275,18 @@ sales %>%
 
 # Counting Observations
 
-Count rows by category.
+Count samples by condition.
 
 ```r
-sales %>%
-  count(Region)
+gene_expr %>%
+  count(Condition)
+```
+
+Count genes by condition.
+
+```r
+gene_expr %>%
+  count(Gene, Condition)
 ```
 
 ---
@@ -282,10 +296,10 @@ sales %>%
 The pipe operator `%>%` passes output from one step to the next.
 
 ```r
-sales %>%
-  filter(Region == "South") %>%
-  select(Customer = `Customer Name`, Sales_2024) %>%
-  arrange(desc(Sales_2024))
+gene_expr %>%
+  filter(Condition == "Treated") %>%
+  select(Sample_ID, `Patient ID`, Tissue, Gene, Expression_Rep2) %>%
+  arrange(desc(Expression_Rep2))
 ```
 
 ---
@@ -311,18 +325,18 @@ Important functions:
 
 ## Wide format
 
-| ID | Sales_2023 | Sales_2024 |
-|---|---|---|
-| 1 | 120 | 150 |
+| Sample_ID | Gene | Expression_Rep1 | Expression_Rep2 |
+|---|---|---|---|
+| S01 | TP53 | 12.5 | 13.1 |
 
 ---
 
 ## Long format
 
-| ID | Year | Sales |
-|---|---|---|
-| 1 | Sales_2023 | 120 |
-| 1 | Sales_2024 | 150 |
+| Sample_ID | Gene | Replicate | Expression |
+|---|---|---|---|
+| S01 | TP53 | Expression_Rep1 | 12.5 |
+| S01 | TP53 | Expression_Rep2 | 13.1 |
 
 ---
 
@@ -331,14 +345,14 @@ Important functions:
 Use `pivot_longer()`.
 
 ```r
-sales_long <- sales %>%
+gene_expr_long <- gene_expr %>%
   pivot_longer(
-    cols = c(Sales_2023, Sales_2024),
-    names_to = "year",
-    values_to = "sales"
+    cols = c(Expression_Rep1, Expression_Rep2),
+    names_to = "replicate",
+    values_to = "expression"
   )
 
-sales_long
+gene_expr_long
 ```
 
 ---
@@ -348,30 +362,30 @@ sales_long
 Use `pivot_wider()`.
 
 ```r
-sales_wide <- sales_long %>%
+gene_expr_wide <- gene_expr_long %>%
   pivot_wider(
-    names_from = year,
-    values_from = sales
+    names_from = replicate,
+    values_from = expression
   )
 
-sales_wide
+gene_expr_wide
 ```
 
 ---
 
 # Separating Columns
 
-Use `separate()`.
+Use `separate()` to split one column into multiple columns.
 
 ```r
-names_df <- tibble(
-  full_name = c("Alice_Smith", "Bob_Jones")
+sample_info <- tibble(
+  sample_label = c("Control_Blood", "Treated_Liver")
 )
 
-names_df %>%
+sample_info %>%
   separate(
-    full_name,
-    into = c("first_name", "last_name"),
+    sample_label,
+    into = c("condition", "tissue"),
     sep = "_"
   )
 ```
@@ -380,20 +394,20 @@ names_df %>%
 
 # Combining Columns
 
-Use `unite()`.
+Use `unite()` to combine multiple columns into one column.
 
 ```r
-name_parts <- tibble(
-  first_name = c("Alice", "Bob"),
-  last_name = c("Smith", "Jones")
+sample_parts <- tibble(
+  condition = c("Control", "Treated"),
+  tissue = c("Blood", "Liver")
 )
 
-name_parts %>%
+sample_parts %>%
   unite(
-    "full_name",
-    first_name,
-    last_name,
-    sep = " "
+    "sample_group",
+    condition,
+    tissue,
+    sep = "_"
   )
 ```
 
@@ -407,18 +421,25 @@ Missing values in R are represented by:
 NA
 ```
 
+Missing values are common in biomedical datasets because of:
+
+- failed measurements
+- low-quality samples
+- incomplete metadata
+- technical problems during data collection
+
 ---
 
 # Identifying Missing Values
 
 ```r
-is.na(sales)
+is.na(gene_expr)
 ```
 
-Count missing values:
+Count missing values in each column:
 
 ```r
-colSums(is.na(sales))
+colSums(is.na(gene_expr))
 ```
 
 ---
@@ -428,8 +449,8 @@ colSums(is.na(sales))
 Use `drop_na()`.
 
 ```r
-sales %>%
-  drop_na(Sales_2024)
+gene_expr %>%
+  drop_na(Expression_Rep1, Expression_Rep2)
 ```
 
 ---
@@ -439,10 +460,10 @@ sales %>%
 Use `replace_na()`.
 
 ```r
-sales %>%
+gene_expr %>%
   mutate(
-    Sales_2023 = replace_na(Sales_2023, 0),
-    Sales_2024 = replace_na(Sales_2024, 0)
+    Expression_Rep1 = replace_na(Expression_Rep1, 0),
+    Expression_Rep2 = replace_na(Expression_Rep2, 0)
   )
 ```
 
@@ -453,15 +474,15 @@ sales %>%
 Use `distinct()`.
 
 ```r
-sales %>%
+gene_expr %>%
   distinct()
 ```
 
-Remove duplicates based on specific columns:
+Remove duplicates based on selected columns:
 
 ```r
-sales %>%
-  distinct(Order_ID, .keep_all = TRUE)
+gene_expr %>%
+  distinct(Sample_ID, Gene, .keep_all = TRUE)
 ```
 
 ---
@@ -471,65 +492,115 @@ sales %>%
 Convert text to dates:
 
 ```r
-sales %>%
+gene_expr %>%
   mutate(
-    `Order Date` = as.Date(`Order Date`)
+    `Collection Date` = as.Date(`Collection Date`)
   )
 ```
 
-Convert to numeric:
+Convert expression values to numeric:
 
 ```r
-sales %>%
+gene_expr %>%
   mutate(
-    Sales_2023 = as.numeric(Sales_2023)
+    Expression_Rep1 = as.numeric(Expression_Rep1),
+    Expression_Rep2 = as.numeric(Expression_Rep2)
   )
 ```
 
 ---
 
-# Complete Data Cleaning Workflow
+# Complete Biomedical Data Cleaning Workflow
 
 Below is a complete reproducible cleaning workflow.
 
 ```r
 library(tidyverse)
 
-sales <- read_csv("data/messy_sales.csv")
+gene_expr <- read_csv("data/messy_gene_expression.csv")
 
-clean_sales <- sales %>%
+clean_gene_expr <- gene_expr %>%
   
   # Rename columns
   rename(
-    order_id = Order_ID,
-    customer_name = `Customer Name`,
-    region = Region,
-    product = Product,
-    sales_2023 = Sales_2023,
-    sales_2024 = Sales_2024,
-    order_date = `Order Date`
+    sample_id = Sample_ID,
+    patient_id = `Patient ID`,
+    condition = Condition,
+    tissue = Tissue,
+    gene = Gene,
+    expression_rep1 = Expression_Rep1,
+    expression_rep2 = Expression_Rep2,
+    collection_date = `Collection Date`
   ) %>%
   
-  # Remove duplicate rows
+  # Remove duplicated rows
   distinct() %>%
   
-  # Replace missing values
+  # Replace missing expression values
   mutate(
-    sales_2023 = replace_na(sales_2023, 0),
-    sales_2024 = replace_na(sales_2024, 0)
+    expression_rep1 = replace_na(expression_rep1, 0),
+    expression_rep2 = replace_na(expression_rep2, 0)
   ) %>%
   
-  # Convert dates
+  # Convert collection date to Date format
   mutate(
-    order_date = as.Date(order_date)
+    collection_date = as.Date(collection_date)
   ) %>%
   
-  # Create total sales variable
+  # Create mean expression variable
   mutate(
-    total_sales = sales_2023 + sales_2024
+    mean_expression = (expression_rep1 + expression_rep2) / 2
   )
 
-clean_sales
+clean_gene_expr
+```
+
+---
+
+# Checking the Cleaned Dataset
+
+View the cleaned dataset:
+
+```r
+head(clean_gene_expr)
+```
+
+Check its structure:
+
+```r
+glimpse(clean_gene_expr)
+```
+
+Count missing values again:
+
+```r
+colSums(is.na(clean_gene_expr))
+```
+
+---
+
+# Summarizing Cleaned Biomedical Data
+
+Calculate mean expression by condition and gene.
+
+```r
+clean_gene_expr %>%
+  group_by(condition, gene) %>%
+  summarise(
+    average_expression = mean(mean_expression),
+    .groups = "drop"
+  )
+```
+
+Calculate mean expression by tissue.
+
+```r
+clean_gene_expr %>%
+  group_by(tissue) %>%
+  summarise(
+    average_expression = mean(mean_expression),
+    .groups = "drop"
+  )
 ```
 
 ---
@@ -540,8 +611,8 @@ Save cleaned data:
 
 ```r
 write_csv(
-  clean_sales,
-  "data/clean_sales.csv"
+  clean_gene_expr,
+  "data/clean_gene_expression.csv"
 )
 ```
 
@@ -553,9 +624,10 @@ write_csv(
 
 Select only:
 
-- customer name
-- product
-- sales_2024
+- sample ID
+- patient ID
+- condition
+- gene
 
 ---
 
@@ -564,46 +636,56 @@ Select only:
 Filter rows where:
 
 ```r
-Region == "North"
+Condition == "Control"
 ```
 
 ---
 
 ## Exercise 3
 
-Create a variable called:
+Filter rows where:
 
 ```r
-sales_difference
-```
-
-equal to:
-
-```r
-Sales_2024 - Sales_2023
+Tissue == "Blood"
 ```
 
 ---
 
 ## Exercise 4
 
-Calculate average sales by region.
+Create a new variable called:
+
+```r
+mean_expression
+```
+
+equal to:
+
+```r
+(Expression_Rep1 + Expression_Rep2) / 2
+```
 
 ---
 
 ## Exercise 5
 
-Convert the dataset from wide format to long format.
+Calculate the average expression for each gene.
 
 ---
 
 ## Exercise 6
 
-Replace missing values with 0.
+Convert the dataset from wide format to long format.
 
 ---
 
 ## Exercise 7
+
+Replace missing expression values with 0.
+
+---
+
+## Exercise 8
 
 Remove duplicated rows.
 
@@ -614,11 +696,12 @@ Remove duplicated rows.
 ## Solution 1
 
 ```r
-sales %>%
+gene_expr %>%
   select(
-    `Customer Name`,
-    Product,
-    Sales_2024
+    Sample_ID,
+    `Patient ID`,
+    Condition,
+    Gene
   )
 ```
 
@@ -627,8 +710,8 @@ sales %>%
 ## Solution 2
 
 ```r
-sales %>%
-  filter(Region == "North")
+gene_expr %>%
+  filter(Condition == "Control")
 ```
 
 ---
@@ -636,11 +719,8 @@ sales %>%
 ## Solution 3
 
 ```r
-sales %>%
-  mutate(
-    sales_difference =
-      Sales_2024 - Sales_2023
-  )
+gene_expr %>%
+  filter(Tissue == "Blood")
 ```
 
 ---
@@ -648,11 +728,10 @@ sales %>%
 ## Solution 4
 
 ```r
-sales %>%
-  group_by(Region) %>%
-  summarise(
-    average_sales =
-      mean(Sales_2024, na.rm = TRUE)
+gene_expr %>%
+  mutate(
+    mean_expression =
+      (Expression_Rep1 + Expression_Rep2) / 2
   )
 ```
 
@@ -661,11 +740,12 @@ sales %>%
 ## Solution 5
 
 ```r
-sales %>%
-  pivot_longer(
-    cols = c(Sales_2023, Sales_2024),
-    names_to = "year",
-    values_to = "sales"
+gene_expr %>%
+  group_by(Gene) %>%
+  summarise(
+    average_rep1 = mean(Expression_Rep1, na.rm = TRUE),
+    average_rep2 = mean(Expression_Rep2, na.rm = TRUE),
+    .groups = "drop"
   )
 ```
 
@@ -674,10 +754,11 @@ sales %>%
 ## Solution 6
 
 ```r
-sales %>%
-  mutate(
-    Sales_2023 = replace_na(Sales_2023, 0),
-    Sales_2024 = replace_na(Sales_2024, 0)
+gene_expr %>%
+  pivot_longer(
+    cols = c(Expression_Rep1, Expression_Rep2),
+    names_to = "replicate",
+    values_to = "expression"
   )
 ```
 
@@ -686,7 +767,19 @@ sales %>%
 ## Solution 7
 
 ```r
-sales %>%
+gene_expr %>%
+  mutate(
+    Expression_Rep1 = replace_na(Expression_Rep1, 0),
+    Expression_Rep2 = replace_na(Expression_Rep2, 0)
+  )
+```
+
+---
+
+## Solution 8
+
+```r
+gene_expr %>%
   distinct()
 ```
 
@@ -696,15 +789,16 @@ sales %>%
 
 In this tutorial, you learned how to:
 
-- import datasets
+- import biomedical datasets
 - inspect data structures
 - manipulate data using `dplyr`
 - reshape data using `tidyr`
 - handle missing values
 - remove duplicated rows
 - create reproducible cleaning workflows
+- export cleaned data
 
-These skills form the foundation of data science and transcriptomics analysis in R.
+These skills form the foundation of biomedical data analysis, transcriptomics, and RNA-seq workflows in R.
 
 ---
 
@@ -716,8 +810,9 @@ After mastering data handling and cleaning, consider learning:
 - exploratory data analysis
 - statistical analysis in R
 - reproducible reports with Quarto
-- transcriptomics analysis
+- transcriptomics data analysis
 - RNA-seq workflows
+- differential gene expression analysis
 
 ---
 
