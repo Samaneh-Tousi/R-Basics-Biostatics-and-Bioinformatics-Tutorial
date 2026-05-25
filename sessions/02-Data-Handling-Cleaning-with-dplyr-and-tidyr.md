@@ -798,22 +798,6 @@ In this tutorial, you learned how to:
 - create reproducible cleaning workflows
 - export cleaned data
 
-These skills form the foundation of biomedical data analysis, transcriptomics, and RNA-seq workflows in R.
-
----
-
-# Recommended Next Topics
-
-After mastering data handling and cleaning, consider learning:
-
-- data visualization with `ggplot2`
-- exploratory data analysis
-- statistical analysis in R
-- reproducible reports with Quarto
-- transcriptomics data analysis
-- RNA-seq workflows
-- differential gene expression analysis
-
 ---
 
 # References
