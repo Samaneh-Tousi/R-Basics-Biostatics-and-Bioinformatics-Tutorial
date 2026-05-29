@@ -683,7 +683,7 @@ dev.off()
 ```
 
 <p align="center">
-  <img src="/assets/Disp_plot.png" alt="Dispersion plot" width="700">
+  <img src="/assets/Disp_plot.png" alt="Dispersion plot" width="800">
 </p>
 
 The **dispersion plot** shows:
@@ -715,7 +715,7 @@ dev.off()
 ```
 
 <p align="center">
-  <img src="/assets/Disp_plot.png" alt="Dispersion plot" width="700">
+  <img src="/assets/MAplot.png" alt="MAplot" width="800">
 </p>
 
 The **MA plot** shows:
