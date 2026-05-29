@@ -8,6 +8,8 @@ Open the [`assets`](../assets) folder in this repository and click the file:
 
 ```text
 featureCounts_counts_matrix.tsv
+```
+
 ---
 
 # Differential Expression Analysis and Enrichment Analysis
