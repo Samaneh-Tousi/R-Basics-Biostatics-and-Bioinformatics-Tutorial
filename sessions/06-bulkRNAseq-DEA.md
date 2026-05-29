@@ -758,7 +758,7 @@ ggsave(
 ```
 
 <p align="center">
-  <img src="assets/PCAplot.png" alt="PCA plot" width="600">
+  <img src="/assets/PCAplot.png" alt="PCAplot" width="800">
 </p>
 
 The PCA plot shows how samples group based on overall gene-expression patterns after normalization and variance-stabilizing transformation.
