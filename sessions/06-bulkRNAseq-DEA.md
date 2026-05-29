@@ -2,14 +2,12 @@
 
 ## Download the input count matrix
 
-Before starting the analysis, download the featureCounts gene-level count matrix:
+Before starting the analysis, download the featureCounts gene-level count matrix.
 
-Open assets <a href="assets" download></a> folder in this repository and click:
+Open the [`assets`](../assets) folder in this repository and click the file:
 
 ```text
 featureCounts_counts_matrix.tsv
-```
-
 ---
 
 # Differential Expression Analysis and Enrichment Analysis
