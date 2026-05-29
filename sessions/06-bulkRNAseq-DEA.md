@@ -4,25 +4,14 @@
 
 Before starting the analysis, download the featureCounts gene-level count matrix:
 
-[Download `featureCounts_counts_matrix.tsv`](./assets/featureCounts_counts_matrix.tsv)
+<a href="assets/featureCounts_counts_matrix.tsv?raw=1" download>
+  Download featureCounts_counts_matrix.tsv
+</a>
 
-If the link opens the file in the browser instead of downloading it, right-click the link and choose:
-
-```text
-Save link as...
-```
-
-The file should be stored in the repository `assets/` folder:
+If the download button does not work, open the `assets` folder in this repository and click:
 
 ```text
-assets/featureCounts_counts_matrix.tsv
-```
-
-If you are running the analysis locally on Windows, the full file location may look like this:
-
-```text
-C:/Users/saman/OneDrive/Desktop/UHasselt/BIOMED/Bioinformatics Group/R workshop/R-Basics--Biostatics-and-Bioinformatics-Tutorial/assets/featureCounts_counts_matrix.tsv
-```
+featureCounts_counts_matrix.tsv
 
 ---
 
