@@ -677,17 +677,13 @@ The size factors show how much each sample is scaled during DESeq2 normalization
 # Dispersion plot
 # ============================================================
 
-<p align="center">
-  <img src=".../assets/Disp_plot.png" alt="Dispersion plot" width="700">
-</p>
-
 plotDispEsts(dds)
 
 dev.off()
 ```
 
 <p align="center">
-  <img src="assets/Disp_plot.png" alt="DESeq2 dispersion plot" width="800">
+  <img src=".../assets/Disp_plot.png" alt="Dispersion plot" width="700">
 </p>
 
 The **dispersion plot** shows:
