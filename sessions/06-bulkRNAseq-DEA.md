@@ -808,10 +808,6 @@ pheatmap(
 dev.off()
 ```
 
-<p align="center">
-  <img src="assets/bulkRNAseq_sample_distance_heatmap.png" alt="Sample distance heatmap" width="700">
-</p>
-
 ---
 
 # 17. Extract DESeq2 Results
@@ -1075,7 +1071,7 @@ ggsave(
 ```
 
 <p align="center">
-  <img src="assets/DEGs_Volcano.png" alt="DEG volcano plot" width="600">
+  <img src="/assets/DEGs_Volcano.png" alt="DEGs_Volcano" width="900">
 </p>
 
 ---
@@ -1132,11 +1128,6 @@ pheatmap(
 
 dev.off()
 ```
-
-<p align="center">
-  <img src="assets/bulkRNAseq_top50_variable_genes_heatmap.png" alt="Top variable genes heatmap" width="700">
-</p>
-
 ---
 
 # 25. Heatmap of Top DEGs
@@ -1180,11 +1171,6 @@ pheatmap(
 
 dev.off()
 ```
-
-<p align="center">
-  <img src="assets/bulkRNAseq_top50_DEGs_heatmap.png" alt="Top DEG heatmap" width="700">
-</p>
-
 ---
 
 # 26. edgeR Differential Expression Analysis
@@ -1290,10 +1276,6 @@ legend(
 dev.off()
 ```
 
-<p align="center">
-  <img src="assets/bulkRNAseq_edgeR_MDS_plot.png" alt="edgeR MDS plot" width="700">
-</p>
-
 ---
 
 # 31. edgeR Design Matrix
@@ -1327,10 +1309,6 @@ plotBCV(dge)
 
 dev.off()
 ```
-
-<p align="center">
-  <img src="assets/bulkRNAseq_edgeR_BCV_plot.png" alt="edgeR BCV plot" width="700">
-</p>
 
 ---
 
@@ -1490,10 +1468,6 @@ ggsave(
 )
 ```
 
-<p align="center">
-  <img src="assets/bulkRNAseq_edgeR_volcano.png" alt="edgeR volcano plot" width="700">
-</p>
-
 ---
 
 # 37. Compare DESeq2 and edgeR
@@ -1555,10 +1529,6 @@ ggsave(
   dpi = 300
 )
 ```
-
-<p align="center">
-  <img src="assets/bulkRNAseq_DESeq2_edgeR_DEG_count_comparison.png" alt="DEG count comparison" width="650">
-</p>
 
 ---
 
@@ -1943,7 +1913,7 @@ dev.off()
 ```
 
 <p align="center">
-  <img src="assets/GSEA.png" alt="GSEA hallmark pathway plot" width="700">
+  <img src="/assets/GSEA.png" alt="GSEA" width="800">
 </p>
 
 ---
@@ -1968,10 +1938,6 @@ ggsave(
   dpi = 300
 )
 ```
-
-<p align="center">
-  <img src="assets/bulkRNAseq_GSEA_Hallmark_dotplot.png" alt="Hallmark GSEA dotplot" width="750">
-</p>
 
 ---
 
