@@ -4,7 +4,7 @@
 
 Before starting the analysis, download the featureCounts gene-level count matrix:
 
-[Download featureCounts_counts_matrix.tsv](https://raw.githubusercontent.com/YOUR-USERNAME/R-Basics--Biostatics-and-Bioinformatics-Tutorial/main/assets/featureCounts_counts_matrix.tsv)
+[Download featureCounts_counts_matrix.tsv](https://raw.githubusercontent.com/YOUR-USERNAME/R-Basics--Biostatics-and-Bioinformatics-Tutorial/assets/featureCounts_counts_matrix.tsv)
 
 If the download button does not work, open the `assets` folder in this repository and click:
 
