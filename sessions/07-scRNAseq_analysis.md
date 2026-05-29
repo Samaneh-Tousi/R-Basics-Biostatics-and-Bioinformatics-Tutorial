@@ -1,17 +1,4 @@
----
-title: "Single-cell RNA-seq Analysis with Seurat, scDblFinder, Azimuth, Pseudobulk DEA, Slingshot, and Integration Benchmarking"
-author: "Your Name"
-format:
-  html:
-    toc: true
-    toc-depth: 3
-    number-sections: true
-execute:
-  warning: false
-  message: false
----
-
-# Single-cell RNA-seq Analysis with Seurat
+# Single-cell RNA-seq Analysis with Seurat and extra
 
 This tutorial demonstrates a complete single-cell RNA-seq workflow using **Seurat** and related R packages.
 
@@ -32,11 +19,11 @@ The workflow includes:
 - graph-based clustering
 - cluster marker detection
 - cluster annotation using Azimuth
+- extraction and subclustering of a specific cell type
 - pseudobulk aggregation by cell type, sample, and condition
 - differential expression analysis on pseudobulk values
 - trajectory analysis using Slingshot
 - cellular heterogeneity analysis
-- extraction and subclustering of a specific cell type
 - integration method benchmarking
 
 ---
@@ -846,7 +833,123 @@ DimPlot(
 
 ---
 
-# 24. Pseudobulk aggregation
+# 24. Extract one cell type and perform subclustering
+
+Subclustering is useful when you want to study one major cell type in more detail.
+
+For example:
+
+- T cell subtypes
+- monocyte subsets
+- rare immune populations
+- malignant subclones
+- stem/progenitor states
+
+Here we extract one available cell type from the tutorial object.
+
+```{r select-celltype-for-subclustering}
+selected_celltype <- unique(seurat_singlets$celltype)[1]
+
+selected_celltype
+```
+
+```{r subset-celltype}
+celltype_subset <- subset(
+  seurat_singlets,
+  subset = celltype == selected_celltype
+)
+
+celltype_subset
+```
+
+```{r recluster-subset}
+celltype_subset <- NormalizeData(celltype_subset)
+
+celltype_subset <- FindVariableFeatures(
+  celltype_subset,
+  selection.method = "vst",
+  nfeatures = 1000
+)
+
+celltype_subset <- ScaleData(celltype_subset)
+
+celltype_subset <- RunPCA(
+  celltype_subset,
+  features = VariableFeatures(celltype_subset)
+)
+
+ElbowPlot(celltype_subset, ndims = 20)
+
+subset_pcs <- 1:min(10, ncol(Embeddings(celltype_subset, "pca")))
+
+celltype_subset <- FindNeighbors(
+  celltype_subset,
+  dims = subset_pcs
+)
+
+celltype_subset <- FindClusters(
+  celltype_subset,
+  resolution = 0.3
+)
+
+celltype_subset <- RunUMAP(
+  celltype_subset,
+  dims = subset_pcs
+)
+
+DimPlot(
+  celltype_subset,
+  reduction = "umap",
+  label = TRUE
+) +
+  ggtitle(paste("Subclusters of", selected_celltype))
+```
+
+---
+
+# 25. Detect markers of expected and rare subclusters
+
+Rare subclusters may represent:
+
+- rare cell states
+- activated cells
+- cycling cells
+- stressed cells
+- doublet contamination
+- disease-associated populations
+- technical artifacts
+
+Always validate rare subclusters carefully.
+
+```{r subcluster-markers}
+subcluster_markers <- FindAllMarkers(
+  celltype_subset,
+  only.pos = TRUE,
+  min.pct = 0.20,
+  logfc.threshold = 0.25
+)
+
+head(subcluster_markers)
+
+write.csv(
+  subcluster_markers,
+  paste0("subcluster_markers_", selected_celltype, ".csv"),
+  row.names = FALSE
+)
+```
+
+```{r rare-subclusters}
+subcluster_sizes <- table(Idents(celltype_subset))
+
+subcluster_sizes
+
+rare_subclusters <- names(subcluster_sizes[subcluster_sizes < quantile(subcluster_sizes, 0.25)])
+
+rare_subclusters
+```
+---
+
+# 26. Pseudobulk aggregation
 
 Single-cell data contain many cells from the same biological sample.
 
@@ -930,7 +1033,7 @@ head(pseudobulk_metadata)
 
 ---
 
-# 25. Pseudobulk DEA with DESeq2
+# 27. Pseudobulk DEA with DESeq2
 
 Differential expression is usually performed separately for each cell type.
 
@@ -1012,7 +1115,7 @@ if (!is.null(dea_results)) {
 
 ---
 
-# 26. Pseudobulk volcano plot
+# 28. Pseudobulk volcano plot
 
 ```{r pseudobulk-volcano}
 plot_volcano <- function(dea_df,
@@ -1048,7 +1151,7 @@ plot_volcano(dea_results)
 
 ---
 
-# 27. Trajectory analysis with Slingshot
+# 29. Trajectory analysis with Slingshot
 
 Trajectory analysis is useful when cells are expected to follow a continuous biological process, such as:
 
@@ -1107,7 +1210,7 @@ lines(SlingshotDataSet(sce_sling), lwd = 2)
 
 ---
 
-# 28. Compare pseudotime by condition
+# 30. Compare pseudotime by condition
 
 ```{r pseudotime-condition}
 pseudotime_df <- as.data.frame(slingPseudotime(sce_sling)) %>%
@@ -1140,7 +1243,7 @@ ggplot(
 
 ---
 
-# 29. Cellular heterogeneity across cell types
+# 31. Cellular heterogeneity across cell types
 
 Cellular heterogeneity can be measured in several ways.
 
@@ -1228,123 +1331,6 @@ ggplot(
     x = "Condition",
     y = "Simpson diversity"
   )
-```
-
----
-
-# 30. Extract one cell type and perform subclustering
-
-Subclustering is useful when you want to study one major cell type in more detail.
-
-For example:
-
-- T cell subtypes
-- monocyte subsets
-- rare immune populations
-- malignant subclones
-- stem/progenitor states
-
-Here we extract one available cell type from the tutorial object.
-
-```{r select-celltype-for-subclustering}
-selected_celltype <- unique(seurat_singlets$celltype)[1]
-
-selected_celltype
-```
-
-```{r subset-celltype}
-celltype_subset <- subset(
-  seurat_singlets,
-  subset = celltype == selected_celltype
-)
-
-celltype_subset
-```
-
-```{r recluster-subset}
-celltype_subset <- NormalizeData(celltype_subset)
-
-celltype_subset <- FindVariableFeatures(
-  celltype_subset,
-  selection.method = "vst",
-  nfeatures = 1000
-)
-
-celltype_subset <- ScaleData(celltype_subset)
-
-celltype_subset <- RunPCA(
-  celltype_subset,
-  features = VariableFeatures(celltype_subset)
-)
-
-ElbowPlot(celltype_subset, ndims = 20)
-
-subset_pcs <- 1:min(10, ncol(Embeddings(celltype_subset, "pca")))
-
-celltype_subset <- FindNeighbors(
-  celltype_subset,
-  dims = subset_pcs
-)
-
-celltype_subset <- FindClusters(
-  celltype_subset,
-  resolution = 0.3
-)
-
-celltype_subset <- RunUMAP(
-  celltype_subset,
-  dims = subset_pcs
-)
-
-DimPlot(
-  celltype_subset,
-  reduction = "umap",
-  label = TRUE
-) +
-  ggtitle(paste("Subclusters of", selected_celltype))
-```
-
----
-
-# 31. Detect markers of expected and rare subclusters
-
-Rare subclusters may represent:
-
-- rare cell states
-- activated cells
-- cycling cells
-- stressed cells
-- doublet contamination
-- disease-associated populations
-- technical artifacts
-
-Always validate rare subclusters carefully.
-
-```{r subcluster-markers}
-subcluster_markers <- FindAllMarkers(
-  celltype_subset,
-  only.pos = TRUE,
-  min.pct = 0.20,
-  logfc.threshold = 0.25
-)
-
-head(subcluster_markers)
-
-write.csv(
-  subcluster_markers,
-  paste0("subcluster_markers_", selected_celltype, ".csv"),
-  row.names = FALSE
-)
-```
-
-```{r rare-subclusters}
-subcluster_sizes <- table(Idents(celltype_subset))
-
-subcluster_sizes
-
-rare_subclusters <- names(subcluster_sizes[subcluster_sizes < quantile(subcluster_sizes, 0.25)])
-
-rare_subclusters
 ```
 
 ---
