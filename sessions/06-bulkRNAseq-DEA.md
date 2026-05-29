@@ -508,7 +508,7 @@ colSums(cts)
 
 # 6. Reorder Samples
 
-Edit this section based on your dataset.
+Edit this section based on your dataset/ Dataset: GSE111972 (microglia, MS vs Control).
 
 For the original MS vs Control example:
 
@@ -609,7 +609,7 @@ ggsave(
 ```
 
 <p align="center">
-  <img src="assets/bulkRNAseq_library_sizes.png" alt="Library size plot" width="700">
+  <img src=".../assets/bulkRNAseq_library_sizes.png" alt="Library size plot" width="700">
 </p>
 
 ---
