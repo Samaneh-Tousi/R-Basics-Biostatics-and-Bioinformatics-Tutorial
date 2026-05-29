@@ -423,7 +423,7 @@ library(RColorBrewer)
 # Define local paths
 # ============================================================
 
-assets_dir <- "C:/Users/saman/OneDrive/Desktop/UHasselt/BIOMED/Bioinformatics Group/R workshop/R-Basics--Biostatics-and-Bioinformatics-Tutorial/assets"
+assets_dir <- "your prefered path at your local computer"
 
 counts_path <- file.path(assets_dir, "featureCounts_counts_matrix.tsv")
 
