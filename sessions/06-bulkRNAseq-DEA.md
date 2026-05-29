@@ -508,7 +508,7 @@ colSums(cts)
 
 # 6. Reorder Samples
 
-Edit this section based on your dataset/ Dataset: GSE111972 (microglia, MS vs Control).
+Edit this section based on your dataset: GSE111972 (microglia, MS vs Control).
 
 For the original MS vs Control example:
 
@@ -608,10 +608,6 @@ ggsave(
 )
 ```
 
-<p align="center">
-  <img src=".../assets/bulkRNAseq_library_sizes.png" alt="Library size plot" width="700">
-</p>
-
 ---
 
 # 9. DESeq2 Differential Expression Analysis
@@ -681,7 +677,9 @@ The size factors show how much each sample is scaled during DESeq2 normalization
 # Dispersion plot
 # ============================================================
 
-png(file.path(assets_dir, "Disp_plot.png"), width = 800, height = 600)
+<p align="center">
+  <img src=".../assets/Disp_plot.png" alt="Dispersion plot" width="700">
+</p>
 
 plotDispEsts(dds)
 
