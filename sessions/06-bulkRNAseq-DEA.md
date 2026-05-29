@@ -4,7 +4,7 @@
 
 Before starting the analysis, download the featureCounts gene-level count matrix:
 
-<a href="assets/featureCounts_counts_matrix.tsv?raw=1" download>
+<a href="assets/featureCounts_counts_matrix.tsv" download>
   Download featureCounts_counts_matrix.tsv
 </a>
 
