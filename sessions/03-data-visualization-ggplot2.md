@@ -426,6 +426,9 @@ ggplot(expression_data, aes(x = gene_A, color = group, fill = group)) +
   ) +
   theme_classic()
 ```
+<p align="center">
+  <img src="../assets/ggplot2/density_plot.png" width="700">
+</p>
 
 ---
 
