@@ -37,6 +37,15 @@ You can:
 - organize analyses
 - run selected lines or entire scripts
 
+Example:
+
+```r
+x <- 5
+y <- 10
+
+x + y
+```
+
 #### Assignment and Comparison Operators in R
 
 In R, `<-` is called the **assignment operator**. It is used to store a value inside an object.
@@ -94,16 +103,6 @@ Output:
 | `<-` | Assignment operator | Stores a value in an object | `x <- 5` |
 | `=` | Assignment or argument setting | Often used inside functions | `mean(x = values)` |
 | `==` | Equality operator | Tests whether two values are equal | `x == 5` |
-
-
-Example:
-
-```r
-x <- 5
-y <- 10
-
-x + y
-```
 
 ---
 
