@@ -1,5 +1,4 @@
 # Programming Basics in R: Functions, Conditions, and Loops
-
 ---
 
 # Learning objectives
