@@ -351,6 +351,10 @@ ggplot(gene_summary, aes(x = group, y = mean_gene_A, fill = group)) +
   theme_classic()
 ```
 
+<p align="center">
+  <img src="../assets/ggplot2/bar_plot.png" width="700">
+</p>
+
 ---
 
 # 10. Histogram
