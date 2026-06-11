@@ -172,6 +172,10 @@ ggplot(expression_data, aes(x = gene_A, y = clinical_score, color = group)) +
   geom_point()
 ```
 
+<p align="center">
+  <img src="../assets/ggplot2/gene_A_scatter_plot.png" width="700">
+</p>
+
 ---
 
 ## 6.2 Scatter Plot with Larger Points
