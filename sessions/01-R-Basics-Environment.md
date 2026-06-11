@@ -214,6 +214,15 @@ Try the following:
 4. Remove one object using `rm()`.
 5. Check the class of your objects using `class()`.
 
+````R
+
+temperature <- data.frame(city = c('Hasselt', 'Genk', 'Leuven'), temp = c(21, 22, 19))
+ages <- c(9,13,16, 18, 22, 35, 42, 55, 63, 82)
+ls()
+class(ages)
+class(temperature)
+````
+
 ---
 
 ## Key Takeaways
