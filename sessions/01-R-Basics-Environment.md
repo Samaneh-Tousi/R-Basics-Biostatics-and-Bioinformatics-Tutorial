@@ -37,6 +37,65 @@ You can:
 - organize analyses
 - run selected lines or entire scripts
 
+## Assignment and Comparison Operators in R
+
+In R, `<-` is called the **assignment operator**. It is used to store a value inside an object.
+
+```r
+x <- 5
+```
+
+This means that the value `5` is assigned to the object `x`.
+
+The `<-` operator is preferred in R because it clearly shows the direction of assignment: the value on the right is stored in the object on the left. It is also the traditional and most commonly used style in R scripts, tutorials, and package documentation.
+
+The `=` operator can also be used for assignment:
+
+```r
+x = 5
+```
+
+However, in R, `=` is more commonly used inside functions to specify arguments.
+
+```r
+mean(x = glucose_values, na.rm = TRUE)
+```
+
+In this example, `x = glucose_values` tells the function which data to use, and `na.rm = TRUE` tells R to remove missing values before calculating the mean.
+
+The `==` operator is used for comparison. It checks whether two values are equal and returns `TRUE` or `FALSE`.
+
+```r
+x <- 5
+
+x == 5
+```
+
+Output:
+
+```r
+[1] TRUE
+```
+
+Another example:
+
+```r
+x == 10
+```
+
+Output:
+
+```r
+[1] FALSE
+```
+
+| Operator | Name | Use | Example |
+|---|---|---|---|
+| `<-` | Assignment operator | Stores a value in an object | `x <- 5` |
+| `=` | Assignment or argument setting | Often used inside functions | `mean(x = values)` |
+| `==` | Equality operator | Tests whether two values are equal | `x == 5` |
+
+
 Example:
 
 ```r
