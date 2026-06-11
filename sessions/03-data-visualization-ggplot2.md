@@ -872,6 +872,9 @@ plot3 <- ggplot(expression_data, aes(x = group, y = gene_C, fill = group)) +
 
 plot1 + plot2 + plot3
 ```
+<p align="center">
+  <img src="../assets/ggplot2/combined_plots.png" width="700">
+</p>
 
 ---
 
