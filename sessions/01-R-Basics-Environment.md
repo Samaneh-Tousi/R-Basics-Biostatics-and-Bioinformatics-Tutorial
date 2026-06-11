@@ -37,7 +37,7 @@ You can:
 - organize analyses
 - run selected lines or entire scripts
 
-## Assignment and Comparison Operators in R
+#### Assignment and Comparison Operators in R
 
 In R, `<-` is called the **assignment operator**. It is used to store a value inside an object.
 
