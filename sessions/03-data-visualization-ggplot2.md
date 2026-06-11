@@ -537,6 +537,9 @@ ggplot(expression_long, aes(x = gene, y = expression, fill = group)) +
   ) +
   theme_classic()
 ```
+<p align="center">
+  <img src="../assets/ggplot2/boxplot_multiple_genes.png" width="700">
+</p>
 
 ---
 
