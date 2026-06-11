@@ -12,7 +12,7 @@ Download and install the correct version for your operating system:
 - macOS
 - Linux
 
-After installation, open R and check that it works.
+After installation, right click on R at C:\Program Files\R\R-4.4.2\bin (replace the R version with your installed R version at the adress) and run as administrator to check whether it works.  
 
 ```r
 version
