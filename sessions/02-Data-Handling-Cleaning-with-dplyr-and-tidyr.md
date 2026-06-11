@@ -76,26 +76,33 @@ Important packages include:
 
 # Creating an Example Biomedical Dataset
 
-We will use a small biomedical dataset representing simplified gene expression measurements from RNA-seq samples.
+We will make a small dummy biomedical dataset representing simplified gene expression measurements from RNA-seq samples.
 
-Create a file called:
+Create a data frame called 'gene_expr):
 
-```text
-data/messy_gene_expression.csv
-```
+````r
 
-with the following content:
+gene_expr <- data.frame(
+  Sample_ID = c("S01", "S02", "S03", "S04", "S05", "S05", "S06"),
+  Patient_ID = c("P001", "P002", "P003", "P004", "P005", "P005", "P006"),
+  Condition = c("Control", "Treated", "Control", "Treated", "Control", "Control", "Treated"),
+  Tissue = c("Blood", "Blood", "Liver", "Liver", "Blood", "Blood", "Blood"),
+  Gene = c("TP53", "TP53", "BRCA1", "BRCA1", "MYC", "MYC", "MYC"),
+  Expression_Rep1 = c(12.5, 18.2, 8.7, NA, 22.1, 22.1, 30.5),
+  Expression_Rep2 = c(13.1, 19.0, NA, 15.4, 21.8, 21.8, 31.2),
+  Collection_Date = as.Date(c(
+    "2024-01-10",
+    "2024-01-12",
+    "2024-01-15",
+    "2024-01-18",
+    "2024-01-20",
+    "2024-01-20",
+    "2024-01-22"
+  ))
+)
 
-```csv
-Sample_ID,Patient ID,Condition,Tissue,Gene,Expression_Rep1,Expression_Rep2,Collection Date
-S01,P001,Control,Blood,TP53,12.5,13.1,2024-01-10
-S02,P002,Treated,Blood,TP53,18.2,19.0,2024-01-12
-S03,P003,Control,Liver,BRCA1,8.7,,2024-01-15
-S04,P004,Treated,Liver,BRCA1,,15.4,2024-01-18
-S05,P005,Control,Blood,MYC,22.1,21.8,2024-01-20
-S05,P005,Control,Blood,MYC,22.1,21.8,2024-01-20
-S06,P006,Treated,Blood,MYC,30.5,31.2,2024-01-22
-```
+````
+
 
 This dataset contains:
 
@@ -104,18 +111,6 @@ This dataset contains:
 - inconsistent column names
 - sample metadata
 - gene expression measurements
-
----
-
-# Importing Data
-
-Use `read_csv()` to import CSV files.
-
-```r
-library(tidyverse)
-
-gene_expr <- read_csv("data/messy_gene_expression.csv")
-```
 
 ---
 
