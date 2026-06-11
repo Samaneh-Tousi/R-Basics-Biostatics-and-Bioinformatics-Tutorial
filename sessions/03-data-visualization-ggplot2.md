@@ -182,7 +182,7 @@ ggplot(expression_data, aes(x = gene_A, y = clinical_score, color = group)) +
 
 ```r
 ggplot(expression_data, aes(x = gene_A, y = clinical_score, color = group)) +
-  geom_point(size = 3)
+  geom_point(size = 4)
 ```
 
 ---
@@ -194,6 +194,10 @@ ggplot(expression_data, aes(x = gene_A, y = clinical_score, color = group)) +
   geom_point(size = 3) +
   geom_smooth(method = "lm", se = TRUE)
 ```
+
+<p align="center">
+  <img src="../assets/ggplot2/geneA_scatter_regression.png" width="700">
+</p>
 
 ---
 
