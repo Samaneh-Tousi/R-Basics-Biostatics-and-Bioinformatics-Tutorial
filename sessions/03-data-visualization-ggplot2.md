@@ -558,6 +558,9 @@ ggplot(expression_long, aes(x = group, y = expression, fill = group)) +
   ) +
   theme_bw()
 ```
+<p align="center">
+  <img src="../assets/ggplot2/Faceted_boxplot.png" width="700">
+</p>
 
 ---
 
