@@ -1,15 +1,4 @@
----
-title: "05 - Programming Basics in R: Functions, Conditions, and Loops"
-subtitle: "Writing reusable R code for biomedical data analysis"
-author: "R Basics, Biostatistics, and Bioinformatics Tutorial"
-format:
-  html:
-    toc: true
-    toc-depth: 3
-    number-sections: true
-    theme: cosmo
-editor: visual
----
+#Programming Basics in R: Functions, Conditions, and Loops"
 
 # Learning objectives
 
