@@ -247,6 +247,10 @@ ggplot(expression_data, aes(x = group, y = gene_A, fill = group)) +
   geom_boxplot(alpha = 0.6) +
   geom_jitter(width = 0.15, size = 2)
 ```
+<p align="center">
+  <img src="../assets/ggplot2/geom_jitter_boxplot.png" width="700">
+</p>
+
 
 ---
 
