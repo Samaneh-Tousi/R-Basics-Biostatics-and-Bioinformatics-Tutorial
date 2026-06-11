@@ -816,6 +816,9 @@ ggplot(expression_data, aes(x = group, y = gene_A, fill = group)) +
   ) +
   theme_classic()
 ```
+<p align="center">
+  <img src="../assets/ggplot2/boxplot_mean.png" width="700">
+</p>
 
 ---
 
