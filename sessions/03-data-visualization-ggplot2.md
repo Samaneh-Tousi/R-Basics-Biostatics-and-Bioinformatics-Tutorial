@@ -383,6 +383,9 @@ ggplot(expression_data, aes(x = gene_A)) +
 ggplot(expression_data, aes(x = gene_A, fill = group)) +
   geom_histogram(binwidth = 0.5, alpha = 0.7, position = "identity")
 ```
+<p align="center">
+  <img src="../assets/ggplot2/histogram.png" width="700">
+</p>
 
 ---
 
