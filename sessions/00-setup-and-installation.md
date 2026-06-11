@@ -24,7 +24,7 @@ You should see information about your installed R version.
 
 RStudio is an editor that makes it easier to write and run R code.
 
-Download RStudio Desktop from:
+Download a non-commercial RStudio Desktop from:
 
 <https://posit.co/download/rstudio-desktop/>
 
