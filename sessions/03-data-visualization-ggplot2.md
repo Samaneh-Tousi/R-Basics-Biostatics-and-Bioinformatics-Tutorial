@@ -487,6 +487,9 @@ ggplot(time_course_data, aes(x = time, y = gene_expression, color = group)) +
   ) +
   theme_minimal()
 ```
+<p align="center">
+  <img src="../assets/ggplot2/line_plot.png" width="700">
+</p>
 
 ---
 
