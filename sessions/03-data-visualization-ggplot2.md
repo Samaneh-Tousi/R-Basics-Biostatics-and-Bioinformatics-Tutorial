@@ -144,10 +144,9 @@ ggplot(data = expression_data, aes(x = group, y = gene_A)) +
 
 This creates a boxplot of `gene_A` expression by group.
 
-```r
-ggplot(data = expression_data, aes(x = group, y = gene_A)) +
-  geom_boxplot()
-```
+<p align="center">
+  <img src="../assets/ggplot2/gene_A_boxplot.png" width="700">
+</p>
 
 ---
 
