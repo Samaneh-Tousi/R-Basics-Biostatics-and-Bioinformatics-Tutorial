@@ -295,6 +295,10 @@ ggplot(expression_data, aes(x = group, y = gene_A, fill = group)) +
   theme_minimal()
 ```
 
+<p align="center">
+  <img src="../assets/ggplot2/Violin_boxplot.png" width="700">
+</p>
+
 ---
 
 # 9. Bar Plot
