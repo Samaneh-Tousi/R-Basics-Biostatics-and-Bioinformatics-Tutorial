@@ -13,27 +13,6 @@ By the end of this session, you will be able to:
 - Apply functions, conditions, and loops to biomedical examples
 - Understand when vectorized R code is better than loops
 
----
-
-# 1. Why do we need programming basics?
-
-As your R analysis becomes longer, you will often repeat similar steps.
-
-For example, you may want to:
-
-- calculate the mean expression of several genes
-- classify samples based on expression level
-- repeat the same analysis for multiple variables
-- apply quality-control rules to many samples or cells
-- avoid copying and pasting the same code many times
-
-Programming basics help you write code that is:
-
-- reusable
-- cleaner
-- easier to debug
-- easier to share
-- less repetitive
 
 In this session, we focus on three important programming concepts:
 
