@@ -272,9 +272,6 @@ You can also control the image size using HTML:
   <img src="../assets/rstudio-interface.png" width="700">
 </p>
 
-<p align="center">
-  <em>RStudio interface showing source, console, environment, and files panes.</em>
-</p>
 ```
 
 ---
@@ -799,33 +796,6 @@ Relative paths make your project easier to share.
 
 ---
 
-# Recommended Repository Structure
-
-A simple GitHub repository for R Markdown tutorials may look like this:
-
-```text
-R-tutorial/
-│
-├── README.md
-├── 00-setup-and-installation.md
-├── 01-r-basics.md
-├── 02-r-markdown.md
-├── 03-data-cleaning.md
-├── 04-data-visualization.md
-├── 05-statistical-analysis.md
-│
-├── data/
-│   └── patients.csv
-│
-├── assets/
-│   └── rstudio-interface.png
-│
-└── scripts/
-    └── example-analysis.R
-```
-
----
-
 # Example Biomedical Analysis in R Markdown
 
 Below is another example using a biomedical-style dataset.
@@ -1024,4 +994,3 @@ The treatment group appears to have higher biomarker values than the control gro
 
 ---
 
-# End of Tutorial
