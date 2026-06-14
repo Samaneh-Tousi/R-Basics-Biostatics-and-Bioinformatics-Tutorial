@@ -26,13 +26,12 @@ The goal of this repository is to provide beginner-friendly teaching material fo
 
 This tutorial is suitable for:
 
-- Biomedical students
-- Biology and bioinformatics students
-- Beginners in R programming
-- Researchers starting data analysis in R
-- Students learning transcriptomics analysis
 - Workshop participants who need structured R learning material
-
+- Researchers starting data analysis in R
+- Researchers learning transcriptomics analysis
+- Beginners in R programming
+- Biomedical researchers
+  
 No advanced programming background is required.
 
 ---
