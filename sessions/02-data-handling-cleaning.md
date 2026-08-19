@@ -1,4 +1,3 @@
-````markdown
 # Data Handling & Cleaning in R with dplyr and tidyr
 
 ## Introduction
@@ -1198,4 +1197,3 @@ In this tutorial, you learned how to:
 - tidyr documentation
 - readr documentation
 - readxl documentation
-````
