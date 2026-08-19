@@ -2,9 +2,9 @@
 
 R is the programming language we will use in this tutorial.
 
-For your UHasselt laptops go install R/RStudio via Uhasselt software center.
+- For your UHasselt laptop/PC, please install R/RStudio via **Uhasselt software center**.
 
-For your personal laptops/PC you can go to the official R/R/RStudio websites:
+- For your personal laptop/PC you can go to the official R/R/RStudio websites:
 
 <https://cran.r-project.org/>
 
