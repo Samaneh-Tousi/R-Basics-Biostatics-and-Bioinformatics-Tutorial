@@ -115,7 +115,6 @@ head(expression_data)
 
 Before making plots, always inspect the dataset.
 We need to know the column names, the type of data in each column, and the size of the dataset.
-
 This is important because plots only work when we use the correct column names and the correct type of data.
 
 For example, if we want to plot `gene_A` by `group`, we need to check that:
@@ -235,27 +234,6 @@ Group
 ```
 
 R is case-sensitive, so capital letters matter.
-
----
-
-## 4.5 Complete Code for This Section
-
-```r
-# View the structure of the dataset
-str(expression_data)
-
-# View summary statistics for each column
-summary(expression_data)
-
-# Check the number of rows and columns
-dim(expression_data)
-
-# Check the names of all columns
-colnames(expression_data)
-```
-
-These functions do not create plots.  
-They help us understand the dataset before we start plotting.
 
 ---
 
