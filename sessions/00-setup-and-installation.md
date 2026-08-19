@@ -78,3 +78,29 @@ For example:
 /path/to/r-transcriptomics-tutorial
 ```
 
+# 5. Install and load R packages
+
+R contains many built-in functions, but additional functions are available through packages.
+
+A package normally needs to be installed only once on your computer.
+
+For example:
+
+```r
+install.packages("ggplot2")
+```
+
+After installation, the package needs to be loaded before you can use it:
+
+```r
+library(ggplot2)
+```
+
+The difference is:
+
+**install.packages()** installs a package on your computer and normally needs to be run only once.
+**library()** loads an installed package into the current R session and needs to be run again when you restart R.
+
+Packages are usually loaded near the beginning of an R script.
+
+
