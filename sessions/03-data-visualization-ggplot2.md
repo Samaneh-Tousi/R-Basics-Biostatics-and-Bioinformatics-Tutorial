@@ -115,19 +115,76 @@ head(expression_data)
 
 Before making plots, always inspect the dataset.
 
+This helps us understand what the dataset contains before using it in `ggplot2`.  
+We need to check the column names, data types, number of rows and columns, and whether the values look reasonable.
+
+---
+
+## 4.1 Check the Structure
+
+The `str()` function shows the structure of the dataset.
+
+It tells us the column names, data types, and a few example values.
+
 ```r
 str(expression_data)
 ```
+
+This helps us check that variables such as `gene_A` are numeric and variables such as `group` are categorical.
+
+---
+
+## 4.2 Check Summary Statistics
+
+The `summary()` function gives a quick summary of each column.
 
 ```r
 summary(expression_data)
 ```
 
+For numeric columns, it shows the minimum, median, mean, and maximum values.  
+It can also show missing values as `NA`.
+
+---
+
+## 4.3 Check Dataset Size
+
+The `dim()` function shows the number of rows and columns.
+
 ```r
 dim(expression_data)
 ```
 
+For example, an output like `60 9` means the dataset has 60 rows and 9 columns.
+
+---
+
+## 4.4 Check Column Names
+
+The `colnames()` function shows all column names.
+
 ```r
+colnames(expression_data)
+```
+
+This is important because ggplot2 needs exact column names.  
+For example, `group` and `Group` are different because R is case-sensitive.
+
+---
+
+## 4.5 Complete Code
+
+```r
+# View the structure of the dataset
+str(expression_data)
+
+# View summary statistics for each column
+summary(expression_data)
+
+# Check the number of rows and columns
+dim(expression_data)
+
+# Check the names of all columns
 colnames(expression_data)
 ```
 
