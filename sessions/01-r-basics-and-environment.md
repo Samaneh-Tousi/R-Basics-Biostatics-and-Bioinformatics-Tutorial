@@ -1,4 +1,3 @@
-````markdown
 # R Basics & Environment
 
 ## Introduction to RStudio
@@ -951,4 +950,4 @@ str(group)
 - Comparison and logical operators can be used to select data based on conditions.
 
 Keeping your environment organized makes coding easier and more reproducible.
-````
+
