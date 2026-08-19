@@ -1,98 +1,66 @@
-# Basic Statistics in R
+# Basic Biostatistics in R
 
-## Overview
+## Introduction
 
-This tutorial introduces statistical analysis in **R** using biomedical-style example data.
+Biostatistics helps us describe biomedical data and answer research questions using statistical methods.
 
-The aim is not only to run statistical tests, but also to understand:
+In practice, statistical analysis usually follows a simple workflow:
 
-- which test to use
-- which R function performs the test
-- how to inspect the output
-- how to interpret the result
+1. Understand the research question.
+2. Identify the type of variables.
+3. Explore and summarize the data.
+4. Visualize the data.
+5. Choose an appropriate statistical test or model.
+6. Check assumptions.
+7. Interpret the effect size, confidence interval, and p-value.
+8. Report the result in the biological or clinical context.
+
+In this tutorial, we will focus on statistical methods that are commonly used in biomedical research.
 
 You will learn how to:
 
-- calculate descriptive statistics
-- work with probability distributions
-- calculate confidence intervals
-- perform hypothesis tests
-- compare two or more groups
-- use parametric and non-parametric tests
+- summarize continuous and categorical variables
+- understand standard deviation, confidence intervals, and p-values
+- compare two groups
+- compare more than two groups
+- analyze paired measurements
+- use non-parametric alternatives
 - analyze categorical variables
 - perform correlation analysis
-- fit linear and generalized linear models
-- check model assumptions
-- perform survival analysis
+- fit linear regression models
+- fit logistic regression models
+- perform basic survival analysis
 - calculate statistical power and sample size
-- export statistical results
 
 ---
 
-# 1. Prerequisites
+# 1. Install and Load Packages
 
-Before starting, make sure R and RStudio are installed.
-
-You only need to install packages **once** on your computer.
-
-After installation, packages can be loaded using:
-
-```r
-library(package_name)
-```
-
----
-
-# 2. Install and Load Required Packages
-
-Install the packages once:
+Install packages only once:
 
 ```r
 install.packages(c(
   "tidyverse",
-  "ggpubr",
   "rstatix",
-  "skimr",
-  "janitor",
-  "BSDA",
-  "car",
-  "lmtest",
-  "gamlr",
   "survival",
-  "survminer",
-  "pwr",
-  "epiR"
+  "survminer"
 ))
 ```
 
-Load the packages when starting a new R session:
+Load them when starting a new R session:
 
 ```r
 library(tidyverse)
-library(ggpubr)
 library(rstatix)
-library(skimr)
-library(janitor)
+library(survival)
+library(survminer)
 ```
-
-Other packages will be loaded when needed later in this tutorial.
 
 ---
 
-# 3. Create an Example Biomedical Dataset
+# 2. Create an Example Biomedical Dataset
 
-In this tutorial, we will use a simulated biomedical dataset.
-
-The dataset contains:
-
-- age
-- sex
-- treatment group
-- body mass index
-- glucose level
-- cholesterol level
-- inflammatory marker level
-- disease status
+We will use a simulated patient dataset.
 
 ```r
 set.seed(123)
@@ -101,1001 +69,544 @@ patient_data <- tibble(
   patient_id = 1:120,
   age = round(rnorm(120, mean = 52, sd = 12)),
   sex = sample(c("Female", "Male"), 120, replace = TRUE),
-  treatment_group = sample(c("Control", "Treatment"), 120, replace = TRUE),
+  treatment_group = rep(c("Control", "Treatment"), each = 60),
   bmi = round(rnorm(120, mean = 27, sd = 4), 1),
-  glucose = round(rnorm(120, mean = 105, sd = 20), 1),
+  glucose = c(
+    rnorm(60, mean = 110, sd = 18),
+    rnorm(60, mean = 101, sd = 18)
+  ),
   cholesterol = round(rnorm(120, mean = 190, sd = 35), 1),
   crp = round(rlnorm(120, meanlog = 1.2, sdlog = 0.6), 2),
-  disease_status = sample(c("Healthy", "Disease"), 120, replace = TRUE)
+  disease_status = sample(
+    c("Healthy", "Disease"),
+    120,
+    replace = TRUE
+  )
 )
 
 head(patient_data)
 ```
 
+The dataset contains both **continuous variables** and **categorical variables**.
+
+Continuous variables include:
+
+- age
+- BMI
+- glucose
+- cholesterol
+- CRP
+
+Categorical variables include:
+
+- sex
+- treatment group
+- disease status
+
+Knowing the type of variable is important because it helps determine which statistical method should be used.
+
 ---
 
-# 4. Inspect the Dataset
+# 3. Inspect the Dataset
 
-Before performing statistical analyses, always inspect the dataset.
+Before calculating statistics, always inspect the data.
 
 ```r
 str(patient_data)
+```
 
-names(patient_data)
+Check the dimensions:
 
+```r
 dim(patient_data)
+```
 
+Check the variable names:
+
+```r
+names(patient_data)
+```
+
+View a general summary:
+
+```r
 summary(patient_data)
 ```
 
----
+These functions help answer basic questions such as:
 
-# 5. Clean Column Names
-
-The `janitor` package can clean column names and make them consistent.
-
-```r
-patient_data <- patient_data %>%
-  clean_names()
-
-names(patient_data)
-```
+- How many observations are there?
+- Which variables are available?
+- Are variables stored as numeric or categorical?
+- Are there unusual values?
 
 ---
 
-# 6. Check for Missing Values
+# 4. Descriptive Statistics
 
-```r
-colSums(is.na(patient_data))
+Descriptive statistics summarize the data before statistical testing.
 
-sum(is.na(patient_data))
-```
-
-For demonstration, we add some missing values:
-
-```r
-patient_data$glucose[c(5, 12, 30)] <- NA
-patient_data$bmi[c(8, 18)] <- NA
-
-colSums(is.na(patient_data))
-```
-
----
-
-# 7. Handle Missing Values
-
-There are several ways to handle missing data.
-
-For this tutorial, we remove rows containing missing values.
-
-```r
-patient_data_clean <- patient_data %>%
-  drop_na()
-
-dim(patient_data)
-
-dim(patient_data_clean)
-```
-
-The appropriate method for handling missing values depends on the study and why the data are missing.
-
----
-
-# Descriptive Statistics
-
-# 8. Descriptive Statistics
-
-Descriptive statistics summarize the main characteristics of a dataset.
-
-Important measures include:
+For a continuous variable, commonly reported statistics include:
 
 - mean
 - median
-- variance
 - standard deviation
-- minimum
-- maximum
-- range
+- minimum and maximum
 - quartiles
-- percentiles
 - interquartile range
 
 ---
 
-# 9. Mean and Median
-
-Calculate the mean:
-
-```r
-mean(patient_data_clean$glucose)
-```
-
-Calculate the median:
-
-```r
-median(patient_data_clean$glucose)
-```
+## 4.1 Mean and Median
 
 The **mean** is the arithmetic average.
 
-The **median** is the middle observation after sorting the data.
-
-The median is often useful for skewed variables or variables containing extreme values.
-
----
-
-# 10. Variance and Standard Deviation
-
-The variance describes how much the observations vary around the mean.
-
 ```r
-var(patient_data_clean$glucose)
+mean(patient_data$glucose)
 ```
 
-The standard deviation is:
+The **median** is the middle value after sorting the observations.
 
 ```r
-sd(patient_data_clean$glucose)
+median(patient_data$glucose)
 ```
 
-A larger standard deviation indicates that the observations are more spread out.
+The mean is useful for approximately symmetric data.
 
----
+The median is often more informative when the data are strongly skewed or contain extreme values.
 
-# 11. Minimum, Maximum, and Range
-
-Minimum:
+For example, CRP is often right-skewed:
 
 ```r
-min(patient_data_clean$glucose)
-```
+mean(patient_data$crp)
 
-Maximum:
-
-```r
-max(patient_data_clean$glucose)
-```
-
-Both values together:
-
-```r
-range(patient_data_clean$glucose)
-```
-
-The statistical range is:
-
-```r
-max(patient_data_clean$glucose) -
-  min(patient_data_clean$glucose)
+median(patient_data$crp)
 ```
 
 ---
 
-# 12. Quartiles and Percentiles
+## 4.2 Standard Deviation and Variance
 
-Quartiles divide ordered observations into four parts.
+The **standard deviation** describes how much observations vary around the mean.
 
-The first quartile is the 25th percentile:
+```r
+sd(patient_data$glucose)
+```
+
+The **variance** is the squared standard deviation:
+
+```r
+var(patient_data$glucose)
+```
+
+A larger standard deviation means that the observations are more spread out.
+
+---
+
+## 4.3 Minimum, Maximum, and Range
+
+```r
+min(patient_data$glucose)
+
+max(patient_data$glucose)
+
+range(patient_data$glucose)
+```
+
+`range()` returns the minimum and maximum values.
+
+---
+
+## 4.4 Quartiles and Interquartile Range
+
+Quartiles divide ordered data into four parts.
 
 ```r
 quantile(
-  patient_data_clean$glucose,
-  probs = 0.25,
-  type = 6
+  patient_data$glucose,
+  probs = c(0.25, 0.50, 0.75)
 )
 ```
 
-The third quartile is the 75th percentile:
+These values correspond to:
+
+- Q1: 25th percentile
+- Q2: median
+- Q3: 75th percentile
+
+The **interquartile range (IQR)** describes the middle 50% of the data.
 
 ```r
-quantile(
-  patient_data_clean$glucose,
-  probs = 0.75,
-  type = 6
-)
+IQR(patient_data$glucose)
 ```
 
-Calculate multiple quartiles at once:
-
-```r
-quantile(
-  patient_data_clean$glucose,
-  probs = c(0.25, 0.50, 0.75),
-  type = 6
-)
-```
-
-Other percentiles can be calculated by changing `probs`.
+Median and IQR are commonly reported for skewed variables.
 
 For example:
 
 ```r
-quantile(
-  patient_data_clean$glucose,
-  probs = c(0.10, 0.90),
-  type = 6
-)
+median(patient_data$crp)
+
+IQR(patient_data$crp)
 ```
 
 ---
 
-# 13. Interquartile Range
-
-The **interquartile range (IQR)** is the difference between the third and first quartiles.
+## 4.5 Summarize Several Statistics Together
 
 ```r
-IQR(
-  patient_data_clean$glucose,
-  type = 6
-)
-```
-
-The IQR describes the spread of the middle 50% of the data.
-
-For skewed variables such as `crp`, the median and IQR are often useful summaries.
-
-```r
-median(patient_data_clean$crp)
-
-IQR(
-  patient_data_clean$crp,
-  type = 6
-)
-```
-
----
-
-# 14. Summary of Continuous Variables
-
-```r
-patient_data_clean %>%
+patient_data %>%
   summarise(
-    mean_age = mean(age),
-    median_age = median(age),
-    sd_age = sd(age),
-
-    mean_bmi = mean(bmi),
-    median_bmi = median(bmi),
-    sd_bmi = sd(bmi),
-
+    n = n(),
     mean_glucose = mean(glucose),
-    median_glucose = median(glucose),
-    variance_glucose = var(glucose),
     sd_glucose = sd(glucose),
+    median_glucose = median(glucose),
+    q1 = quantile(glucose, 0.25),
+    q3 = quantile(glucose, 0.75),
     min_glucose = min(glucose),
-    max_glucose = max(glucose),
-    q1_glucose = quantile(glucose, 0.25, type = 6),
-    q3_glucose = quantile(glucose, 0.75, type = 6),
-    iqr_glucose = IQR(glucose, type = 6),
-
-    mean_cholesterol = mean(cholesterol),
-    median_cholesterol = median(cholesterol),
-    sd_cholesterol = sd(cholesterol),
-
-    mean_crp = mean(crp),
-    median_crp = median(crp),
-    sd_crp = sd(crp)
+    max_glucose = max(glucose)
   )
 ```
 
 ---
 
-# 15. Summary Using `summary()`
+# 5. Summarizing Categorical Variables
+
+For categorical variables, we usually report:
+
+- number of observations
+- proportion
+- percentage
+
+Create a frequency table:
 
 ```r
-summary(patient_data_clean$glucose)
+table(patient_data$sex)
 ```
 
-For a complete dataset:
-
-```r
-summary(patient_data_clean)
-```
-
----
-
-# 16. Summary Using `skimr`
-
-```r
-skim(patient_data_clean)
-```
-
----
-
-# 17. Frequency Tables
-
-Use `table()` for categorical variables.
-
-```r
-table(patient_data_clean$sex)
-
-table(patient_data_clean$treatment_group)
-
-table(patient_data_clean$disease_status)
-```
-
-Using `dplyr`:
-
-```r
-patient_data_clean %>%
-  count(sex)
-```
-
----
-
-# 18. Proportions
+Calculate proportions:
 
 ```r
 prop.table(
-  table(patient_data_clean$sex)
+  table(patient_data$sex)
 )
 ```
 
-Convert to percentages:
+Calculate percentages:
 
 ```r
 prop.table(
-  table(patient_data_clean$sex)
+  table(patient_data$sex)
 ) * 100
 ```
 
 Using `dplyr`:
 
 ```r
-patient_data_clean %>%
+patient_data %>%
   count(sex) %>%
   mutate(
-    percent = n / sum(n) * 100
+    percentage = n / sum(n) * 100
   )
 ```
 
 ---
 
-# Probability Distributions in R
+# 6. Always Visualize the Data
 
-R provides functions for working with probability distributions.
+Statistical tests should not replace looking at the data.
 
-A common naming system is:
+For a continuous variable, a histogram can show the shape of the distribution.
 
-```text
-d = density or probability
-p = cumulative probability
-q = quantile
-r = generate random values
+```r
+ggplot(patient_data, aes(x = glucose)) +
+  geom_histogram(
+    bins = 25,
+    color = "black",
+    fill = "lightblue"
+  ) +
+  theme_minimal()
 ```
+
+A boxplot is useful for comparing groups.
+
+```r
+ggplot(
+  patient_data,
+  aes(
+    x = treatment_group,
+    y = glucose,
+    fill = treatment_group
+  )
+) +
+  geom_boxplot() +
+  geom_jitter(
+    width = 0.15,
+    alpha = 0.6
+  ) +
+  theme_minimal()
+```
+
+Before running a statistical test, ask:
+
+> Does the plot support the assumptions I am about to make?
+
+---
+
+# 7. Understanding Confidence Intervals and p-Values
+
+Before learning statistical tests, it is useful to understand two important concepts.
+
+## Confidence Interval
+
+A **confidence interval** gives a range of plausible values for a population parameter.
 
 For example:
 
 ```text
-dbinom()
-pbinom()
-qbinom()
-rbinom()
+Mean difference = 8.2
+
+95% CI = 2.1 to 14.3
 ```
+
+The estimated difference is 8.2, but there is uncertainty around that estimate.
+
+In biomedical research, confidence intervals are important because they show both:
+
+- the size of the estimated effect
+- the uncertainty around the estimate
 
 ---
 
-# 19. Binomial Distribution
+## p-Value
 
-Suppose:
+A p-value is calculated under the assumption that the **null hypothesis** is true.
 
-```text
-X ~ Binomial(n = 4, p = 0.2)
-```
-
-Calculate:
+A commonly used threshold is:
 
 ```text
-P(X = 2)
+0.05
 ```
 
-using:
+A simple interpretation is:
 
-```r
-dbinom(
-  2,
-  size = 4,
-  prob = 0.2
-)
-```
+- `p < 0.05`: evidence against the null hypothesis
+- `p >= 0.05`: insufficient evidence to reject the null hypothesis
 
-Calculate:
+However:
 
-```text
-P(X <= 2)
-```
+> A small p-value does not automatically mean that an effect is biologically or clinically important.
 
-using:
-
-```r
-pbinom(
-  2,
-  size = 4,
-  prob = 0.2
-)
-```
-
-Calculate:
-
-```text
-P(X > 2)
-```
-
-using:
-
-```r
-pbinom(
-  2,
-  size = 4,
-  prob = 0.2,
-  lower.tail = FALSE
-)
-```
+Always consider the estimated effect and its confidence interval.
 
 ---
 
-# 20. Multinomial Distribution
+# 8. Confidence Interval for a Mean
 
-Suppose observations fall into four categories.
-
-```r
-dmultinom(
-  c(12, 10, 2, 1),
-  size = 25,
-  prob = c(0.46, 0.42, 0.09, 0.03)
-)
-```
-
-This calculates the probability of observing exactly:
-
-```text
-12, 10, 2, and 1
-```
-
-observations in the four categories.
-
----
-
-# 21. Normal Distribution
-
-Suppose:
-
-```text
-X ~ Normal(mean = 170, variance = 100)
-```
-
-The standard deviation is:
+Suppose we want a 95% confidence interval for the mean glucose level.
 
 ```r
-sqrt(100)
+t.test(patient_data$glucose)
 ```
 
-Calculate:
+The output contains:
 
-```text
-P(X <= 150)
-```
-
-using:
-
-```r
-pnorm(
-  150,
-  mean = 170,
-  sd = sqrt(100)
-)
-```
-
-Calculate:
-
-```text
-P(X > 150)
-```
-
-using:
-
-```r
-pnorm(
-  150,
-  mean = 170,
-  sd = sqrt(100),
-  lower.tail = FALSE
-)
-```
-
-Calculate:
-
-```text
-P(150 <= X <= 160)
-```
-
-using:
-
-```r
-pnorm(
-  160,
-  mean = 170,
-  sd = sqrt(100)
-) -
-  pnorm(
-    150,
-    mean = 170,
-    sd = sqrt(100)
-  )
-```
-
-For continuous distributions, the probability of observing exactly one value is zero.
-
-Therefore `dnorm()` gives a **density**, not the probability of observing exactly one value.
-
----
-
-# 22. Chi-Square Distribution
-
-For a chi-square distribution with 2 degrees of freedom:
-
-```r
-pchisq(
-  3,
-  df = 2
-)
-```
-
-For:
-
-```text
-P(X > 3)
-```
-
-use:
-
-```r
-pchisq(
-  3,
-  df = 2,
-  lower.tail = FALSE
-)
-```
-
----
-
-# 23. t Distribution
-
-For a t distribution with 2 degrees of freedom:
-
-```r
-pt(
-  3,
-  df = 2
-)
-```
-
-For:
-
-```text
-P(X > 3)
-```
-
-use:
-
-```r
-pt(
-  3,
-  df = 2,
-  lower.tail = FALSE
-)
-```
-
----
-
-# Confidence Intervals
-
-A **confidence interval** provides a range of plausible values for a population parameter.
-
-A common confidence level is:
-
-```text
-95%
-```
-
----
-
-# 24. Confidence Interval for One Mean
-
-Use `t.test()`:
-
-```r
-t.test(
-  patient_data_clean$glucose
-)
-```
-
-The output includes:
-
-- sample mean
+- estimated mean
+- 95% confidence interval
 - t statistic
 - p-value
-- confidence interval
 
-For a 99% confidence interval:
+For a different confidence level:
 
 ```r
 t.test(
-  patient_data_clean$glucose,
+  patient_data$glucose,
   conf.level = 0.99
 )
 ```
 
 ---
 
-# 25. Confidence Interval for One Proportion
+# 9. Checking the Distribution
 
-Suppose 63 of 136 patients are frequent smokers.
+Several statistical tests work best when the data within groups are reasonably compatible with a normal distribution.
 
-```r
-prop.test(
-  x = 63,
-  n = 136,
-  conf.level = 0.95
-)
-```
-
-Here:
-
-- `x` = number of successes
-- `n` = total number of observations
-
-For a binary variable containing 0 and 1:
-
-```r
-data01 <- c(
-  0, 0, 0, 1, 0, 1, 0, 1, 1,
-  0, 1, 0, 1, 0, 0, 1, 0, 1
-)
-```
-
-Then:
-
-```r
-prop.test(
-  x = sum(data01),
-  n = length(data01)
-)
-```
+We can investigate this using plots.
 
 ---
 
-# 26. Exact Confidence Interval for One Proportion
-
-When the sample is small, an exact binomial method can be used.
+## 9.1 Histogram
 
 ```r
-binom.test(
-  x = 4,
-  n = 10,
-  conf.level = 0.90
-)
-```
-
----
-
-# Hypothesis Testing
-
-A hypothesis test usually compares:
-
-```text
-H0 = null hypothesis
-HA = alternative hypothesis
-```
-
-The p-value measures how compatible the observed data are with the null hypothesis.
-
-A commonly used significance level is:
-
-```text
-alpha = 0.05
-```
-
----
-
-# 27. One-Sample t-Test
-
-Suppose we want to test whether mean glucose equals 100.
-
-```r
-t.test(
-  patient_data_clean$glucose,
-  mu = 100,
-  alternative = "two.sided"
-)
-```
-
-Alternative hypotheses can be:
-
-```text
-"two.sided"
-"less"
-"greater"
-```
-
-For example:
-
-```r
-t.test(
-  patient_data_clean$glucose,
-  mu = 100,
-  alternative = "greater"
-)
-```
-
-tests whether the population mean is greater than 100.
-
----
-
-# 28. One-Proportion Test
-
-Suppose we want to test:
-
-```text
-H0: p = 0.50
-```
-
-and observe 20 successes among 50 observations.
-
-```r
-prop.test(
-  x = 20,
-  n = 50,
-  p = 0.50,
-  alternative = "two.sided"
-)
-```
-
----
-
-# 29. Exact One-Proportion Test
-
-For small samples:
-
-```r
-binom.test(
-  x = 4,
-  n = 10,
-  p = 0.45,
-  alternative = "less"
-)
-```
-
----
-
-# Normality Testing
-
-# 30. Why Check Normality?
-
-Several statistical procedures assume approximately normally distributed observations or residuals.
-
-Examples include:
-
-- t-tests
-- ANOVA
-- linear regression
-
-Normality can be investigated using:
-
-- histograms
-- Q-Q plots
-- Shapiro-Wilk tests
-
----
-
-# 31. Histogram
-
-```r
-ggplot(
-  patient_data_clean,
-  aes(x = glucose)
-) +
+ggplot(patient_data, aes(x = glucose)) +
   geom_histogram(
-    bins = 30,
-    color = "black",
-    fill = "skyblue"
-  ) +
-  labs(
-    title = "Distribution of Glucose Levels",
-    x = "Glucose Level",
-    y = "Count"
+    bins = 25,
+    color = "black"
   ) +
   theme_minimal()
 ```
 
 ---
 
-# 32. Q-Q Plot
-
-```r
-ggqqplot(
-  patient_data_clean$glucose
-)
-```
-
-Using `ggplot2`:
+## 9.2 Q-Q Plot
 
 ```r
 ggplot(
-  patient_data_clean,
+  patient_data,
   aes(sample = glucose)
 ) +
   stat_qq() +
   stat_qq_line() +
-  labs(
-    title = "Q-Q Plot of Glucose Levels"
+  theme_minimal()
+```
+
+If the points approximately follow the line, the distribution is reasonably compatible with normality.
+
+---
+
+## 9.3 Shapiro-Wilk Test
+
+```r
+shapiro.test(patient_data$glucose)
+```
+
+A common interpretation is:
+
+- `p > 0.05`: no strong evidence against normality
+- `p <= 0.05`: evidence that the distribution differs from normality
+
+Do not use the Shapiro-Wilk test alone.
+
+Always also inspect the distribution visually.
+
+---
+
+# 10. Comparing Two Independent Groups
+
+One of the most common biomedical questions is:
+
+> Is a continuous measurement different between two groups?
+
+For example:
+
+> Is glucose different between the Control and Treatment groups?
+
+---
+
+## 10.1 Independent Samples t-Test
+
+Use a t-test when comparing the means of two **independent groups**.
+
+```r
+t.test(
+  glucose ~ treatment_group,
+  data = patient_data
+)
+```
+
+By default, R performs **Welch's t-test**, which does not require equal variances.
+
+Important information in the output includes:
+
+- mean in each group
+- estimated difference
+- confidence interval
+- p-value
+
+Visualize the comparison:
+
+```r
+ggplot(
+  patient_data,
+  aes(
+    x = treatment_group,
+    y = glucose,
+    fill = treatment_group
+  )
+) +
+  geom_boxplot() +
+  geom_jitter(
+    width = 0.15,
+    alpha = 0.6
   ) +
   theme_minimal()
 ```
 
 ---
 
-# 33. Shapiro-Wilk Test
+## 10.2 Effect Size
+
+A statistically significant difference may still be very small.
+
+Effect size helps describe the magnitude of the difference.
+
+For a two-group comparison, Cohen's d can be calculated using:
 
 ```r
-shapiro.test(
-  patient_data_clean$glucose
-)
-```
-
-A common interpretation is:
-
-- p-value > 0.05: there is no strong statistical evidence against normality
-- p-value <= 0.05: the data significantly deviate from normality
-
-Always combine formal testing with plots and knowledge of the data.
-
----
-
-# 34. Normality by Group
-
-```r
-patient_data_clean %>%
-  group_by(treatment_group) %>%
-  shapiro_test(glucose)
-```
-
----
-
-# Comparing Two Groups
-
-# 35. Independent Samples t-Test
-
-Use an independent samples t-test when the two groups contain different individuals.
-
-Example:
-
-> Is mean glucose different between Control and Treatment groups?
-
-```r
-t.test(
-  glucose ~ treatment_group,
-  data = patient_data_clean
-)
-```
-
-By default, R uses Welch's t-test, which does not assume equal variances.
-
----
-
-# 36. Comparing Variances
-
-Use `var.test()` to compare two variances.
-
-```r
-control_glucose <- patient_data_clean %>%
-  filter(treatment_group == "Control") %>%
-  pull(glucose)
-
-treatment_glucose <- patient_data_clean %>%
-  filter(treatment_group == "Treatment") %>%
-  pull(glucose)
-```
-
-Then:
-
-```r
-var.test(
-  control_glucose,
-  treatment_glucose
-)
-```
-
-If you specifically want the pooled-variance version of the t-test:
-
-```r
-t.test(
-  control_glucose,
-  treatment_glucose,
-  var.equal = TRUE
-)
-```
-
----
-
-# 37. Paired t-Test
-
-A paired t-test is used when two measurements come from the same individuals.
-
-Example:
-
-```r
-before <- c(
-  115, 112, 107, 119, 115,
-  138, 126, 105, 104, 115
-)
-
-after <- c(
-  128, 115, 106, 128, 122,
-  145, 132, 109, 102, 117
-)
-```
-
-Run:
-
-```r
-t.test(
-  after,
-  before,
-  paired = TRUE
-)
-```
-
-The pairing is important because each value in `before` corresponds to the same individual in `after`.
-
----
-
-# 38. t-Test Using `rstatix`
-
-```r
-patient_data_clean %>%
-  t_test(
-    glucose ~ treatment_group
-  )
-```
-
-Effect size:
-
-```r
-patient_data_clean %>%
+patient_data %>%
   cohens_d(
     glucose ~ treatment_group
   )
 ```
 
+Effect size should be interpreted together with the confidence interval and clinical context.
+
 ---
 
-# 39. Wilcoxon Rank-Sum Test
+# 11. Paired t-Test
 
-For two independent groups, a common non-parametric alternative is the Wilcoxon rank-sum test.
+A **paired test** is used when the two measurements come from the same individuals.
+
+Examples include:
+
+- blood pressure before and after treatment
+- gene expression before and after stimulation
+- measurements from matched patients
+
+Create example data:
 
 ```r
-wilcox.test(
-  glucose ~ treatment_group,
-  data = patient_data_clean,
-  paired = FALSE
+before <- c(
+  125, 138, 142, 130, 150,
+  145, 135, 128, 160, 140
+)
+
+after <- c(
+  118, 130, 137, 122, 143,
+  139, 130, 120, 150, 135
 )
 ```
 
-Using `rstatix`:
+Run the paired t-test:
 
 ```r
-patient_data_clean %>%
-  wilcox_test(
-    glucose ~ treatment_group
-  )
+t.test(
+  after,
+  before,
+  paired = TRUE
+)
 ```
+
+The important point is that observation 1 in `before` belongs to the same person as observation 1 in `after`.
+
+Do not use an independent t-test for paired measurements.
 
 ---
 
-# 40. Wilcoxon Signed-Rank Test
+# 12. Non-Parametric Alternative for Two Groups
 
-For paired measurements:
+Sometimes the data are strongly skewed, contain influential outliers, or are not suitable for a mean-based comparison.
+
+For two independent groups, a common alternative is the **Wilcoxon rank-sum test**.
+
+```r
+wilcox.test(
+  crp ~ treatment_group,
+  data = patient_data
+)
+```
+
+For paired data:
 
 ```r
 wilcox.test(
@@ -1105,766 +616,355 @@ wilcox.test(
 )
 ```
 
-For a one-sample signed-rank test:
+A useful simplified guide is:
 
-```r
-wilcox.test(
-  patient_data_clean$glucose,
-  mu = 100
-)
-```
-
----
-
-# 41. Sign Test
-
-The sign test is available through the `BSDA` package.
-
-```r
-library(BSDA)
-```
-
-For paired data:
-
-```r
-SIGN.test(
-  after,
-  before,
-  md = 0,
-  alternative = "two.sided"
-)
-```
-
-The sign test uses only the direction of the paired differences.
+| Situation | Common Test |
+|---|---|
+| Two independent groups, approximately normal continuous outcome | Independent t-test |
+| Two paired measurements, approximately normal differences | Paired t-test |
+| Two independent groups, strongly non-normal/ordinal outcome | Wilcoxon rank-sum |
+| Two paired measurements, strongly non-normal differences | Wilcoxon signed-rank |
 
 ---
 
-# Comparing More Than Two Groups
+# 13. Comparing More Than Two Groups
 
-# 42. Create a Three-Group Variable
+Suppose we want to compare a continuous variable among three or more groups.
+
+First create age groups:
 
 ```r
-patient_data_clean <- patient_data_clean %>%
+patient_data <- patient_data %>%
   mutate(
     age_group = case_when(
       age < 40 ~ "Young",
-      age >= 40 & age < 60 ~ "Middle-aged",
-      age >= 60 ~ "Older"
+      age < 60 ~ "Middle-aged",
+      TRUE ~ "Older"
     )
   )
 
-patient_data_clean %>%
-  count(age_group)
+table(patient_data$age_group)
 ```
 
 ---
 
-# 43. One-Way ANOVA
+## 13.1 One-Way ANOVA
 
-ANOVA compares means across three or more groups.
+ANOVA tests whether the group means are all equal.
+
+Example:
+
+> Does cholesterol differ among age groups?
 
 ```r
-anova_result <- aov(
+anova_model <- aov(
   cholesterol ~ age_group,
-  data = patient_data_clean
+  data = patient_data
 )
 
-summary(anova_result)
+summary(anova_model)
 ```
+
+The ANOVA p-value answers:
+
+> Is there evidence that at least one group mean differs?
+
+It does **not** tell us which groups differ.
 
 ---
 
-# 44. ANOVA Using `rstatix`
+## 13.2 Post-Hoc Test
+
+If the ANOVA is significant, we can compare pairs of groups.
 
 ```r
-patient_data_clean %>%
-  anova_test(
-    cholesterol ~ age_group
-  )
+TukeyHSD(anova_model)
 ```
+
+Tukey's method adjusts for performing multiple comparisons.
 
 ---
 
-# 45. Post-Hoc Comparisons
+## 13.3 Kruskal-Wallis Test
 
-If the overall ANOVA is significant, post-hoc comparisons can identify which groups differ.
-
-```r
-TukeyHSD(anova_result)
-```
-
-Using `rstatix`:
-
-```r
-patient_data_clean %>%
-  tukey_hsd(
-    cholesterol ~ age_group
-  )
-```
-
----
-
-# 46. Kruskal-Wallis Test
-
-A common non-parametric alternative to one-way ANOVA is:
+For strongly non-normal or ordinal outcomes, a common alternative is:
 
 ```r
 kruskal.test(
   cholesterol ~ age_group,
-  data = patient_data_clean
-)
-```
-
-Using `rstatix`:
-
-```r
-patient_data_clean %>%
-  kruskal_test(
-    cholesterol ~ age_group
-  )
-```
-
----
-
-# Categorical Data Analysis
-
-# 47. Contingency Tables
-
-A contingency table summarizes two categorical variables.
-
-```r
-disease_treatment_table <- table(
-  patient_data_clean$disease_status,
-  patient_data_clean$treatment_group
-)
-
-disease_treatment_table
-```
-
-Add row and column totals:
-
-```r
-addmargins(
-  disease_treatment_table
-)
-```
-
-Convert frequencies to proportions:
-
-```r
-prop.table(
-  disease_treatment_table
+  data = patient_data
 )
 ```
 
 ---
 
-# 48. Chi-Square Test of Independence
+# 14. Association Between Categorical Variables
 
-```r
-chisq.test(
-  disease_treatment_table
-)
-```
-
-The test evaluates whether the two categorical variables are independent.
-
----
-
-# 49. Expected Cell Counts
-
-The chi-square approximation works best when expected cell counts are sufficiently large.
-
-Check expected counts:
-
-```r
-chisq.test(
-  disease_treatment_table
-)$expected
-```
-
-If expected counts are too small, Fisher's exact test may be more appropriate.
-
----
-
-# 50. Continuity Correction
-
-For a 2 x 2 table, R applies a continuity correction by default.
-
-Disable it using:
-
-```r
-chisq.test(
-  disease_treatment_table,
-  correct = FALSE
-)
-```
-
----
-
-# 51. Fisher's Exact Test
-
-```r
-fisher.test(
-  disease_treatment_table
-)
-```
-
-Fisher's exact test is especially useful for small cell counts.
-
----
-
-# 52. Two-Proportion Test
-
-Suppose we observe:
-
-```text
-Group A: 78 successes from 279
-Group B: 40 successes from 211
-```
-
-Run:
-
-```r
-prop.test(
-  x = c(78, 40),
-  n = c(279, 211),
-  alternative = "two.sided",
-  correct = FALSE
-)
-```
-
-The output contains:
-
-- estimated proportions
-- test statistic
-- p-value
-- confidence interval for the difference in proportions
-
----
-
-# Correlation Analysis
-
-# 53. Pearson Correlation
-
-Pearson correlation measures linear association between two continuous variables.
-
-```r
-cor.test(
-  patient_data_clean$bmi,
-  patient_data_clean$glucose,
-  method = "pearson"
-)
-```
-
-The output includes:
-
-- estimated correlation coefficient
-- confidence interval
-- p-value
-
-Correlation does not imply causation.
-
----
-
-# 54. Spearman Correlation
-
-Spearman correlation is based on ranks.
-
-```r
-cor.test(
-  patient_data_clean$bmi,
-  patient_data_clean$glucose,
-  method = "spearman"
-)
-```
-
-It is useful when the relationship is monotonic but not necessarily linear.
-
----
-
-# 55. Correlation Matrix
-
-```r
-continuous_vars <- patient_data_clean %>%
-  select(
-    age,
-    bmi,
-    glucose,
-    cholesterol,
-    crp
-  )
-
-cor_matrix <- cor(
-  continuous_vars
-)
-
-cor_matrix
-```
-
-If missing values are present:
-
-```r
-cor_matrix <- cor(
-  continuous_vars,
-  use = "complete.obs",
-  method = "pearson"
-)
-
-cor_matrix
-```
-
----
-
-# Linear Regression
-
-# 56. Simple Linear Regression
-
-Linear regression models a continuous outcome as a function of one or more predictors.
+Suppose both variables are categorical.
 
 Example:
 
-> Does BMI predict glucose?
+> Is disease status associated with treatment group?
+
+Create a contingency table:
 
 ```r
-model_1 <- lm(
-  glucose ~ bmi,
-  data = patient_data_clean
+disease_table <- table(
+  patient_data$disease_status,
+  patient_data$treatment_group
 )
 
-summary(model_1)
-```
-
-The model has the form:
-
-```text
-glucose = intercept + slope * BMI
-```
-
-Important parts of `summary()` include:
-
-- `Estimate`: estimated regression coefficients
-- `Std. Error`: uncertainty of the estimates
-- `t value`: test statistic
-- `Pr(>|t|)`: p-value
-- `R-squared`: proportion of variation explained by the model
-- `F-statistic`: overall model test
-
----
-
-# 57. Confidence Intervals for Regression Coefficients
-
-```r
-confint(
-  model_1
-)
+disease_table
 ```
 
 ---
 
-# 58. Regression Plot
+## 14.1 Chi-Square Test
+
+```r
+chi_result <- chisq.test(
+  disease_table
+)
+
+chi_result
+```
+
+The null hypothesis is that the two categorical variables are independent.
+
+Check the expected cell counts:
+
+```r
+chi_result$expected
+```
+
+---
+
+## 14.2 Fisher's Exact Test
+
+If some expected cell counts are very small, Fisher's exact test is often preferable.
+
+```r
+fisher.test(
+  disease_table
+)
+```
+
+A practical rule is:
+
+- adequate expected counts → chi-square test
+- small/sparse tables → Fisher's exact test
+
+---
+
+# 15. Comparing Two Proportions
+
+Suppose:
+
+- 40 of 100 patients in group A experienced an event
+- 25 of 100 patients in group B experienced an event
+
+Use:
+
+```r
+prop.test(
+  x = c(40, 25),
+  n = c(100, 100)
+)
+```
+
+This compares the two population proportions.
+
+---
+
+# 16. Correlation
+
+Correlation measures the strength of association between two variables.
+
+Example:
+
+> Is BMI associated with glucose?
+
+Always visualize the relationship first.
 
 ```r
 ggplot(
-  patient_data_clean,
+  patient_data,
   aes(
     x = bmi,
     y = glucose
   )
 ) +
-  geom_point(
-    alpha = 0.7
-  ) +
+  geom_point() +
   geom_smooth(
     method = "lm",
     se = TRUE
-  ) +
-  labs(
-    title = "Relationship Between BMI and Glucose",
-    x = "BMI",
-    y = "Glucose Level"
   ) +
   theme_minimal()
 ```
 
 ---
 
-# 59. Prediction from a Linear Model
+## 16.1 Pearson Correlation
 
-Predict glucose for a patient with BMI = 25:
+Pearson correlation measures **linear association**.
 
 ```r
-predict(
-  model_1,
-  newdata = data.frame(
-    bmi = 25
-  )
+cor.test(
+  patient_data$bmi,
+  patient_data$glucose,
+  method = "pearson"
 )
 ```
 
-Confidence interval for the **mean response**:
+The correlation coefficient `r` ranges between:
 
-```r
-predict(
-  model_1,
-  newdata = data.frame(
-    bmi = 25
-  ),
-  interval = "confidence"
-)
+```text
+-1 and +1
 ```
 
-Prediction interval for an **individual observation**:
+Approximately:
 
-```r
-predict(
-  model_1,
-  newdata = data.frame(
-    bmi = 25
-  ),
-  interval = "prediction"
-)
-```
-
-Prediction intervals are wider because they include both uncertainty in the estimated mean and individual variability.
+- positive `r` → variables increase together
+- negative `r` → one increases while the other decreases
+- `r` close to 0 → little linear association
 
 ---
 
-# 60. Multiple Linear Regression
+## 16.2 Spearman Correlation
+
+Spearman correlation is based on ranks and is useful for monotonic relationships or variables with strong skewness/outliers.
+
+```r
+cor.test(
+  patient_data$bmi,
+  patient_data$crp,
+  method = "spearman"
+)
+```
+
+Important:
+
+> Correlation does not demonstrate causation.
+
+---
+
+# 17. Linear Regression
+
+Correlation describes association.
+
+**Linear regression** goes further by modeling how a continuous outcome changes with one or more predictors.
+
+Example:
+
+> How does glucose change with BMI?
+
+---
+
+## 17.1 Simple Linear Regression
+
+```r
+model_1 <- lm(
+  glucose ~ bmi,
+  data = patient_data
+)
+
+summary(model_1)
+```
+
+The model can be written conceptually as:
+
+```text
+glucose = intercept + slope × BMI
+```
+
+The important coefficient is the estimate for `bmi`.
+
+For example, an estimate of:
+
+```text
+2.1
+```
+
+would mean that glucose is estimated to increase by approximately 2.1 units for every one-unit increase in BMI.
+
+---
+
+## 17.2 Confidence Intervals
+
+```r
+confint(model_1)
+```
+
+Confidence intervals help show how precisely the regression coefficients are estimated.
+
+---
+
+## 17.3 Multiple Linear Regression
+
+Biomedical outcomes usually depend on more than one variable.
+
+For example:
 
 ```r
 model_2 <- lm(
-  glucose ~ bmi + age + cholesterol,
-  data = patient_data_clean
+  glucose ~ bmi + age + sex,
+  data = patient_data
 )
 
 summary(model_2)
 ```
 
-In multiple regression, each coefficient describes the association with the outcome while the other predictors are held constant.
+Each coefficient is interpreted while **holding the other predictors constant**.
+
+This is one reason regression models are widely used in biomedical research.
 
 ---
 
-# 61. Regression with Categorical Predictors
-
-```r
-model_3 <- lm(
-  glucose ~ treatment_group,
-  data = patient_data_clean
-)
-
-summary(model_3)
-```
-
-R automatically creates indicator variables for categorical predictors.
-
-One category becomes the **reference category**.
-
-It is often useful to explicitly convert categorical variables to factors:
-
-```r
-patient_data_clean <- patient_data_clean %>%
-  mutate(
-    treatment_group = factor(treatment_group),
-    sex = factor(sex)
-  )
-```
-
----
-
-# 62. Continuous and Categorical Predictors Together
-
-```r
-model_4 <- lm(
-  glucose ~
-    bmi +
-    age +
-    cholesterol +
-    treatment_group +
-    sex,
-  data = patient_data_clean
-)
-
-summary(model_4)
-```
-
----
-
-# 63. Linear Regression Assumptions
+## 17.4 Regression Assumptions
 
 Important assumptions include:
 
-- independence
-- linearity
-- constant variance of residuals
-- approximately normal residuals
+- observations are independent
+- the relationship is reasonably linear
+- residual variability is approximately constant
+- residuals are reasonably normally distributed
+
+R provides useful diagnostic plots:
+
+```r
+par(mfrow = c(2, 2))
+
+plot(model_2)
+
+par(mfrow = c(1, 1))
+```
+
+Pay particular attention to:
+
+- Residuals vs Fitted
+- Normal Q-Q
 
 ---
 
-## Residuals vs Fitted Values
+# 18. Logistic Regression
 
-```r
-plot(
-  model_4,
-  which = 1
-)
-```
+Linear regression is used when the outcome is continuous.
 
-Look for:
+**Logistic regression** is commonly used when the outcome has two categories.
 
-- no strong curved pattern
-- approximately equal vertical spread
+Examples include:
 
----
-
-## Q-Q Plot of Residuals
-
-```r
-plot(
-  model_4,
-  which = 2
-)
-```
+- disease / healthy
+- dead / alive
+- responder / non-responder
+- positive / negative
 
 ---
 
-## Shapiro-Wilk Test of Residuals
+## 18.1 Prepare a Binary Outcome
 
 ```r
-shapiro.test(
-  residuals(model_4)
-)
-```
-
-Model assumptions should not be evaluated using only one formal test.
-
----
-
-# 64. Diagnostic Plots
-
-```r
-par(
-  mfrow = c(2, 2)
-)
-
-plot(model_4)
-
-par(
-  mfrow = c(1, 1)
-)
-```
-
----
-
-# 65. Type II ANOVA for Regression Models
-
-When models contain categorical predictors, it can be useful to test an entire predictor rather than individual dummy coefficients.
-
-Load:
-
-```r
-library(car)
-```
-
-Then:
-
-```r
-Anova(
-  model_4,
-  type = 2
-)
-```
-
----
-
-# 66. Global F-Test
-
-The F-statistic shown by:
-
-```r
-summary(model_4)
-```
-
-tests the overall hypothesis that all non-intercept regression coefficients are zero.
-
-The corresponding ANOVA table can be viewed using:
-
-```r
-anova(model_4)
-```
-
----
-
-# 67. Pairwise Comparisons
-
-Suppose we compare cholesterol between the three age groups.
-
-```r
-pairwise.t.test(
-  patient_data_clean$cholesterol,
-  patient_data_clean$age_group,
-  p.adjust.method = "none"
-)
-```
-
-Bonferroni adjustment:
-
-```r
-pairwise.t.test(
-  patient_data_clean$cholesterol,
-  patient_data_clean$age_group,
-  p.adjust.method = "bonferroni"
-)
-```
-
-Benjamini-Hochberg adjustment:
-
-```r
-pairwise.t.test(
-  patient_data_clean$cholesterol,
-  patient_data_clean$age_group,
-  p.adjust.method = "BH"
-)
-```
-
-Multiple-testing adjustments help account for the fact that several comparisons are being performed.
-
----
-
-# 68. Interaction Effects
-
-An interaction means that the association between one predictor and the outcome depends on another predictor.
-
-Use `*`:
-
-```r
-interaction_model <- lm(
-  glucose ~ bmi * treatment_group,
-  data = patient_data_clean
-)
-
-summary(
-  interaction_model
-)
-```
-
-This is equivalent to including:
-
-```text
-bmi
-treatment_group
-bmi:treatment_group
-```
-
-The interaction term tests whether the slope for BMI differs between treatment groups.
-
----
-
-# 69. Log-Likelihood
-
-```r
-logLik(
-  model_4
-)
-```
-
-The likelihood describes how well a statistical model explains the observed data.
-
----
-
-# 70. Akaike Information Criterion
-
-Calculate AIC:
-
-```r
-AIC(
-  model_4
-)
-```
-
-AIC can be used to compare models fitted to the same outcome and observations.
-
-Lower AIC values generally indicate a better balance between model fit and complexity.
-
-For corrected AIC:
-
-```r
-library(gamlr)
-
-AICc(
-  model_4
-)
-```
-
----
-
-# 71. Likelihood Ratio Test
-
-Likelihood-ratio tests compare nested models.
-
-Load:
-
-```r
-library(lmtest)
-```
-
-Create two models:
-
-```r
-reduced_model <- lm(
-  glucose ~ bmi + age,
-  data = patient_data_clean
-)
-
-full_model <- lm(
-  glucose ~ bmi + age + cholesterol,
-  data = patient_data_clean
-)
-```
-
-Compare them:
-
-```r
-lrtest(
-  reduced_model,
-  full_model
-)
-```
-
----
-
-# Generalized Linear Models
-
-Generalized linear models extend ordinary linear regression to different types of outcomes.
-
-The general structure is:
-
-```r
-glm(
-  formula,
-  family = distribution(link = "link_function"),
-  data = dataset
-)
-```
-
-Common families include:
-
-```text
-gaussian   -> continuous outcome
-binomial   -> binary outcome
-poisson    -> count outcome
-```
-
----
-
-# 72. Logistic Regression
-
-Logistic regression is used when the outcome is binary.
-
-Create:
-
-```r
-patient_data_clean <- patient_data_clean %>%
+patient_data <- patient_data %>%
   mutate(
     disease_binary =
       ifelse(
@@ -1873,39 +973,44 @@ patient_data_clean <- patient_data_clean %>%
         0
       )
   )
+```
 
+Check the coding:
+
+```r
 table(
-  patient_data_clean$disease_binary
+  patient_data$disease_binary
 )
 ```
 
-Fit a logistic model:
+Here:
 
-```r
-logistic_model <- glm(
-  disease_binary ~
-    age +
-    bmi +
-    glucose +
-    cholesterol,
-  data = patient_data_clean,
-  family = binomial(
-    link = "logit"
-  )
-)
-
-summary(
-  logistic_model
-)
+```text
+0 = Healthy
+1 = Disease
 ```
 
 ---
 
-# 73. Odds Ratios
+## 18.2 Fit the Logistic Regression Model
 
-Logistic regression coefficients are expressed in log-odds.
+```r
+logistic_model <- glm(
+  disease_binary ~ age + bmi + glucose,
+  data = patient_data,
+  family = binomial
+)
 
-Convert them to odds ratios:
+summary(logistic_model)
+```
+
+The raw regression coefficients are expressed in **log-odds**, which are difficult to interpret directly.
+
+---
+
+## 18.3 Odds Ratios
+
+Convert the coefficients to odds ratios:
 
 ```r
 exp(
@@ -1913,7 +1018,7 @@ exp(
 )
 ```
 
-Confidence intervals:
+Confidence intervals for the odds ratios:
 
 ```r
 exp(
@@ -1921,103 +1026,29 @@ exp(
 )
 ```
 
-A simple interpretation is:
+A simplified interpretation is:
+
+- OR > 1 → higher odds of the outcome
+- OR < 1 → lower odds of the outcome
+- OR = 1 → no association with the odds
+
+For example:
 
 ```text
-OR > 1  -> higher odds
-OR < 1  -> lower odds
-OR = 1  -> no difference in odds
+OR = 1.20
 ```
 
-Interpretation must always consider the reference group and how the predictor is coded.
+means that the odds are multiplied by `1.20` for a one-unit increase in that predictor, assuming the other predictors remain constant.
 
 ---
 
-# 74. Logistic Regression Prediction
+# 19. Survival Analysis
 
-Predict the probability of disease for a new patient:
+Some biomedical outcomes are not simply yes/no.
 
-```r
-new_patient <- data.frame(
-  age = 60,
-  bmi = 28,
-  glucose = 110,
-  cholesterol = 200
-)
-```
+Instead, we are interested in:
 
-Then:
-
-```r
-predict(
-  logistic_model,
-  newdata = new_patient,
-  type = "response"
-)
-```
-
-Using:
-
-```r
-type = "response"
-```
-
-returns the predicted probability rather than the logit.
-
----
-
-# 75. Poisson Regression
-
-Poisson regression is commonly used for count outcomes.
-
-Create a simple simulated count variable:
-
-```r
-set.seed(321)
-
-patient_data_clean <- patient_data_clean %>%
-  mutate(
-    hospital_visits = rpois(
-      n(),
-      lambda = 2
-    )
-  )
-```
-
-Fit:
-
-```r
-poisson_model <- glm(
-  hospital_visits ~ age + disease_status,
-  data = patient_data_clean,
-  family = poisson(
-    link = "log"
-  )
-)
-
-summary(
-  poisson_model
-)
-```
-
-Predict expected counts:
-
-```r
-predict(
-  poisson_model,
-  newdata = data.frame(
-    age = 60,
-    disease_status = "Disease"
-  ),
-  type = "response"
-)
-```
-
----
-
-# Survival Analysis
-
-Survival analysis is used when the outcome is the **time until an event occurs**.
+> How long does it take until an event occurs?
 
 Examples include:
 
@@ -2026,99 +1057,86 @@ Examples include:
 - time until disease progression
 - time until treatment failure
 
-An important feature of survival data is **censoring**.
-
-A censored observation occurs when the exact event time is not observed, for example because the patient is still alive when the study ends.
+This is called **time-to-event** or **survival analysis**.
 
 ---
 
-# 76. Load Survival Packages
+## 19.1 What Is Censoring?
 
-```r
-library(survival)
+Suppose a patient is still alive when the study finishes.
 
-library(survminer)
-```
+We know that the patient survived at least until the end of follow-up, but we do not know their exact future survival time.
+
+This observation is called **censored**.
+
+Survival analysis can use both:
+
+- patients who experienced the event
+- patients who were censored
 
 ---
 
-# 77. Create Example Survival Data
+## 19.2 Create Example Survival Data
 
 ```r
 survival_data <- data.frame(
-  patient_id = 1:20,
   time = c(
     5, 8, 12, 15, 18,
     22, 25, 30, 35, 40,
-    6, 10, 14, 20, 23,
-    28, 32, 36, 42, 48
+    8, 12, 18, 22, 28,
+    32, 38, 42, 48, 52
   ),
   status = c(
-    1, 1, 0, 1, 1,
-    0, 1, 0, 1, 0,
-    1, 0, 1, 1, 0,
-    1, 0, 1, 0, 0
+    1, 1, 1, 0, 1,
+    1, 0, 1, 0, 1,
+    1, 0, 1, 0, 1,
+    0, 1, 0, 0, 0
   ),
   treatment = rep(
     c("Control", "Treatment"),
     each = 10
   )
 )
-
-survival_data
 ```
 
 Here:
 
-- `time` is the follow-up time
-- `status = 1` means that the event occurred
-- `status = 0` means that the observation was censored
+```text
+status = 1 → event occurred
+status = 0 → censored
+```
 
 ---
 
-# 78. Create a Survival Object
+## 19.3 Kaplan-Meier Curve
 
-Use `Surv()`:
+First create a survival object:
 
 ```r
 survival_object <- Surv(
-  survival_data$time,
-  survival_data$status
+  time = survival_data$time,
+  event = survival_data$status
 )
-
-survival_object
 ```
 
-The survival object combines:
-
-- event time
-- censoring information
-
----
-
-# 79. Kaplan-Meier Curve
-
-Fit one overall survival curve:
+Fit Kaplan-Meier curves:
 
 ```r
-km_overall <- survfit(
-  survival_object ~ 1,
+km_fit <- survfit(
+  survival_object ~ treatment,
   data = survival_data
 )
-
-km_overall
 ```
 
 Plot:
 
 ```r
 ggsurvplot(
-  km_overall,
+  km_fit,
   data = survival_data,
-  title = "Kaplan-Meier Survival Curve",
-  xlab = "Time",
-  ylab = "Survival Probability",
-  conf.int = TRUE
+  conf.int = TRUE,
+  risk.table = TRUE,
+  pval = TRUE
 )
 ```
 
@@ -2126,64 +1144,24 @@ The Kaplan-Meier curve estimates the probability of remaining event-free over ti
 
 ---
 
-# 80. Kaplan-Meier Curves by Group
+## 19.4 Log-Rank Test
+
+To formally compare survival curves:
 
 ```r
-km_group <- survfit(
+survdiff(
   Surv(time, status) ~ treatment,
   data = survival_data
 )
 ```
 
-Plot:
-
-```r
-ggsurvplot(
-  km_group,
-  data = survival_data,
-  title = "Kaplan-Meier Curves by Treatment",
-  xlab = "Time",
-  ylab = "Survival Probability",
-  pval = TRUE,
-  conf.int = TRUE
-)
-```
-
-The displayed p-value corresponds to a test comparing the survival curves.
+The null hypothesis is that the survival experience is the same between groups.
 
 ---
 
-# 81. Log-Rank Test
+## 19.5 Cox Regression
 
-The log-rank test compares survival distributions between groups.
-
-```r
-survdiff(
-  Surv(time, status) ~ treatment,
-  data = survival_data,
-  rho = 0
-)
-```
-
----
-
-# 82. Wilcoxon Survival Test
-
-A weighted Wilcoxon-type survival test can be performed using:
-
-```r
-survdiff(
-  Surv(time, status) ~ treatment,
-  data = survival_data,
-  rho = 1
-)
-```
-
----
-
-# 83. Cox Proportional Hazards Regression
-
-Cox regression evaluates the association between predictors and the event hazard.
+Cox regression allows us to study survival while including predictors.
 
 ```r
 cox_model <- coxph(
@@ -2191,81 +1169,30 @@ cox_model <- coxph(
   data = survival_data
 )
 
-summary(
-  cox_model
-)
+summary(cox_model)
 ```
 
-In the output:
-
-```text
-coef
-```
-
-is the log hazard ratio.
-
-```text
-exp(coef)
-```
-
-is the hazard ratio.
+The most important effect measure is the **hazard ratio (HR)**.
 
 A simplified interpretation is:
 
-```text
-HR > 1  -> higher hazard
-HR < 1  -> lower hazard
-HR = 1  -> similar hazard
-```
+- HR > 1 → higher event hazard
+- HR < 1 → lower event hazard
+- HR = 1 → similar event hazard
+
+As with an odds ratio, interpretation depends on the reference group.
 
 ---
 
-# 84. Cox Model with Multiple Predictors
+# 20. Statistical Power and Sample Size
 
-Create an age variable for demonstration:
+Before starting a study, researchers should ask:
 
-```r
-set.seed(456)
+> How many participants are needed?
 
-survival_data$age <- round(
-  rnorm(
-    nrow(survival_data),
-    mean = 60,
-    sd = 10
-  )
-)
-```
+A study with too few participants may have insufficient power to detect an important effect.
 
-Fit:
-
-```r
-cox_model_2 <- coxph(
-  Surv(time, status) ~
-    treatment +
-    age,
-  data = survival_data
-)
-
-summary(
-  cox_model_2
-)
-```
-
-Each coefficient describes the association with the hazard while accounting for the other variables in the model.
-
----
-
-# Power and Sample-Size Calculations
-
-Statistical **power** is the probability that a statistical test detects an effect when a real effect exists.
-
-Power depends on:
-
-- sample size
-- effect size
-- variability
-- significance level
-- type of statistical test
+**Statistical power** is the probability of detecting an effect when the effect truly exists.
 
 A commonly used target is:
 
@@ -2279,589 +1206,362 @@ or:
 power = 0.80
 ```
 
+Power depends on:
+
+- sample size
+- expected effect size
+- variability
+- significance level
+
 ---
 
-# 85. Power for One Mean
+## 20.1 Sample Size for Comparing Two Means
 
-Use `power.t.test()`.
+Suppose we want to detect a difference of:
 
-Suppose we want to detect a difference of 3 units with standard deviation 9 using 100 observations:
+```text
+5 units
+```
+
+with an expected standard deviation of:
+
+```text
+10 units
+```
+
+using:
+
+```text
+alpha = 0.05
+power = 0.80
+```
+
+Use:
 
 ```r
 power.t.test(
-  n = 100,
-  delta = 3,
-  sd = 9,
+  n = NULL,
+  delta = 5,
+  sd = 10,
+  sig.level = 0.05,
+  power = 0.80,
+  type = "two.sample"
+)
+```
+
+`n = NULL` tells R:
+
+> Calculate the required sample size.
+
+For a two-sample test, the returned `n` is approximately the required number of participants **per group**.
+
+---
+
+## 20.2 Calculate Power When Sample Size Is Known
+
+Suppose we already plan to include 50 participants per group.
+
+```r
+power.t.test(
+  n = 50,
+  delta = 5,
+  sd = 10,
   sig.level = 0.05,
   power = NULL,
-  type = "one.sample",
-  alternative = "one.sided"
+  type = "two.sample"
 )
 ```
 
-Setting:
-
-```r
-power = NULL
-```
-
-means that R calculates the power.
+`power = NULL` tells R to calculate the expected power.
 
 ---
 
-# 86. Sample Size for One Mean
+## 20.3 Sample Size for Comparing Two Proportions
 
-If we want to calculate the required sample size:
+Suppose we expect:
+
+```text
+Group 1: 40% response
+Group 2: 60% response
+```
+
+Use:
 
 ```r
-power.t.test(
+power.prop.test(
   n = NULL,
-  delta = 3,
-  sd = 9,
-  sig.level = 0.05,
-  power = 0.80,
-  type = "one.sample",
-  alternative = "two.sided"
-)
-```
-
-Setting:
-
-```r
-n = NULL
-```
-
-means that R calculates the required sample size.
-
----
-
-# 87. Sample Size for Two Means
-
-Suppose we want to detect a mean difference of 3 with standard deviation 17.1:
-
-```r
-power.t.test(
-  n = NULL,
-  delta = 3,
-  sd = 17.1,
-  sig.level = 0.05,
-  power = 0.80,
-  type = "two.sample",
-  alternative = "two.sided"
-)
-```
-
-For a two-sample test, `n` represents the required sample size **per group**.
-
----
-
-# 88. Paired-Sample Power
-
-For paired measurements:
-
-```r
-power.t.test(
-  n = NULL,
-  delta = 3,
-  sd = 8,
-  sig.level = 0.05,
-  power = 0.80,
-  type = "paired",
-  alternative = "two.sided"
-)
-```
-
----
-
-# 89. Power for ANOVA
-
-Use `power.anova.test()` when comparing three or more means.
-
-Suppose expected group means are:
-
-```r
-group_means <- c(
-  150,
-  170,
-  160,
-  185
-)
-```
-
-Calculate the variance between group means:
-
-```r
-var(
-  group_means
-)
-```
-
-Then:
-
-```r
-power.anova.test(
-  groups = 4,
-  n = NULL,
-  between.var = var(group_means),
-  within.var = 15^2,
+  p1 = 0.40,
+  p2 = 0.60,
   sig.level = 0.05,
   power = 0.80
 )
 ```
 
-The resulting `n` is the approximate number of observations required **per group**.
+Again, the returned `n` is approximately the sample size required per group.
 
 ---
 
-# 90. Power for One Proportion
+## 20.4 Sample Size for ANOVA
 
-Load:
-
-```r
-library(pwr)
-```
-
-Suppose the null proportion is:
-
-```text
-0.85
-```
-
-and the alternative is:
-
-```text
-0.75
-```
-
-Calculate Cohen's `h`:
+For three or more groups, R provides:
 
 ```r
-h <- ES.h(
-  0.75,
-  0.85
-)
-
-h
+power.anova.test()
 ```
 
-Then:
+For example:
 
 ```r
-pwr.p.test(
-  h = h,
+power.anova.test(
+  groups = 3,
   n = NULL,
+  between.var = 25,
+  within.var = 100,
   sig.level = 0.05,
-  power = 0.90,
-  alternative = "less"
+  power = 0.80
 )
 ```
 
+In real studies, expected effect sizes and variability should ideally come from:
+
+- previous studies
+- pilot data
+- clinically meaningful differences
+
 ---
 
-# 91. Power for Two Proportions
+# 21. Multiple Testing
 
-Suppose:
+In biomedical and especially genomic research, researchers may perform many statistical tests.
+
+The more tests we perform, the greater the chance of obtaining false-positive results.
+
+For example:
+
+```r
+p_values <- c(
+  0.001,
+  0.01,
+  0.03,
+  0.08,
+  0.20
+)
+```
+
+Bonferroni adjustment:
+
+```r
+p.adjust(
+  p_values,
+  method = "bonferroni"
+)
+```
+
+Benjamini-Hochberg adjustment:
+
+```r
+p.adjust(
+  p_values,
+  method = "BH"
+)
+```
+
+The Benjamini-Hochberg method controls the **false discovery rate** and is especially important in analyses such as transcriptomics where thousands of genes may be tested.
+
+---
+
+# 22. Which Statistical Test Should I Use?
+
+A useful first question is:
+
+> What type of outcome variable do I have?
+
+| Research Question | Outcome | Common Method |
+|---|---|---|
+| Describe a continuous variable | Continuous | Mean/SD or Median/IQR |
+| Compare two independent groups | Continuous | Independent t-test |
+| Compare paired measurements | Continuous | Paired t-test |
+| Compare two non-normal independent groups | Continuous/ordinal | Wilcoxon rank-sum |
+| Compare 3+ groups | Continuous | ANOVA |
+| Compare 3+ non-normal groups | Continuous/ordinal | Kruskal-Wallis |
+| Compare two proportions | Categorical | `prop.test()` |
+| Association between categorical variables | Categorical | Chi-square |
+| Small categorical table | Categorical | Fisher's exact |
+| Association between two continuous variables | Continuous | Pearson/Spearman correlation |
+| Predict a continuous outcome | Continuous | Linear regression |
+| Predict a binary outcome | Binary | Logistic regression |
+| Analyze time until an event | Time-to-event | Kaplan-Meier / Cox regression |
+
+This table is a starting point.
+
+The final choice also depends on:
+
+- study design
+- independence or pairing
+- sample size
+- data distribution
+- statistical assumptions
+- research question
+
+---
+
+# 23. A Practical Statistical Workflow
+
+For most biomedical analyses, a good workflow is:
+
+### Step 1: Define the question
+
+For example:
 
 ```text
-p1 = 0.60
-p2 = 0.40
+Is glucose different between treatment groups?
 ```
 
-Calculate:
-
-```r
-h <- ES.h(
-  0.60,
-  0.40
-)
-```
-
-Then calculate power for two groups of 100:
-
-```r
-pwr.2p2n.test(
-  h = h,
-  n1 = 100,
-  n2 = 100,
-  sig.level = 0.05,
-  power = NULL,
-  alternative = "two.sided"
-)
-```
-
----
-
-# 92. Sample Size for an Odds Ratio
-
-For case-control studies, sample size can also be planned using an expected odds ratio.
-
-Load:
-
-```r
-library(epiR)
-```
-
-Suppose:
+### Step 2: Identify the variables
 
 ```text
-Exposure prevalence among controls = 0.30
-Exposure prevalence among cases = 0.46
+Outcome: glucose → continuous
+
+Predictor: treatment group → categorical with 2 groups
 ```
 
-Calculate the expected odds ratio:
+### Step 3: Explore the data
 
 ```r
-p1 <- 0.46
-
-p0 <- 0.30
-
-expected_or <-
-  (p1 / (1 - p1)) /
-  (p0 / (1 - p0))
-
-expected_or
+summary(patient_data$glucose)
 ```
 
-Calculate sample size:
+Visualize:
 
 ```r
-epi.sscc(
-  N = NA,
-  OR = expected_or,
-  p1 = p1,
-  p0 = p0,
-  n = NA,
-  power = 0.80,
-  r = 2,
-  sided.test = 2,
-  conf.level = 0.95
-)
+ggplot(
+  patient_data,
+  aes(
+    x = treatment_group,
+    y = glucose
+  )
+) +
+  geom_boxplot() +
+  geom_jitter(
+    width = 0.15
+  )
 ```
 
-Here:
+### Step 4: Choose the test
 
-- `OR` is the expected odds ratio
-- `p1` is expected exposure prevalence among cases
-- `p0` is expected exposure prevalence among controls
-- `r` is the ratio of controls to cases
-- `power` is the desired statistical power
-
----
-
-# Reporting Statistical Results
-
-# 93. Reporting a t-Test
-
-Example:
-
-> An independent samples t-test was used to compare mean glucose levels between the Control and Treatment groups.
+Two independent groups with a continuous outcome:
 
 ```r
-t_test_result <- t.test(
+t.test(
   glucose ~ treatment_group,
-  data = patient_data_clean
+  data = patient_data
 )
-
-t_test_result
 ```
 
-When reporting results, include:
+### Step 5: Interpret more than the p-value
 
-- test used
-- groups compared
-- estimated difference
-- confidence interval when relevant
+Look at:
+
+- group means
+- difference between groups
+- confidence interval
 - p-value
+- effect size
+
+### Step 6: Interpret biologically
+
+Ask:
+
+> Is the observed difference large enough to matter biologically or clinically?
 
 ---
 
-# 94. Reporting ANOVA
+# 24. Practice Exercises
 
-```r
-anova_result <- aov(
-  cholesterol ~ age_group,
-  data = patient_data_clean
-)
+## Exercise 1
 
-summary(
-  anova_result
-)
-```
-
-Example:
-
-> A one-way ANOVA was used to compare mean cholesterol levels among age groups.
-
----
-
-# 95. Reporting Correlation
-
-```r
-correlation_result <- cor.test(
-  patient_data_clean$bmi,
-  patient_data_clean$glucose,
-  method = "pearson"
-)
-
-correlation_result
-```
-
-Example:
-
-> Pearson correlation was used to evaluate the linear association between BMI and glucose.
-
----
-
-# 96. Reporting Linear Regression
-
-```r
-linear_model_result <- summary(
-  model_4
-)
-
-linear_model_result
-```
-
-Example:
-
-> Multiple linear regression was used to evaluate whether age, BMI, cholesterol, treatment group, and sex were associated with glucose level.
-
----
-
-# 97. Reporting Logistic Regression
-
-```r
-summary(
-  logistic_model
-)
-
-exp(
-  coef(logistic_model)
-)
-```
-
-For logistic regression, effect estimates are commonly reported as **odds ratios**.
-
----
-
-# 98. Reporting Cox Regression
-
-```r
-summary(
-  cox_model_2
-)
-```
-
-For Cox regression, effects are commonly reported as **hazard ratios**.
-
----
-
-# Exporting Results
-
-# 99. Export Clean Dataset
-
-```r
-write.csv(
-  patient_data_clean,
-  "patient_data_clean.csv",
-  row.names = FALSE
-)
-```
-
----
-
-# 100. Export Summary Statistics
-
-```r
-summary_statistics <- patient_data_clean %>%
-  summarise(
-    mean_age = mean(age),
-    sd_age = sd(age),
-
-    mean_bmi = mean(bmi),
-    sd_bmi = sd(bmi),
-
-    mean_glucose = mean(glucose),
-    variance_glucose = var(glucose),
-    sd_glucose = sd(glucose),
-    median_glucose = median(glucose),
-    q1_glucose = quantile(
-      glucose,
-      0.25,
-      type = 6
-    ),
-    q3_glucose = quantile(
-      glucose,
-      0.75,
-      type = 6
-    ),
-    iqr_glucose = IQR(
-      glucose,
-      type = 6
-    ),
-
-    mean_cholesterol = mean(cholesterol),
-    sd_cholesterol = sd(cholesterol),
-
-    median_crp = median(crp),
-    iqr_crp = IQR(
-      crp,
-      type = 6
-    )
-  )
-
-write.csv(
-  summary_statistics,
-  "summary_statistics.csv",
-  row.names = FALSE
-)
-```
-
----
-
-# 101. Export Group Summary
-
-```r
-group_summary <- patient_data_clean %>%
-  group_by(treatment_group) %>%
-  summarise(
-    n = n(),
-    mean_glucose = mean(glucose),
-    sd_glucose = sd(glucose),
-    median_glucose = median(glucose),
-    iqr_glucose = IQR(glucose),
-    .groups = "drop"
-  )
-
-write.csv(
-  group_summary,
-  "group_summary.csv",
-  row.names = FALSE
-)
-```
-
----
-
-# Practice Exercises
-
-# 102. Descriptive Statistics
-
-Calculate the following for `bmi`:
+Calculate the following for `glucose`:
 
 - mean
 - median
-- variance
 - standard deviation
-- minimum
-- maximum
 - first quartile
 - third quartile
 - IQR
 
 ```r
-mean(
-  patient_data_clean$bmi
-)
+mean(patient_data$glucose)
 
-median(
-  patient_data_clean$bmi
-)
+median(patient_data$glucose)
 
-var(
-  patient_data_clean$bmi
-)
-
-sd(
-  patient_data_clean$bmi
-)
-
-range(
-  patient_data_clean$bmi
-)
+sd(patient_data$glucose)
 
 quantile(
-  patient_data_clean$bmi,
-  probs = c(
-    0.25,
-    0.75
-  ),
-  type = 6
+  patient_data$glucose,
+  c(0.25, 0.75)
 )
 
-IQR(
-  patient_data_clean$bmi,
-  type = 6
-)
+IQR(patient_data$glucose)
 ```
 
 ---
 
-# 103. One-Sample t-Test
+## Exercise 2
 
-Test whether the mean cholesterol level differs from 190.
+Compare glucose between the Control and Treatment groups.
+
+First visualize the data:
+
+```r
+ggplot(
+  patient_data,
+  aes(
+    x = treatment_group,
+    y = glucose
+  )
+) +
+  geom_boxplot() +
+  geom_jitter(
+    width = 0.15
+  )
+```
+
+Then perform the test:
 
 ```r
 t.test(
-  patient_data_clean$cholesterol,
-  mu = 190
+  glucose ~ treatment_group,
+  data = patient_data
 )
 ```
 
 ---
 
-# 104. Independent t-Test
+## Exercise 3
 
-Compare BMI between males and females.
+Compare CRP between treatment groups using a non-parametric test.
 
 ```r
-t.test(
-  bmi ~ sex,
-  data = patient_data_clean
+wilcox.test(
+  crp ~ treatment_group,
+  data = patient_data
 )
 ```
 
 ---
 
-# 105. Paired t-Test
-
-Create paired measurements:
-
-```r
-baseline <- c(
-  120, 130, 125, 118,
-  140, 135, 128, 132
-)
-
-followup <- c(
-  115, 124, 121, 116,
-  133, 130, 125, 127
-)
-```
-
-Compare them:
-
-```r
-t.test(
-  followup,
-  baseline,
-  paired = TRUE
-)
-```
-
----
-
-# 106. Categorical Association
+## Exercise 4
 
 Test whether disease status is associated with sex.
 
 ```r
-sex_disease_table <- table(
-  patient_data_clean$sex,
-  patient_data_clean$disease_status
+disease_sex_table <- table(
+  patient_data$disease_status,
+  patient_data$sex
 )
 
 chisq.test(
-  sex_disease_table
+  disease_sex_table
 )
 ```
 
@@ -2869,68 +1569,60 @@ Check expected counts:
 
 ```r
 chisq.test(
-  sex_disease_table
+  disease_sex_table
 )$expected
 ```
 
 ---
 
-# 107. Correlation
+## Exercise 5
 
-Test the correlation between age and cholesterol.
+Test the correlation between BMI and glucose.
 
 ```r
 cor.test(
-  patient_data_clean$age,
-  patient_data_clean$cholesterol,
+  patient_data$bmi,
+  patient_data$glucose,
   method = "pearson"
 )
 ```
 
 ---
 
-# 108. Linear Regression
+## Exercise 6
 
-Predict cholesterol from age and BMI.
+Fit a multiple linear regression model predicting glucose from:
 
-```r
-cholesterol_model <- lm(
-  cholesterol ~ age + bmi,
-  data = patient_data_clean
-)
-
-summary(
-  cholesterol_model
-)
-```
-
-Confidence intervals:
+- BMI
+- age
+- sex
 
 ```r
-confint(
-  cholesterol_model
+glucose_model <- lm(
+  glucose ~ bmi + age + sex,
+  data = patient_data
 )
+
+summary(glucose_model)
 ```
 
 ---
 
-# 109. Logistic Regression
+## Exercise 7
 
 Fit a logistic regression model predicting disease status from age and BMI.
 
 ```r
 disease_model <- glm(
   disease_binary ~ age + bmi,
-  data = patient_data_clean,
+  data = patient_data,
   family = binomial
 )
 
-summary(
-  disease_model
-)
+summary(disease_model)
 ```
 
-Odds ratios:
+Calculate odds ratios:
 
 ```r
 exp(
@@ -2940,43 +1632,9 @@ exp(
 
 ---
 
-# 110. Survival Analysis
+## Exercise 8
 
-Fit Kaplan-Meier curves by treatment.
-
-```r
-survival_fit <- survfit(
-  Surv(time, status) ~ treatment,
-  data = survival_data
-)
-
-ggsurvplot(
-  survival_fit,
-  data = survival_data,
-  pval = TRUE
-)
-```
-
----
-
-# 111. Cox Regression
-
-```r
-cox_exercise <- coxph(
-  Surv(time, status) ~ treatment + age,
-  data = survival_data
-)
-
-summary(
-  cox_exercise
-)
-```
-
----
-
-# 112. Power Calculation
-
-Calculate the sample size required to detect a mean difference of 5 when:
+Calculate the sample size required to detect a difference of 5 units between two groups when:
 
 ```text
 SD = 10
@@ -2991,321 +1649,107 @@ power.t.test(
   sd = 10,
   sig.level = 0.05,
   power = 0.80,
-  type = "two.sample",
-  alternative = "two.sided"
+  type = "two.sample"
 )
 ```
 
 ---
 
-# Common Statistical Tests in R
+# 25. Interpreting Statistical Results
 
-| Research Question | Common Test | R Function |
-|---|---|---|
-| Describe a continuous variable | Mean, median, SD, IQR | `mean()`, `median()`, `sd()`, `IQR()` |
-| Confidence interval for one mean | One-sample t procedure | `t.test()` |
-| Test one population mean | One-sample t-test | `t.test()` |
-| Confidence interval/test for one proportion | Approximate proportion test | `prop.test()` |
-| Exact test for one proportion | Exact binomial test | `binom.test()` |
-| Compare two independent means | Independent t-test | `t.test()` |
-| Compare two paired means | Paired t-test | `t.test(..., paired = TRUE)` |
-| Compare two variances | F-test | `var.test()` |
-| Compare two independent non-normal groups | Wilcoxon rank-sum | `wilcox.test()` |
-| Compare paired non-normal measurements | Wilcoxon signed-rank | `wilcox.test(..., paired = TRUE)` |
-| Sign-based paired comparison | Sign test | `SIGN.test()` |
-| Compare 3+ means | ANOVA | `aov()` |
-| Compare 3+ non-normal groups | Kruskal-Wallis | `kruskal.test()` |
-| Compare two proportions | Two-sample proportion test | `prop.test()` |
-| Test two categorical variables | Chi-square | `chisq.test()` |
-| Small categorical table | Fisher's exact test | `fisher.test()` |
-| Test normality | Shapiro-Wilk | `shapiro.test()` |
-| Linear association | Pearson correlation | `cor.test()` |
-| Rank-based association | Spearman correlation | `cor.test(method = "spearman")` |
-| Predict continuous outcome | Linear regression | `lm()` |
-| Predict binary outcome | Logistic regression | `glm(family = binomial)` |
-| Model count outcome | Poisson regression | `glm(family = poisson)` |
-| Kaplan-Meier survival estimate | Kaplan-Meier | `survfit()` |
-| Compare survival curves | Log-rank test | `survdiff()` |
-| Model survival outcome | Cox regression | `coxph()` |
-| Power/sample size for t-test | Power analysis | `power.t.test()` |
-| Power/sample size for ANOVA | ANOVA power | `power.anova.test()` |
-| Power for proportions | Proportion power | `pwr.p.test()`, `pwr.2p2n.test()` |
-| Case-control sample size | Odds-ratio-based calculation | `epi.sscc()` |
-
----
-
-# Choosing Between Common Tests
-
-A simple decision process is:
-
-```text
-What type of outcome do you have?
-```
-
-For a **continuous outcome**:
-
-```text
-One group
-    |
-    +-- Mean -> one-sample t-test
-    |
-    +-- Non-parametric -> signed-rank or sign test
-```
-
-```text
-Two groups
-    |
-    +-- Independent -> independent t-test
-    |
-    +-- Paired -> paired t-test
-    |
-    +-- Non-parametric independent -> Wilcoxon rank-sum
-    |
-    +-- Non-parametric paired -> Wilcoxon signed-rank
-```
-
-```text
-Three or more groups
-    |
-    +-- Parametric -> ANOVA
-    |
-    +-- Non-parametric -> Kruskal-Wallis
-```
-
-For a **categorical outcome**:
-
-```text
-One proportion
-    |
-    +-- Large sample -> prop.test()
-    |
-    +-- Small sample -> binom.test()
-```
-
-```text
-Two categorical variables
-    |
-    +-- Adequate expected counts -> chisq.test()
-    |
-    +-- Small expected counts -> fisher.test()
-```
-
-For a **continuous relationship**:
-
-```text
-Correlation -> cor.test()
-
-Prediction -> lm()
-```
-
-For a **binary outcome**:
-
-```text
-Logistic regression -> glm(..., family = binomial)
-```
-
-For **count data**:
-
-```text
-Poisson regression -> glm(..., family = poisson)
-```
-
-For **time-to-event data**:
-
-```text
-Kaplan-Meier -> survfit()
-
-Compare curves -> survdiff()
-
-Multiple predictors -> coxph()
-```
-
----
-
-# Interpretation of p-Values
-
-A p-value measures evidence against the null hypothesis.
-
-A commonly used threshold is:
-
-```text
-0.05
-```
-
-A simple interpretation is:
-
-- p-value < 0.05: statistically significant at the 5% level
-- p-value >= 0.05: not statistically significant at the 5% level
-
-However, statistical significance does not automatically mean that the result is:
-
-- biologically important
-- clinically important
-- large in magnitude
-
-Always consider:
-
-- effect size
-- confidence interval
-- sample size
-- study design
-- biological or clinical context
-
----
-
-# Confidence Intervals vs p-Values
-
-A p-value answers a question about statistical evidence.
-
-A confidence interval gives information about:
-
-- the estimated effect
-- the direction of the effect
-- the uncertainty around the effect
-
-For example:
-
-```text
-Estimated difference = 5
-
-95% CI = 1 to 9
-```
-
-contains more information than simply reporting:
+When reading statistical output, do not search only for:
 
 ```text
 p < 0.05
 ```
 
-Whenever possible, report both effect estimates and confidence intervals.
+Instead, ask:
+
+1. What is the estimated effect?
+2. In which direction is the effect?
+3. How large is the effect?
+4. What is the confidence interval?
+5. Is the result statistically convincing?
+6. Is it biologically or clinically meaningful?
+
+For regression models, pay attention to the effect measure:
+
+| Model | Common Effect Measure |
+|---|---|
+| Linear regression | Regression coefficient |
+| Logistic regression | Odds ratio |
+| Cox regression | Hazard ratio |
 
 ---
 
-# Multiple Testing
+# 26. Good Statistical Practice
 
-When many statistical tests are performed, the probability of false-positive results increases.
+When performing biostatistical analysis:
 
-Common adjustment methods include:
-
-```r
-p.adjust(
-  c(
-    0.001,
-    0.02,
-    0.04,
-    0.20
-  ),
-  method = "bonferroni"
-)
-```
-
-and:
-
-```r
-p.adjust(
-  c(
-    0.001,
-    0.02,
-    0.04,
-    0.20
-  ),
-  method = "BH"
-)
-```
-
-This topic becomes especially important in genomic and transcriptomic analyses where thousands of statistical tests may be performed simultaneously.
+- define the research question before running a test
+- identify the outcome and predictor variables
+- distinguish independent from paired observations
+- explore and visualize the data first
+- check important assumptions
+- report descriptive statistics
+- report effect sizes and confidence intervals when possible
+- do not interpret statistical significance as clinical importance
+- use multiple-testing correction when performing many tests
+- calculate sample size before collecting data when possible
+- interpret the result in the context of the study design
 
 ---
 
-# Good Statistical Practice
+# 27. Session Information
 
-When performing statistical analysis:
-
-- define the research question before choosing the test
-- identify the type of outcome and predictor variables
-- inspect and clean the data
-- visualize the data
-- check statistical assumptions
-- distinguish paired and independent observations
-- use exact methods when sample sizes are too small for approximations
-- report effect sizes when possible
-- report confidence intervals
-- do not rely only on p-values
-- adjust for multiple testing when appropriate
-- interpret results in biological or clinical context
-- document the complete analysis for reproducibility
-
----
-
-# Session Information
-
-It is good practice to record information about the R environment used for the analysis.
+At the end of an analysis, record the R environment:
 
 ```r
 sessionInfo()
 ```
 
-This shows information such as:
-
-- R version
-- operating system
-- loaded packages
-- package versions
-
-This is useful for reproducibility.
+This helps make the analysis reproducible.
 
 ---
 
 # Summary
 
-In this tutorial, you learned how to perform a broad range of statistical analyses in R.
+In this tutorial, you learned the statistical methods most commonly encountered in biomedical research.
 
-You covered:
+You learned how to:
 
-- descriptive statistics
-- mean and median
-- variance and standard deviation
-- minimum, maximum, and range
-- quartiles and percentiles
-- interquartile range
-- frequency tables and proportions
-- binomial, multinomial, normal, chi-square, and t distributions
-- confidence intervals for means and proportions
-- one-sample hypothesis tests
-- independent and paired t-tests
-- tests for variances
-- one- and two-proportion tests
-- sign tests
-- Wilcoxon signed-rank and rank-sum tests
-- ANOVA
-- Kruskal-Wallis tests
-- normality testing
-- contingency tables
-- chi-square tests
-- Fisher's exact tests
-- Pearson and Spearman correlation
-- simple linear regression
-- multiple linear regression
-- categorical predictors
-- regression confidence intervals
-- prediction intervals
-- regression assumptions
-- Type II ANOVA
-- global F-tests
-- pairwise comparisons
-- interaction effects
-- log-likelihood
-- AIC and AICc
-- likelihood-ratio tests
-- logistic regression
-- Poisson regression
-- Kaplan-Meier survival analysis
-- log-rank tests
-- Cox regression
-- statistical power
-- sample-size calculations for means
-- sample-size calculations for ANOVA
-- power calculations for proportions
-- case-control sample-size calculations based on odds ratios
+- describe continuous data using mean, median, SD, quartiles, and IQR
+- summarize categorical data using counts and percentages
+- visualize data before statistical testing
+- understand confidence intervals and p-values
+- compare two independent groups
+- analyze paired measurements
+- use Wilcoxon tests for non-parametric comparisons
+- compare three or more groups using ANOVA or Kruskal-Wallis
+- analyze categorical variables using chi-square and Fisher's exact tests
+- compare proportions
+- calculate Pearson and Spearman correlations
+- fit simple and multiple linear regression models
+- fit logistic regression models and interpret odds ratios
+- analyze time-to-event data using Kaplan-Meier curves and Cox regression
+- understand censoring and hazard ratios
+- calculate basic statistical power and sample size
+- correct p-values when performing multiple statistical tests
 
-This session provides a statistical foundation for later biomedical, genomics, and transcriptomics analyses in R.
+The most important skill is not memorizing R commands.
+
+It is learning to connect:
+
+```text
+Research question
+        ↓
+Variable types
+        ↓
+Study design
+        ↓
+Appropriate statistical method
+        ↓
+Interpretation
+```
+
+This approach provides a strong foundation for biomedical, clinical, and transcriptomics analyses in R.
