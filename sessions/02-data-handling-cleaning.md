@@ -1,3 +1,4 @@
+````markdown
 # Data Handling & Cleaning in R with dplyr and tidyr
 
 ## Introduction
@@ -30,6 +31,8 @@ In this tutorial, you will learn how to:
 
 By the end of this tutorial, you will be able to:
 
+- import CSV, text, and Excel files
+- inspect imported datasets
 - use `dplyr` for data manipulation
 - use `tidyr` for reshaping data
 - clean messy biomedical datasets
@@ -69,8 +72,145 @@ Important packages include:
 | `dplyr` | Data manipulation |
 | `tidyr` | Data reshaping |
 | `ggplot2` | Data visualization |
-| `readr` | Importing files |
+| `readr` | Importing text and CSV files |
 | `stringr` | String handling |
+
+---
+
+# Importing Data into R
+
+Biomedical data are often stored in files such as:
+
+- Excel files (`.xlsx`, `.xls`)
+- CSV files (`.csv`)
+- text files (`.txt`)
+
+Before importing a dataset, it is useful to know:
+
+- whether the first row contains column names
+- which delimiter separates the columns
+- which decimal symbol is used
+- how missing values are represented
+
+Common missing-value symbols include:
+
+```text
+NA
+?
+.
+```
+
+or empty cells.
+
+---
+
+## Importing CSV Files
+
+The `readr` package is included in the tidyverse.
+
+Use `read_csv()` to import a standard comma-separated file:
+
+```r
+gene_data <- read_csv("data/gene_expression.csv")
+```
+
+You can specify how missing values are represented:
+
+```r
+gene_data <- read_csv(
+  "data/gene_expression.csv",
+  na = c("", "NA", "?")
+)
+```
+
+After importing the data, inspect it:
+
+```r
+head(gene_data)
+glimpse(gene_data)
+```
+
+---
+
+## Importing Semicolon-Separated CSV Files
+
+In some European systems, a comma is used as the decimal symbol and a semicolon is used to separate columns.
+
+For these files, `read_csv2()` can be useful:
+
+```r
+gene_data <- read_csv2("data/gene_expression.csv")
+```
+
+Always check the imported data to make sure the columns and numeric values were interpreted correctly.
+
+---
+
+## Importing Text Files
+
+For text files, you can use `read_delim()` and specify the delimiter.
+
+For a tab-separated file:
+
+```r
+gene_data <- read_delim(
+  "data/gene_expression.txt",
+  delim = "\t"
+)
+```
+
+For another delimiter, replace `"\t"` with the appropriate character.
+
+For example, a semicolon-separated text file can be imported using:
+
+```r
+gene_data <- read_delim(
+  "data/gene_expression.txt",
+  delim = ";"
+)
+```
+
+---
+
+## Importing Excel Files
+
+Excel files can be imported using the `readxl` package.
+
+Install it once:
+
+```r
+install.packages("readxl")
+```
+
+Load the package:
+
+```r
+library(readxl)
+```
+
+Import an Excel file:
+
+```r
+gene_data <- read_excel(
+  "data/gene_expression.xlsx"
+)
+```
+
+If the Excel file contains multiple sheets, you can select one:
+
+```r
+gene_data <- read_excel(
+  "data/gene_expression.xlsx",
+  sheet = "Sheet1"
+)
+```
+
+After importing an Excel file, always inspect the result:
+
+```r
+head(gene_data)
+str(gene_data)
+```
 
 ---
 
@@ -78,10 +218,9 @@ Important packages include:
 
 We will make a small dummy biomedical dataset representing simplified gene expression measurements from RNA-seq samples.
 
-Create a data frame called 'gene_expr):
+Create a data frame called `gene_expr`:
 
-````r
-
+```r
 gene_expr <- data.frame(
   Sample_ID = c("S01", "S02", "S03", "S04", "S05", "S05", "S06"),
   Patient_ID = c("P001", "P002", "P003", "P004", "P005", "P005", "P006"),
@@ -100,21 +239,32 @@ gene_expr <- data.frame(
     "2024-01-22"
   ))
 )
-
-````
-
+```
 
 This dataset contains:
 
 - missing expression values
 - duplicated rows
-- inconsistent column names
 - sample metadata
 - gene expression measurements
 
 ---
 
 # Inspecting Data
+
+Before cleaning or analyzing a dataset, always inspect its structure and contents.
+
+## View the dataset
+
+```r
+View(gene_expr)
+```
+
+`View()` opens the dataset in a spreadsheet-like window in RStudio.
+
+For large datasets, it is often faster to inspect only the first rows.
+
+---
 
 ## View the first rows
 
@@ -126,9 +276,19 @@ head(gene_expr)
 
 ## View dataset structure
 
+Using tidyverse:
+
 ```r
 glimpse(gene_expr)
 ```
+
+Using Base R:
+
+```r
+str(gene_expr)
+```
+
+Both functions help you check which variables are present and what data type each column contains.
 
 ---
 
@@ -138,12 +298,22 @@ glimpse(gene_expr)
 dim(gene_expr)
 ```
 
+The first number is the number of rows or observations.
+
+The second number is the number of columns or variables.
+
 ---
 
 ## View column names
 
 ```r
 colnames(gene_expr)
+```
+
+You can also use:
+
+```r
+names(gene_expr)
 ```
 
 ---
@@ -153,6 +323,12 @@ colnames(gene_expr)
 ```r
 summary(gene_expr)
 ```
+
+`summary()` gives a quick overview of each column.
+
+For numeric variables, it reports values such as the minimum, median, mean, and maximum.
+
+For other data types, the output depends on the type of variable.
 
 ---
 
@@ -179,7 +355,7 @@ Use `select()` to keep specific columns.
 
 ```r
 gene_expr %>%
-  select(Sample_ID, `Patient ID`, Condition, Gene)
+  select(Sample_ID, Patient_ID, Condition, Gene)
 ```
 
 ---
@@ -246,8 +422,8 @@ Use `rename()` to improve column names.
 gene_expr %>%
   rename(
     sample_id = Sample_ID,
-    patient_id = `Patient ID`,
-    collection_date = `Collection Date`
+    patient_id = Patient_ID,
+    collection_date = Collection_Date
   )
 ```
 
@@ -293,9 +469,142 @@ The pipe operator `%>%` passes output from one step to the next.
 ```r
 gene_expr %>%
   filter(Condition == "Treated") %>%
-  select(Sample_ID, `Patient ID`, Tissue, Gene, Expression_Rep2) %>%
+  select(Sample_ID, Patient_ID, Tissue, Gene, Expression_Rep2) %>%
   arrange(desc(Expression_Rep2))
 ```
+
+---
+
+# Base R Alternatives for Working with Data Frames
+
+The tidyverse provides convenient functions for data manipulation, but it is also useful to recognize common **Base R** syntax.
+
+These approaches perform similar operations without `dplyr`.
+
+---
+
+## Selecting a Column
+
+Using `$`:
+
+```r
+gene_expr$Condition
+```
+
+Using column indexing:
+
+```r
+gene_expr[, "Condition"]
+```
+
+---
+
+## Selecting Rows and Columns
+
+Data frames use the following structure:
+
+```text
+dataframe[row, column]
+```
+
+Select the first row:
+
+```r
+gene_expr[1, ]
+```
+
+Select the first column:
+
+```r
+gene_expr[, 1]
+```
+
+Select the first three rows and the first two columns:
+
+```r
+gene_expr[1:3, 1:2]
+```
+
+---
+
+## Filtering Rows in Base R
+
+Select treated samples:
+
+```r
+gene_expr[gene_expr$Condition == "Treated", ]
+```
+
+Select treated blood samples:
+
+```r
+gene_expr[
+  gene_expr$Condition == "Treated" &
+    gene_expr$Tissue == "Blood",
+]
+```
+
+---
+
+## Sorting Rows in Base R
+
+The `order()` function can be used to sort data.
+
+Ascending order:
+
+```r
+gene_expr[
+  order(gene_expr$Expression_Rep2),
+]
+```
+
+Descending order:
+
+```r
+gene_expr[
+  order(gene_expr$Expression_Rep2, decreasing = TRUE),
+]
+```
+
+---
+
+## Adding Columns with cbind()
+
+The `cbind()` function combines objects by columns.
+
+For example:
+
+```r
+quality_score <- c(1, 2, 1, 2, 1, 1, 2)
+
+gene_expr_with_quality <- cbind(
+  gene_expr,
+  quality_score
+)
+```
+
+The new column must contain the same number of values as the data frame has rows.
+
+---
+
+## Adding Rows with rbind()
+
+The `rbind()` function combines objects by rows.
+
+For example:
+
+```r
+new_sample <- gene_expr[1, ]
+
+gene_expr_extended <- rbind(
+  gene_expr,
+  new_sample
+)
+```
+
+The new row must contain the same columns as the original data frame.
+
+For most data-cleaning tasks in this tutorial, we will mainly use the tidyverse functions because they are easier to read in longer workflows.
 
 ---
 
@@ -462,6 +771,9 @@ gene_expr %>%
   )
 ```
 
+> Replacing missing values with `0` is shown here only as an example of how `replace_na()` works.  
+> In real biomedical analyses, whether a missing value should be replaced with zero depends on what the missing value represents.
+
 ---
 
 # Removing Duplicate Rows
@@ -489,7 +801,7 @@ Convert text to dates:
 ```r
 gene_expr %>%
   mutate(
-    `Collection Date` = as.Date(`Collection Date`)
+    Collection_Date = as.Date(Collection_Date)
   )
 ```
 
@@ -501,6 +813,21 @@ gene_expr %>%
     Expression_Rep1 = as.numeric(Expression_Rep1),
     Expression_Rep2 = as.numeric(Expression_Rep2)
   )
+```
+
+Convert a categorical variable into a factor:
+
+```r
+gene_expr %>%
+  mutate(
+    Condition = as.factor(Condition)
+  )
+```
+
+Check the result:
+
+```r
+str(gene_expr$Condition)
 ```
 
 ---
@@ -519,13 +846,13 @@ clean_gene_expr <- gene_expr %>%
   # Rename columns
   rename(
     sample_id = Sample_ID,
-    patient_id = `Patient ID`,
+    patient_id = Patient_ID,
     condition = Condition,
     tissue = Tissue,
     gene = Gene,
     expression_rep1 = Expression_Rep1,
     expression_rep2 = Expression_Rep2,
-    collection_date = `Collection Date`
+    collection_date = Collection_Date
   ) %>%
   
   # Remove duplicated rows
@@ -570,6 +897,18 @@ Count missing values again:
 
 ```r
 colSums(is.na(clean_gene_expr))
+```
+
+Check its dimensions:
+
+```r
+dim(clean_gene_expr)
+```
+
+Check its column names:
+
+```r
+colnames(clean_gene_expr)
 ```
 
 ---
@@ -686,6 +1025,32 @@ Remove duplicated rows.
 
 ---
 
+## Exercise 9
+
+Use Base R to:
+
+1. display the dimensions of `gene_expr`
+2. display its column names
+3. select only rows where `Condition == "Treated"`
+
+---
+
+## Exercise 10
+
+Suppose a dataset is stored as:
+
+```text
+data/patient_data.xlsx
+```
+
+Write the commands required to:
+
+1. load the `readxl` package
+2. import the Excel file
+3. inspect the first rows of the imported dataset
+
+---
+
 # Practice Solutions
 
 ## Solution 1
@@ -694,7 +1059,7 @@ Remove duplicated rows.
 gene_expr %>%
   select(
     Sample_ID,
-    `Patient ID`,
+    Patient_ID,
     Condition,
     Gene
   )
@@ -780,13 +1145,43 @@ gene_expr %>%
 
 ---
 
+## Solution 9
+
+```r
+dim(gene_expr)
+
+colnames(gene_expr)
+
+gene_expr[
+  gene_expr$Condition == "Treated",
+]
+```
+
+---
+
+## Solution 10
+
+```r
+library(readxl)
+
+patient_data <- read_excel(
+  "data/patient_data.xlsx"
+)
+
+head(patient_data)
+```
+
+---
+
 # Summary
 
 In this tutorial, you learned how to:
 
-- import biomedical datasets
-- inspect data structures
+- import CSV, text, and Excel datasets
+- check delimiters, missing values, and file structure before analysis
+- inspect datasets using `head()`, `View()`, `str()`, `glimpse()`, `dim()`, and `colnames()`
 - manipulate data using `dplyr`
+- recognize common Base R approaches for working with data frames
 - reshape data using `tidyr`
 - handle missing values
 - remove duplicated rows
@@ -801,3 +1196,6 @@ In this tutorial, you learned how to:
 - tidyverse documentation
 - dplyr documentation
 - tidyr documentation
+- readr documentation
+- readxl documentation
+````
