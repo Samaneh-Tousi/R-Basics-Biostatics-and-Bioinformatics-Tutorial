@@ -6,6 +6,7 @@ By the end of this tutorial, you will be able to:
 
 - Understand the basic structure of a `ggplot2` plot
 - Create scatter plots, bar plots, boxplots, violin plots, histograms, and line plots
+- Create frequency tables and group continuous data into intervals
 - Customize plot labels, colors, themes, and legends
 - Visualize biomedical-style datasets
 - Create publication-ready plots
@@ -237,6 +238,134 @@ R is case-sensitive, so capital letters matter.
 
 ---
 
+## 4.5 Create a Frequency Table
+
+Before creating a plot, it can be useful to count how often different values or categories occur.
+
+The `table()` function creates a **frequency table**.
+
+For example, to count the number of samples in each treatment group:
+
+```r
+table(expression_data$group)
+```
+
+The output shows how many observations belong to each category.
+
+You can also create a frequency table for another categorical variable:
+
+```r
+table(expression_data$sex)
+```
+
+The `table()` function can also be applied to numeric variables.
+
+For example:
+
+```r
+table(expression_data$age)
+```
+
+This shows how often each age occurs in the dataset.
+
+---
+
+## 4.6 Relative and Cumulative Frequencies
+
+A frequency table gives the number of observations in each category.
+
+To calculate **relative frequencies**, or proportions, use `prop.table()`:
+
+```r
+prop.table(table(expression_data$group))
+```
+
+The proportions add up to `1`.
+
+To express them as percentages:
+
+```r
+prop.table(table(expression_data$group)) * 100
+```
+
+For ordered numeric values, we can also calculate cumulative frequencies.
+
+For example:
+
+```r
+age_frequency <- table(expression_data$age)
+
+cumsum(age_frequency)
+```
+
+To calculate cumulative proportions:
+
+```r
+cumsum(prop.table(age_frequency))
+```
+
+You can combine this information into one table:
+
+```r
+age_frequency_table <- cbind(
+  frequency = age_frequency,
+  proportion = prop.table(age_frequency),
+  cumulative_frequency = cumsum(age_frequency),
+  cumulative_proportion = cumsum(prop.table(age_frequency))
+)
+
+age_frequency_table
+```
+
+This can be useful for exploring a variable before deciding how to visualize it.
+
+---
+
+## 4.7 Group Continuous Data into Intervals
+
+Continuous variables often contain many different values.
+
+Instead of counting each value separately, we can divide the variable into **intervals or classes** using `cut()`.
+
+For example, we can divide age into five automatically determined intervals:
+
+```r
+age_groups <- cut(
+  expression_data$age,
+  breaks = 5
+)
+
+table(age_groups)
+```
+
+We can also define the interval boundaries ourselves.
+
+For example:
+
+```r
+age_groups <- cut(
+  expression_data$age,
+  breaks = c(20, 30, 40, 50, 60, 70, 80)
+)
+
+table(age_groups)
+```
+
+Another way to generate equally spaced boundaries is with `seq()`:
+
+```r
+age_groups <- cut(
+  expression_data$age,
+  breaks = seq(from = 20, to = 80, by = 10)
+)
+
+table(age_groups)
+```
+
+This approach is useful when creating frequency tables for continuous variables and when deciding suitable intervals for histograms.
+
+---
+
 # 5. Basic ggplot2 Structure
 
 The basic structure of a ggplot is:
@@ -351,10 +480,10 @@ ggplot(expression_data, aes(x = group, y = gene_A, fill = group)) +
   geom_boxplot(alpha = 0.6) +
   geom_jitter(width = 0.15, size = 2)
 ```
+
 <p align="center">
   <img src="../assets/ggplot2/geom_jitter_boxplot.png" width="700">
 </p>
-
 
 ---
 
@@ -408,6 +537,30 @@ ggplot(expression_data, aes(x = group, y = gene_A, fill = group)) +
 # 9. Bar Plot
 
 Bar plots are useful for categorical summaries.
+
+When working with raw categorical data, `geom_bar()` automatically counts the number of observations in each category.
+
+For example, we can count the number of samples in each group:
+
+```r
+ggplot(expression_data, aes(x = group)) +
+  geom_bar()
+```
+
+We can also color the bars by group:
+
+```r
+ggplot(expression_data, aes(x = group, fill = group)) +
+  geom_bar() +
+  labs(
+    title = "Number of Samples by Group",
+    x = "Group",
+    y = "Number of Samples"
+  ) +
+  theme_classic()
+```
+
+If the data are already summarized and we want the bar height to represent an existing numeric value, we use `geom_col()` instead.
 
 First, we calculate the average expression of `gene_A` in each group.
 
@@ -465,6 +618,8 @@ ggplot(gene_summary, aes(x = group, y = mean_gene_A, fill = group)) +
 
 Histograms show the distribution of a continuous variable.
 
+Unlike a bar plot, a histogram divides a continuous variable into intervals called **bins**.
+
 ```r
 ggplot(expression_data, aes(x = gene_A)) +
   geom_histogram()
@@ -474,10 +629,14 @@ ggplot(expression_data, aes(x = gene_A)) +
 
 ## 10.1 Histogram with Bin Width
 
+The `binwidth` argument controls the width of each interval.
+
 ```r
 ggplot(expression_data, aes(x = gene_A)) +
   geom_histogram(binwidth = 0.5)
 ```
+
+Choosing different bin widths can change how the distribution appears, so it is useful to try several reasonable values.
 
 ---
 
@@ -487,6 +646,7 @@ ggplot(expression_data, aes(x = gene_A)) +
 ggplot(expression_data, aes(x = gene_A, fill = group)) +
   geom_histogram(binwidth = 0.5, alpha = 0.7, position = "identity")
 ```
+
 <p align="center">
   <img src="../assets/ggplot2/histogram.png" width="700">
 </p>
@@ -530,6 +690,7 @@ ggplot(expression_data, aes(x = gene_A, color = group, fill = group)) +
   ) +
   theme_classic()
 ```
+
 <p align="center">
   <img src="../assets/ggplot2/density_plot.png" width="700">
 </p>
@@ -591,6 +752,7 @@ ggplot(time_course_data, aes(x = time, y = gene_expression, color = group)) +
   ) +
   theme_minimal()
 ```
+
 <p align="center">
   <img src="../assets/ggplot2/line_plot.png" width="700">
 </p>
@@ -641,6 +803,7 @@ ggplot(expression_long, aes(x = gene, y = expression, fill = group)) +
   ) +
   theme_classic()
 ```
+
 <p align="center">
   <img src="../assets/ggplot2/boxplot_multiple_genes.png" width="700">
 </p>
@@ -662,6 +825,7 @@ ggplot(expression_long, aes(x = group, y = expression, fill = group)) +
   ) +
   theme_bw()
 ```
+
 <p align="center">
   <img src="../assets/ggplot2/Faceted_boxplot.png" width="700">
 </p>
@@ -920,6 +1084,7 @@ ggplot(expression_data, aes(x = group, y = gene_A, fill = group)) +
   ) +
   theme_classic()
 ```
+
 <p align="center">
   <img src="../assets/ggplot2/boxplot_mean.png" width="700">
 </p>
@@ -947,12 +1112,12 @@ ggplot(expression_data, aes(x = group, y = gene_A, color = group)) +
   ) +
   theme_classic()
 ```
+
 <p align="center">
   <img src="../assets/ggplot2/mean_CI.png" width="700">
 </p>
 
 ---
-
 
 # 22. Combining Multiple Plots
 
@@ -976,6 +1141,7 @@ plot3 <- ggplot(expression_data, aes(x = group, y = gene_C, fill = group)) +
 
 plot1 + plot2 + plot3
 ```
+
 <p align="center">
   <img src="../assets/ggplot2/combined_plots.png" width="700">
 </p>
@@ -1394,18 +1560,39 @@ ggsave()
 
 ---
 
+## Question 5
+
+Which Base R function can be used to create a frequency table?
+
+```r
+table()
+```
+
+---
+
+## Question 6
+
+Which function can be used to divide a continuous variable into intervals?
+
+```r
+cut()
+```
+
+---
+
 # 34. Summary
 
 In this tutorial, you learned how to:
 
+- Inspect variables before creating plots
+- Create frequency, relative-frequency, and cumulative-frequency tables
+- Group continuous variables into intervals using `cut()`
 - Create plots using `ggplot2`
 - Use `aes()` to map variables to plot features
 - Create scatter plots, boxplots, violin plots, histograms, density plots, bar plots, and line plots
 - Visualize biomedical gene expression data
-- Create volcano plots and PCA plots
 - Customize labels, colors, legends, and themes
 - Combine plots using `patchwork`
 - Save plots using `ggsave()`
 
 ---
-
