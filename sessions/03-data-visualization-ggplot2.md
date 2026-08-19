@@ -114,9 +114,7 @@ head(expression_data)
 # 4. Understanding the Dataset
 
 Before making plots, always inspect the dataset.
-
-This means we first look at the dataset to understand what it contains.  
-Before using `ggplot2`, we need to know the column names, the type of data in each column, and the size of the dataset.
+We need to know the column names, the type of data in each column, and the size of the dataset.
 
 This is important because plots only work when we use the correct column names and the correct type of data.
 
