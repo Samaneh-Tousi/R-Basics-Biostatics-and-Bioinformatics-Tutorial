@@ -3,10 +3,13 @@
 R is the programming language we will use in this tutorial.
 
 
-- For your **UHasselt laptop/PC**, please install R/RStudio via the **UHasselt Software Center**. Please see the [installation instructions](../assets/UHasselt%20Software%20Center.docx).
+
+- For your **UHasselt laptop/PC**, please install R/RStudio via the **UHasselt Software Center**. Please see the [installation instructions](../assets/UHasselt%20Software%20Center.pdf).
+
 
 
 - For your **personal laptop/PC** you can go to the official R/R/RStudio websites:
+
 
 <https://cran.r-project.org/>
 
