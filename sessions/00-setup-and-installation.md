@@ -4,7 +4,7 @@ R is the programming language we will use in this tutorial.
 
 
 
-- - For your **UHasselt laptop/PC**, please install R/RStudio via the **UHasselt Software Center**. Please see the [installation instructions](../assets/UHasselt%20Software%20Center.pdf).
+- For your <strong>UHasselt laptop/PC</strong>, please install R/RStudio via the <strong>UHasselt Software Center</strong>. Please see the <a href="../assets/UHasselt%20Software%20Center.pdf" target="_blank" rel="noopener noreferrer">installation instructions</a>.
 
 
 
