@@ -8,7 +8,7 @@ R is the programming language we will use in this tutorial.
 
 
 
-- For your **personal laptop/PC** you can go to the official R/R/RStudio websites:
+- For your **personal laptop/PC** you can go to the official R/RStudio websites:
 
 
 <https://cran.r-project.org/>
