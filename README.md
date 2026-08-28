@@ -44,16 +44,17 @@ The main tutorial materials are located in the `sessions/` folder.
 R-Basics-Biostatics-and-Bioinformatics-Tutorial/
 │
 ├── assets/
-│   └── Images and input files used in the tutorials
+│   └── Images and input files used throughout the tutorials
 │
 ├── sessions/
 │   ├── 00-setup-and-installation.md
-│   ├── 01-R-Basics-Environment.md
-│   ├── 02-Data-Handling-Cleaning-with-dplyr-and-tidyr.md
+│   ├── 01-r-basics-and-environment.md
+│   ├── 02-data-handling-cleaning.md
 │   ├── 03-data-visualization-ggplot2.md
-│   ├── 04-basic-statistics-in-r.md
-│   ├── 05-Reproducibility-in-R-with-R-Markdown.md
-│   ├── 06-bulkRNAseq-DEA.md
-│   └── 07-scRNAseq_analysis.md
+│   ├── 04-reproducibility-rmarkdown.md
+│   ├── 05-functions-conditions-loops.md
+│   ├── 06-basic-statistics.md
+│   ├── 07-bulk-rnaseq-DEA-analysis.md
+│   └── 08-single-cell-rnaseq-analysis.md
 │
 └── README.md
