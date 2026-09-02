@@ -4,7 +4,7 @@
 
 **Why is it called R?**
 R was developed by **Ross Ihaka** and **Robert Gentleman** at the University of Auckland in the early 1990s. The name comes from the first letter of both of their first names and is also a reference to the earlier statistical programming language **S**.
-
+In 1995, it became an open source code by **Martin Mächler**.
 
 ## Introduction to RStudio
 
