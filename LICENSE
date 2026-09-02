@@ -1,21 +1,50 @@
-MIT License
+Course Materials License – Restricted Educational Use
 
-Copyright (c) 2026 Samaneh-Tousi
+Copyright © 2026 Samaneh-Tousi
+All rights reserved.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+These materials, including but not limited to the tutorial text, R code,
+examples, exercises, figures, images, documentation, and associated files,
+are provided solely for educational use by officially registered participants
+of the course for which these materials were made available.
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+Permission is granted to registered course participants to:
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+- access and view the materials for the duration of the course;
+- download or make personal copies when necessary for participation in the course;
+- run and modify the provided R code for coursework, exercises, and personal
+  learning related to the course.
+
+No other rights are granted.
+
+Without prior written permission from the copyright holder, you may not:
+
+- distribute, share, publish, sublicense, or redistribute these materials,
+  in whole or in part;
+- upload or reproduce these materials on another website, repository,
+  learning platform, file-sharing service, or other public or private
+  distribution platform;
+- distribute modified, adapted, translated, remixed, or derivative versions
+  of these materials;
+- use these materials, or any substantial portion of them, in another course,
+  workshop, training program, publication, tutorial, or educational resource;
+- use these materials for any commercial purpose;
+- sell, license, monetize, or otherwise commercially exploit these materials;
+- incorporate these materials into commercial products or services.
+
+Course participants may modify the R code and other materials solely for their
+own coursework and personal learning. Such modified versions may not be
+distributed or published without prior written permission.
+
+Access to these materials does not transfer ownership or copyright.
+
+Any use beyond the permissions stated above requires prior written permission
+from the copyright holder.
+
+Third-party software, R packages, datasets, images, and other materials
+included or referenced in this repository remain subject to their respective
+licenses, copyright terms, and conditions.
+
+THE MATERIALS ARE PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY, FITNESS
+FOR A PARTICULAR PURPOSE, AND NONINFRINGEMENT.
