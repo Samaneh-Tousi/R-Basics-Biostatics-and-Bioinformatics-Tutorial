@@ -58,3 +58,20 @@ R-Basics-Biostatics-and-Bioinformatics-Tutorial/
 │   └── 08-single-cell-rnaseq-analysis.md
 │
 └── README.md
+```
+
+## License and Use
+
+Copyright © 2026 Samaneh-Tousi. All rights reserved.
+
+These materials are provided exclusively for registered participants of this
+course for educational purposes.
+
+Course participants may download, run, and modify the materials for their own
+coursework and personal learning. Redistribution, publication, adaptation for
+redistribution, use in other courses or training materials, and any commercial
+use are prohibited without prior written permission.
+
+See the [LICENSE](LICENSE) file for the full terms.
+
+
