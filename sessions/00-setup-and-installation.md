@@ -1,12 +1,8 @@
 # 1. Install R, RStudio, and some R packages
 
-R is the programming language we will use in this tutorial.
-
-
-
 - For your <strong>UHasselt laptop/PC</strong>, please install R/RStudio via the <strong>UHasselt Software Center</strong>. Open the link in a new tab by right Click <a href="../assets/UHasselt%20Software%20Center.pdf" target="_blank" rel="noopener noreferrer">installation instructions</a>.
 
-
+**Important!** If you still cannot see the applications CRAN R and RStudio in the UHasselt Software Center after following the instructions, please submit a ticket to the UHasselt Service Desk.
 
 - For your **personal laptop/PC** you can go to the official R/RStudio websites:
 
