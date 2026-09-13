@@ -15,7 +15,14 @@ Download and install the correct version for your operating system:
 - macOS
 - Linux
 
-After installation, right click on R at C:\Program Files\R\R-4.4.2\bin (replace the R version with your installed R version at the adress) and run as administrator to check whether it works.  
+After installation, right click on R at C:\Program Files\R\R-4.4.2\bin (replace the R version with your installed R version at the address) and run it by double clicking on it to check whether it opens and works.  
+
+<p align="center">
+  <img src="../assets/R_session.png" width="900">
+</p>
+
+Then it it opens, you can check your R version by the command! 
+
 
 ```r
 version
