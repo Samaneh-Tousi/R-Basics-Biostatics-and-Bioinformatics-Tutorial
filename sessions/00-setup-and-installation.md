@@ -27,11 +27,17 @@ When R opens, you should see the R version information on the first line.
 
 RStudio is an editor that makes it easier to write and run R code.
 
-Download a non-commercial RStudio Desktop from:
+Download the free, non-commercial version of RStudio Desktop from:
 
 <https://posit.co/download/rstudio-desktop/>
 
-Install it, then open RStudio.
+Choose the installation link that matches your operating system.
+
+<p align="center">
+  <img src="../assets/RStudio_download_links.png" width="600">
+</p>
+
+After installation, open RStudio.
 
 When RStudio opens successfully, you should see four main panels:
 
