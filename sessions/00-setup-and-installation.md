@@ -55,24 +55,12 @@ File > Save workspace image to ~/.RData> New Directory > New Project> write r_tu
 
 This creates an RStudio project in the directory you selected.
 
+Every time you want to practice the tutorial sessions, go to the folder where you saved the `r_tutorial` project and double-click the `r_tutorial.Rproj` file. This will open the project in RStudio.
 
-# 4. Check your working directory
+For each session of the R tutorial, you can create a new R script by clicking the first icon in the RStudio toolbar.
 
-In R, run:
+When you save the script, it will be stored in your `r_tutorial` project folder. You can open it again and revise it at any time.
 
-```r
-getwd()
-```
-
-This shows your current working directory.
-
-If you are using an RStudio project, the working directory should be the main project folder.
-
-For example:
-
-```text
-/path/to/r-transcriptomics-tutorial
-```
 
 # 5. Install and load R packages
 
@@ -80,23 +68,27 @@ R contains many built-in functions, but additional functions are available throu
 
 A package normally needs to be installed only once on your computer.
 
-For example:
+Packages are usually loaded near the beginning of an R script.
+
+To avoid reinstalling a package that is already installed, you can first check whether the package exists:
+
 
 ```r
-install.packages("ggplot2")
-```
+if (!requireNamespace("ggplot2", quietly = TRUE)) {
+  install.packages("ggplot2")
+}
 
-After installation, the package needs to be loaded before you can use it:
-
-```r
 library(ggplot2)
 ```
 
-The difference is:
+This code means:
+
+If ggplot2 is not installed, install it.
+Then load ggplot2 so it can be used in the current R session.
+
+This is useful because reinstalling packages again and again can take time and may sometimes cause installation or version conflicts.
+
+So:
 
 **install.packages()** installs a package on your computer and normally needs to be run only once.
 **library()** loads an installed package into the current R session and needs to be run again when you restart R.
-
-Packages are usually loaded near the beginning of an R script.
-
-
