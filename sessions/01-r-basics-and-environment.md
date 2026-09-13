@@ -810,6 +810,15 @@ sample_info <- list(
 )
 
 sample_info
+
+$name
+[1] "sample_1"
+
+$age
+[1] 25
+
+$scores
+[1] 88 92 79
 ```
 
 For example, the same list contains text, a numeric value, and a numeric vector.
