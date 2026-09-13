@@ -321,6 +321,8 @@ Output:
 [1] 15
 [1] 3.14
 ```
+At above example, `round(3.14159, 2)` gives `3.14` because the second argument, `2`, tells R to keep **2** digits after the decimal point.
+
 
 Functions can perform many different tasks, including:
 
