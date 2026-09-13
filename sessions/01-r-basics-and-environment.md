@@ -721,7 +721,7 @@ Conditions can also be combined.
 | Operator | Meaning |
 |---|---|
 | `&` | AND |
-| `|` | OR |
+| `\|` | OR |
 | `!` | NOT |
 
 For example:
