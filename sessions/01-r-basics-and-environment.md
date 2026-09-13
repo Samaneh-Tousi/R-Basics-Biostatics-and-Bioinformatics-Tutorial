@@ -603,6 +603,9 @@ They are often produced by comparisons.
 
 ```r
 5 > 3
+[1] TRUE
+3 > 5
+[1] FALSE
 ```
 
 Output:
