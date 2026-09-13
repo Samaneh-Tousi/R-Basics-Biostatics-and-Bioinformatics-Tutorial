@@ -302,7 +302,7 @@ For example:
 mean(c(1, 2, 3, 4, 5))
 ```
 
-The function `c()` combines values into a vector:
+The function `c()` **combines** values into a vector:
 
 ```r
 c(1, 2, 3, 4, 5)
