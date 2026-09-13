@@ -34,7 +34,7 @@ Download the free, non-commercial version of RStudio Desktop from:
 Choose the installation link that matches your operating system.
 
 <p align="center">
-  <img src="../assets/RStudio_download_links.png" width="600">
+  <img src="../assets/RStudio_download_links.png" width="800">
 </p>
 
 After installation, open RStudio.
