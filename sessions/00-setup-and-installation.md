@@ -43,23 +43,18 @@ When RStudio opens successfully, you should see four main panels:
 
 # 3. Create an RStudio project
 
-Open RStudio.
+Open RStudio. 
+
+Using an RStudio project is recommended because it keeps your working directory organized.
 
 Then go to:
 
 ```text
-File > New Project > New Directory > New Project
+File > Save workspace image to ~/.RData> New Directory > New Project> write r_tutorial at Directory name > click on Browse and choose a directory to save the R project
 ```
 
-Choose a project name, for example:
+This creates an RStudio project in the directory you selected.
 
-```text
-r_tutorial
-```
-
-This creates an `.Rproj` file.
-
-Using an RStudio project is recommended because it keeps your working directory organized.
 
 # 4. Check your working directory
 
