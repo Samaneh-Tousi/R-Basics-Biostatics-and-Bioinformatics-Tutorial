@@ -131,7 +131,7 @@ mean(x = glucose_values, na.rm = TRUE)
 
 In this example, `x = glucose_values` tells the function which data to use, and `na.rm = TRUE` tells R to remove missing values before calculating the mean.
 
-The `==` operator is used for comparison. It checks whether two values are equal and returns `TRUE` or `FALSE`.
+The `==` operator is used for **comparison**. It checks whether two values are equal and returns `TRUE` or `FALSE`.
 
 ```r
 x <- 5
