@@ -62,7 +62,7 @@ For each session of the R tutorial, you can create a new R script by clicking th
 When you save the script, it will be stored in your `r_tutorial` project folder. You can open it again and revise it at any time.
 
 
-# 5. Install and load R packages
+# 4. Install and load R packages
 
 R contains many built-in functions, but additional functions are available through packages.
 
@@ -91,4 +91,5 @@ This is useful because reinstalling packages again and again can take time and m
 So:
 
 **install.packages()** installs a package on your computer and normally needs to be run only once.
+
 **library()** loads an installed package into the current R session and needs to be run again when you restart R.
