@@ -37,23 +37,14 @@ Choose the installation link that matches your operating system.
   <img src="../assets/RStudio_download_links.png" width="800">
 </p>
 
-After installation, open RStudio.
-
-When RStudio opens successfully, you should see four main panels:
-
-1. Source panel
-2. Console
-3. Environment / History
-4. Files / Plots / Packages / Help
-
 
 # 3. Create an RStudio project
 
-Open RStudio. 
+After installation, open RStudio.
 
 Using an RStudio project is recommended because it keeps your working directory organized.
 
-Then go to:
+For that please take these steps:
 
 ```text
 File > Save workspace image to ~/.RData> New Directory > New Project> write r_tutorial at Directory name > click on Browse and choose a directory to save the R project
