@@ -44,7 +44,7 @@ After installation, open RStudio.
 
 Using an RStudio project is recommended because it keeps your working directory organized.
 
-For that please take these steps:
+For that, please take these steps:
 
 ```text
 File > Save workspace image to ~/.RData> New Directory > New Project> write r_tutorial at Directory name > click on Browse and choose a directory to save the R project
