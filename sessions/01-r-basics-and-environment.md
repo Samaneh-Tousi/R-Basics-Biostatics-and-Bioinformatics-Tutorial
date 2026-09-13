@@ -96,7 +96,7 @@ Comments can be added to R code using the `#` symbol.
 
 R ignores anything written after `#` on the same line. This means comments are not run as code.
 
-Comments are useful for writing notes to yourself or explaining what your code does.
+Comments are useful for writing notes to yourself or explaining what your code does and making your analysis easier to understand later.
 
 ```r
 x <- 5  # store the value 5 in x
@@ -104,8 +104,6 @@ x <- 5  # store the value 5 in x
 # Calculate the square of x
 x^2
 ```
-
-Comments are useful for explaining what your code does and making your analysis easier to understand later.
 
 #### Assignment and Comparison Operators in R
 
