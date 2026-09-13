@@ -54,7 +54,7 @@ File > New Project > New Directory > New Project
 Choose a project name, for example:
 
 ```text
-r-transcriptomics-tutorial
+r_tutorial
 ```
 
 This creates an `.Rproj` file.
