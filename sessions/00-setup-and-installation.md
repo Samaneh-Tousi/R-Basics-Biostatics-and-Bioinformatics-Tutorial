@@ -18,11 +18,14 @@ Download and install the correct version for your operating system:
 After installation, right click on R at C:\Program Files\R\R-4.4.2\bin (replace the R version with your installed R version at the address) and run it by double clicking on it to check whether it opens and works.  
 
 <p align="center">
-  <img src="../assets/R_session.png" width="900">
+  <img src="../assets/R_session.png" width="600">
 </p>
 
-Then it it opens, you can check your R version by the command! 
+Then when it opens, you can check your R version by the command! 
 
+<p align="center">
+  <img src="../assets/R_version.png" width="600">
+</p>
 
 ```r
 version
