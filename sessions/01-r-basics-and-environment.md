@@ -408,7 +408,7 @@ After running the code above, the objects will appear in your Environment pane.
 
 ## Viewing Objects in the Environment
 
-To display all current objects:
+To display all current objects, run ls():
 
 ```r
 ls()
