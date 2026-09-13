@@ -620,27 +620,27 @@ Output:
 [1] FALSE
 ```
 
-### Factor
+## Factors
 
 Factors are used for **categorical variables**.
 
-A categorical variable is a variable that contains groups or categories instead of continuous numbers.
+A categorical variable contains categories instead of continuous numbers.
 
-For example, in a biological experiment, samples may belong to different groups:
+For example, in a biological experiment, each sample may have a treatment status:
 
 - control
 - treated
 
-These are not numbers. They are categories.
+These are not numerical values. They are categories.
 
 ```r
-group <- c("control", "treated", "control", "treated")
+treatment_status <- c("control", "treated", "control", "treated")
 ```
 
-Here, `group` is a character vector because the values are written as text.
+Here, `treatment_status` is a character vector because the values are written as text.
 
 ```r
-str(group)
+str(treatment_status)
 ```
 
 R will show:
@@ -649,18 +649,18 @@ R will show:
 chr [1:4] "control" "treated" "control" "treated"
 ```
 
-This means that `group` is stored as text.
+This means that `treatment_status` is stored as text.
 
-To tell R that these values represent categories, we can convert them to a factor:
+To tell R that these values represent categories, we can convert the object to a factor:
 
 ```r
-group_factor <- factor(group)
+treatment_status_factor <- factor(treatment_status)
 ```
 
 Now check the structure:
 
 ```r
-str(group_factor)
+str(treatment_status_factor)
 ```
 
 R will show something like:
@@ -669,12 +669,12 @@ R will show something like:
 Factor w/ 2 levels "control","treated": 1 2 1 2
 ```
 
-This means that `group_factor` is a factor with 2 categories, called **levels**.
+This means that `treatment_status_factor` is a factor with 2 categories, called **levels**.
 
-The levels are:
+You can inspect the levels using:
 
 ```r
-levels(group_factor)
+levels(treatment_status_factor)
 ```
 
 Output:
@@ -683,16 +683,14 @@ Output:
 [1] "control" "treated"
 ```
 
-So, factors store the possible categories as **levels**.
-
 In this example:
 
 - `control` is one level
 - `treated` is another level
 
-Factors are useful because many R functions, especially statistical and plotting functions, treat factors as groups.
+Factors are useful because many R functions, especially statistical and plotting functions, treat factor levels as categories.
 
-For example, if you make a plot, R can use the factor levels to separate samples into different groups.
+For example, if you make a plot, R can use the factor levels to compare the `control` samples with the `treated` samples.
 
 ---
 
