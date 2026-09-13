@@ -563,6 +563,9 @@ gene <- "TP53"
 str(city)
 ```
 
+**chr** "Hasselt" means the object is a **character** value.
+
+
 Text values can be combined using `paste()`:
 
 ```r
