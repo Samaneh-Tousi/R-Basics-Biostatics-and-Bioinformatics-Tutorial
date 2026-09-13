@@ -204,7 +204,7 @@ sample1 <- 10
 gene2 <- 5
 ```
 
-Avoid using names as object names that are already commonly used by R, such as:
+Avoid using numbers and names as object names in R, such as:
 
 ```text
 c
