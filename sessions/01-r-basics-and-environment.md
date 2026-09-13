@@ -429,13 +429,6 @@ Remove a single object:
 ```r
 rm(x)
 ```
-
-Remove all objects:
-
-```r
-rm(list = ls())
-```
-
 ---
 
 ## Checking Object Types
