@@ -15,7 +15,7 @@ Download and install the correct version for your operating system:
 - macOS
 - Linux
 
-After installation, go to the R installation folder, for example: C:\Program Files\R\R-4.4.2\bin (Replace R-4.4.2 with the version of R installed on your computer). Then double-click the R application file to check that R opens and works correctly. 
+After installation, go to the R installation folder, for example: **C:\Program Files\R\R-4.4.2\bin** (Replace R-4.4.2 with the version of R installed on your computer). Then double-click the R application file to check that R opens and works correctly. 
 When R opens, you should see the R version information on the first line.
 
 <p align="center">
