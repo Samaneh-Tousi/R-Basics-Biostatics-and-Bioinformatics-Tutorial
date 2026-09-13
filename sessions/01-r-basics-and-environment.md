@@ -92,9 +92,11 @@ You can also select multiple lines and run them together using the **Run** butto
 
 ### Comments in R
 
-Comments can be added to your code using `#`.
+Comments can be added to R code using the `#` symbol.
 
-Anything written after `#` is ignored by R.
+R ignores anything written after `#` on the same line. This means comments are not run as code.
+
+Comments are useful for writing notes to yourself or explaining what your code does.
 
 ```r
 x <- 5  # store the value 5 in x
