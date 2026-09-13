@@ -516,7 +516,7 @@ So in simple words:
 str(x)      shows one number
 str(data)   shows a table with rows and columns
 str(scores) shows a list/vector of numbers
-```
+````
 
 
 
