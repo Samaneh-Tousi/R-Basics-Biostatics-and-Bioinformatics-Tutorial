@@ -624,23 +624,75 @@ Output:
 
 Factors are used for **categorical variables**.
 
-For example:
+A categorical variable is a variable that contains groups or categories instead of continuous numbers.
+
+For example, in a biological experiment, samples may belong to different groups:
+
+- control
+- treated
+
+These are not numbers. They are categories.
 
 ```r
 group <- c("control", "treated", "control", "treated")
+```
 
+Here, `group` is a character vector because the values are written as text.
+
+```r
+str(group)
+```
+
+R will show:
+
+```r
+chr [1:4] "control" "treated" "control" "treated"
+```
+
+This means that `group` is stored as text.
+
+To tell R that these values represent categories, we can convert them to a factor:
+
+```r
 group_factor <- factor(group)
+```
 
+Now check the structure:
+
+```r
 str(group_factor)
 ```
 
-Factors store the possible categories as **levels**.
+R will show something like:
 
-You can inspect these levels using:
+```r
+Factor w/ 2 levels "control","treated": 1 2 1 2
+```
+
+This means that `group_factor` is a factor with 2 categories, called **levels**.
+
+The levels are:
 
 ```r
 levels(group_factor)
 ```
+
+Output:
+
+```r
+[1] "control" "treated"
+```
+
+So, factors store the possible categories as **levels**.
+
+In this example:
+
+- `control` is one level
+- `treated` is another level
+
+Factors are useful because many R functions, especially statistical and plotting functions, treat factors as groups.
+
+For example, if you make a plot, R can use the factor levels to separate samples into different groups.
 
 ---
 
