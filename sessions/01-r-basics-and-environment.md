@@ -608,11 +608,7 @@ They are often produced by comparisons.
 [1] FALSE
 ```
 
-Output:
-
-```r
-[1] TRUE
-```
+... and run this:
 
 ```r
 5 == 10
