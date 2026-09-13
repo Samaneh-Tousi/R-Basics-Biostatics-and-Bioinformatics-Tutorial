@@ -472,6 +472,53 @@ str(x)
 
 This means `x` is a **numeric object** and its value is **5**.
 
+````r
+str(data)
+# 'data.frame': 3 obs. of 2 variables:
+#  $ id   : int  1 2 3
+#  $ score: num  88 92 79
+````
+This means data is a **data frame**.
+
+It has:
+
+````r
+3 obs. = 3 observations = 3 rows
+2 variables = 2 columns
+````
+
+The columns are:
+
+````r
+id    = integer column with values 1, 2, 3
+score = numeric column with values 88, 92, 79
+````
+
+And:
+
+````r
+str(scores)
+# num [1:4] 88 92 79 95
+````
+This means scores is a **numeric vector**.
+
+````
+[1:4]
+````
+It means the vector has values from position **1 to position 4**, so it contains **4** numbers:
+
+````
+88, 92, 79, 95
+````
+So in simple words:
+
+````
+str(x)      shows one number
+str(data)   shows a table with rows and columns
+str(scores) shows a list/vector of numbers
+```
+
+
 
 ---
 
