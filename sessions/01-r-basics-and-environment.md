@@ -465,6 +465,14 @@ str(scores)
 
 `str()` is especially useful for datasets because it shows the type of each variable and gives a quick overview of the data.
 
+````r
+str(x)
+# num 5
+````
+
+This means `x` is a **numeric object** and its value is **5**.
+
+
 ---
 
 ## Basic Data Types in R
