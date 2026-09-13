@@ -23,15 +23,16 @@ After installation, right click on R at C:\Program Files\R\R-4.4.2\bin (replace 
 
 Then when it opens, you can check your R version by the command! 
 
-<p align="center">
-  <img src="../assets/R_version.png" width="600">
-</p>
 
 ```r
 version
 ```
 
 You should see information about your installed R version.
+
+<p align="center">
+  <img src="../assets/R_version.png" width="600">
+</p>
 
 # 2. Install RStudio
 
