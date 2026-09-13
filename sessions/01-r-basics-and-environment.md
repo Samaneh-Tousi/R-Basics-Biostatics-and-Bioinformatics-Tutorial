@@ -387,6 +387,17 @@ Think of the environment as a desk with labeled boxes holding your data and resu
 
 ---
 
+## Why the Environment Matters
+
+Understanding the R environment helps you:
+
+- track your variables
+- organize analyses
+- avoid overwriting objects
+- debug errors more easily
+
+---
+
 ## Creating Objects in R
 
 You can create objects using the assignment operator `<-`.
@@ -991,17 +1002,6 @@ The toolbar provides quick access to common actions such as:
 - saving files
 - running code
 - installing packages
-
----
-
-## Why the Environment Matters
-
-Understanding the R environment helps you:
-
-- track your variables
-- organize analyses
-- avoid overwriting objects
-- debug errors more easily
 
 ---
 
