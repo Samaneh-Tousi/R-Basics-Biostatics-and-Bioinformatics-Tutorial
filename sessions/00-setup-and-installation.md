@@ -97,7 +97,7 @@ So:
 
 -----
 
-# **Further explanation about R packages sources:**
+# **Further explanation about R packages:**
 
 ## **CRAN**
 
