@@ -97,7 +97,7 @@ So:
 
 -----
 
-#**Further explanation about R packages sources:**
+# **Further explanation about R packages sources:**
 
 **CRAN**
 **CRAN** stands for **Comprehensive R Archive Network**. It is the main online collection of **R** packages.
