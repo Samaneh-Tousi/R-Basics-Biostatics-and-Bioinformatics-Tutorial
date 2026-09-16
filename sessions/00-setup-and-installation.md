@@ -152,6 +152,197 @@ So, to summerize the R package sources:
 
 **BiocManager** → the tool used to install Bioconductor packages
 
+------
+
+# Rtools
+
+## What is Rtools?
+
+**Rtools** is a collection of compilers and build tools used by R on **Windows**.
+
+Some R packages contain code written in programming languages such as:
+
+- C
+- C++
+- Fortran
+
+When R needs to install such a package from **source code**, that code must first be compiled. On Windows, Rtools provides the tools needed for this compilation.
+
+A simple way to think about it is:
+
+> **Rtools helps R build and install packages from source code on Windows.**
+
+---
+
+## Do I always need Rtools?
+
+**No**.
+
+Mostly, you will **not** need Rtools for normal package installation because many CRAN packages are available as **binary packages**.
+
+A binary package is a pre-built version of the package that can be installed directly.
+
+For example:
+
+```r
+install.packages("ggplot2")
+```
+
+will usually install a Windows binary version of `ggplot2`, so Rtools is **not** needed.
+
+Rtools becomes important when R needs to install a package from **source**.
+
+---
+
+## When might Rtools be needed?
+
+You may need Rtools if you see messages such as:
+
+```text
+WARNING: Rtools is required to build R packages
+```
+
+or errors mentioning:
+
+```text
+compilation failed
+```
+
+```text
+make not found
+```
+
+```text
+gcc not found
+```
+
+These messages suggest that R is trying to compile source code but cannot find the required build tools.
+
+---
+
+## Binary packages versus source packages
+
+A **binary package** is already compiled and ready to install:
+
+```text
+Binary package
+      ↓
+Install directly
+      ↓
+Ready to use
+```
+
+A **source package** contains the original source code and may need to be compiled:
+
+```text
+Source package
+      ↓
+Rtools
+      ↓
+Compile the source code
+      ↓
+Install the package
+```
+
+Therefore, Rtools is mainly needed for the second situation.
+
+---
+
+## Rtools and R versions
+
+The Rtools version should be compatible with the version of R installed on your computer.
+
+After updating R, it is therefore a good idea to check whether your Rtools version is still appropriate.
+
+You can check your R version using:
+
+```r
+R.version.string
+```
+
+For example:
+
+```text
+[1] "R version 4.x.x"
+```
+
+Then make sure that the corresponding Rtools version is installed.
+
+---
+
+## How to install Rtools
+
+Rtools is not installed from inside R like a normal R package. It is a separate Windows program/toolchain that you download and install on your computer.
+
+First, check your R version:
+
+``
+R.version.string
+``
+
+Then go to the official CRAN Rtools page:
+
+<https://cran.r-project.org/bin/windows/Rtools/>
+
+Choose the Rtools version that matches your R version. For example, CRAN currently lists Rtools 4.5 for R 4.5.x, Rtools 4.4 for R 4.4.x, and so on.
+After downloading it, run the installer in Windows and generally keep the default installation options.
+
+Then restart RStudio and check whether R can find the build tools.
+
+
+---
+
+## How can I check whether R can use Rtools?
+
+If the `pkgbuild` package is installed, you can check whether the required build tools are available with:
+
+```r
+pkgbuild::has_build_tools(debug = TRUE)
+```
+
+If everything is configured correctly, this should return:
+
+```text
+TRUE
+```
+
+If `pkgbuild` is not installed, install it first:
+
+```r
+install.packages("pkgbuild")
+```
+
+and then run:
+
+```r
+pkgbuild::has_build_tools(debug = TRUE)
+```
+
+---
+
+## Important note
+
+You normally do **not** need to install Rtools just because you are using R or RStudio.
+
+Install Rtools when:
+
+- a package installation specifically requires it
+- R reports that build tools are missing
+- you need to install or develop packages from source
+
+Rtools is mainly relevant for **Windows**. macOS and Linux use different compilers and system development tools.
+
+---
+
+## Quick summary
+
+- **Rtools** provides build and compilation tools for R on Windows.
+- It is mainly needed when installing packages from **source code**.
+- Most binary package installations do not require Rtools.
+- Some packages contain C, C++, or Fortran code and may need compilation.
+- The Rtools version should be compatible with your R version.
+- After updating R, check whether your Rtools installation is still appropriate.
+- If an installation fails with compilation-related errors, Rtools may be one of the things to check.
 
 ------
 
@@ -915,4 +1106,4 @@ BiocManager::version()
 - When you see a non-zero exit status, scroll upward and look for the first `ERROR:` message.
 - Common causes include missing dependencies, incompatible R versions, library permissions, locked packages, `00LOCK` folders, internet problems, and missing system software.
 - For Bioconductor problems, `BiocManager::valid()` is a useful diagnostic command.
-````
+
