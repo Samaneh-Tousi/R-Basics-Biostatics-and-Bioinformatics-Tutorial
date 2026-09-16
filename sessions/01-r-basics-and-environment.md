@@ -1068,3 +1068,153 @@ str(group)
 
 Keeping your environment organized makes coding easier and more reproducible.
 
+-----
+
+# Further Tips for this session!
+
+## Running Multiple R Scripts at the Same Time
+
+Normally, the main R Console runs **one task at a time**.
+
+For example, if you run:
+
+```r
+source("analysis1.R")
+```
+
+and the script takes a long time to finish, the main R session will remain busy until the script is completed.
+
+RStudio provides **Background Jobs**, which allow you to run other R scripts at the same time.
+
+---
+
+## Background Jobs
+
+A Background Job runs an R script in a **separate R session**.
+
+This means that you can:
+
+- run one or more scripts in the background
+- continue using the main R Console
+- run several independent analyses at the same time
+
+Conceptually:
+
+```text
+Main R session
+    |
+    |-- Background Job 1 --> analysis1.R
+    |
+    |-- Background Job 2 --> analysis2.R
+    |
+    |-- Background Job 3 --> analysis3.R
+```
+
+To run an R script as a Background Job in RStudio:
+
+```text
+Source -> Source as Background Job
+```
+
+You can repeat this for several scripts.
+
+---
+
+## Each Background Job Has Its Own R Session
+
+A Background Job usually starts in a separate R session.
+
+This means that objects created in your main R session are not automatically available in the Background Job.
+
+For example, suppose you create:
+
+```r
+my_data <- read.csv("data.csv")
+```
+
+in your main Console.
+
+A Background Job may not automatically have access to the object `my_data`.
+
+Therefore, it is good practice to make each script self-contained:
+
+```r
+library(ggplot2)
+
+my_data <- read.csv("data.csv")
+
+summary(my_data)
+```
+
+This means that the script contains everything it needs to run independently.
+
+This also makes your analysis more **reproducible**.
+
+---
+
+## Be Careful When Writing to Files
+
+Multiple scripts can run at the same time, but problems may occur if they try to write to the **same output file**.
+
+For example:
+
+```text
+analysis1.R --> results.csv
+analysis2.R --> results.csv
+```
+
+Both scripts may try to modify `results.csv` at the same time.
+
+It is safer to use different output files:
+
+```text
+analysis1.R --> results_analysis1.csv
+analysis2.R --> results_analysis2.csv
+```
+
+---
+
+## Computer Resources
+
+Each Background Job uses additional computer resources, including:
+
+- CPU
+- memory (RAM)
+- disk activity
+
+Running many large analyses at the same time can therefore slow down your computer.
+
+For small scripts this is usually not a problem, but large datasets or bioinformatics analyses may require a significant amount of memory and processing power.
+
+---
+
+## When Are Background Jobs Useful?
+
+Background Jobs are useful when:
+
+- a script takes a long time to finish
+- you want to run several independent analyses
+- you want to continue working in R while another analysis is running
+- you are processing several datasets separately
+
+For example, you may want to analyze several datasets at the same time:
+
+```text
+sample1_analysis.R
+sample2_analysis.R
+sample3_analysis.R
+```
+
+Each script can be started as a separate Background Job.
+
+---
+
+## Quick Summary
+
+- The main R Console normally runs one task at a time.
+- RStudio Background Jobs allow multiple R scripts to run at the same time.
+- Each Background Job runs in a separate R session.
+- A Background Job does not automatically share all objects from the main R session.
+- Scripts should therefore be written so that they can run independently.
+- Avoid having multiple scripts write to the same file at the same time.
+- Running several jobs uses more CPU and memory.
