@@ -155,7 +155,6 @@ So, to summerize the R package sources:
 
 ------
 
-````md
 # Updating R and RStudio and Troubleshooting Package Installation
 
 Keeping **R** and **RStudio** up to date is important, but it can sometimes encounter problems after an update, especially with installed packages.
