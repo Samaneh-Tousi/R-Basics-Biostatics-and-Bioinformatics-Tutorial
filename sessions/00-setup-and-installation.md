@@ -141,5 +141,9 @@ In R, `::` means “use something from a package without loading the whole packa
 So, to summerize the R package sources:
 
 **CRAN** → where many general R packages come from
+
+
 **Bioconductor** → where many bioinformatics R packages come from
+
+
 **BiocManager** → the tool used to install Bioconductor packages
