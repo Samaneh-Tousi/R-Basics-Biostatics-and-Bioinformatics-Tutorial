@@ -94,3 +94,52 @@ So:
 **install.packages()** installs a package on your computer and normally needs to be run only once.
 
 **library()** loads an installed package into the current R session and needs to be run again when you restart R.
+
+-----
+
+**Further explanation about R packages sources):**
+
+**CRAN**
+**CRAN** stands for **Comprehensive R Archive Network**. It is the main online collection of **R** packages.
+Most general-purpose packages, such as `ggplot2`, `dplyr`, and `readr`, are installed from **CRAN**.
+
+Example:
+
+`install.packages("ggplot2")`
+
+**Bioconductor**
+**Bioconductor** is another collection of R packages, but it focuses mainly on **bioinformatics** and **biological data analysis**.
+It contains packages for tasks such as **RNA-seq analysis, genomics, gene expression analysis, and single-cell analysis**.
+
+Examples of **Bioconductor** packages include `DESeq2`, `edgeR`, and `limma`.
+
+**BiocManager**
+**BiocManager** is an R package that helps **R** install and manage packages from **Bioconductor**.
+In other words, **Bioconductor** is the collection of bioinformatics packages, while **BiocManager** is the tool used to install them.
+
+First, install **BiocManager** from **CRAN**:
+
+`install.packages("BiocManager")`
+
+Then use it to install a **Bioconductor** package:
+
+`BiocManager::install("DESeq2")`
+
+means:
+
+**BiocManager** → the package name
+`::` → “use a function from this package”
+install → the function name
+
+So you can read it as:
+
+Use the install() function from the BiocManager package.
+
+In R, `::` means “use something from a package without loading the whole package.”
+
+
+So, to summerize the R package sources:
+
+**CRAN** → where many general R packages come from
+**Bioconductor** → where many bioinformatics R packages come from
+**BiocManager** → the tool used to install Bioconductor packages
