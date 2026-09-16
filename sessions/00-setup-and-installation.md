@@ -168,7 +168,7 @@ Some R packages contain code written in programming languages such as:
 
 When R needs to install such a package from **source code**, that code must first be compiled. On Windows, Rtools provides the tools needed for this compilation.
 
-A simple way to think about it is:
+So, we can say:
 
 > **Rtools helps R build and install packages from source code on Windows.**
 
