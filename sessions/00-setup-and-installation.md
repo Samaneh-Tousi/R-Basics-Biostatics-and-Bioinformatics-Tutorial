@@ -63,6 +63,10 @@ When you save the script, it will be stored in your `r_tutorial` project folder.
 
 R contains many built-in functions, but additional functions are available through packages.
 
+R packages are bundles of reusable R code and related materials that add capabilities to R.
+
+A package can contain functions, datasets, documentation, and sometimes compiled code. Instead of writing everything yourself, you can install a package and use functions that someone else has already built and tested.
+
 A package normally needs to be installed only once on your computer.
 
 Packages are usually loaded near the beginning of an R script.
