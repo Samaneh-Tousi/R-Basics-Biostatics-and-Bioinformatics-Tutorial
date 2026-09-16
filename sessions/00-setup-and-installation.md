@@ -99,7 +99,8 @@ So:
 
 # **Further explanation about R packages sources:**
 
-**CRAN**
+## **CRAN**
+
 **CRAN** stands for **Comprehensive R Archive Network**. It is the main online collection of **R** packages.
 Most general-purpose packages, such as `ggplot2`, `dplyr`, and `readr`, are installed from **CRAN**.
 
@@ -107,13 +108,15 @@ Example:
 
 `install.packages("ggplot2")`
 
-**Bioconductor**
+## **Bioconductor**
+
 **Bioconductor** is another collection of R packages, but it focuses mainly on **bioinformatics** and **biological data analysis**.
 It contains packages for tasks such as **RNA-seq analysis, genomics, gene expression analysis, and single-cell analysis**.
 
 Examples of **Bioconductor** packages include `DESeq2`, `edgeR`, and `limma`.
 
-**BiocManager**
+## **BiocManager**
+
 **BiocManager** is an R package that helps **R** install and manage packages from **Bioconductor**.
 In other words, **Bioconductor** is the collection of bioinformatics packages, while **BiocManager** is the tool used to install them.
 
