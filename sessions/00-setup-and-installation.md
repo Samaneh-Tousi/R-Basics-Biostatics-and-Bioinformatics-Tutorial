@@ -80,7 +80,7 @@ library(ggplot2)
 
 This code means:
 
-If ggplot2 is not installed, install it.
+If ggplot2 is not installed, install it. **quietly = TRUE** means “check for the package without printing unnecessary messages to the console, and suppresses the usual message/warning about the package not being available.”
 Then load ggplot2 so it can be used in the current R session.
 
 This is useful because reinstalling packages again and again can take time and may sometimes cause installation or version conflicts.
