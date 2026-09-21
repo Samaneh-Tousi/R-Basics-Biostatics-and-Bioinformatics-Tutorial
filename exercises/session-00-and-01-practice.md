@@ -4,15 +4,13 @@ Use the R console or an R script to complete the following exercises.
 
 ## 1. Checking and Installing a Package
 
-Suppose you want to use the package `ggplot2`.
+Suppose you want to use the package `tidyverse`.
 
 Write R code that:
 
-1. Checks whether `ggplot2` is already installed.
+1. Checks whether `tidyverse` is already installed.
 2. Installs the package only if it is not already installed.
 3. Loads the package after checking the installation.
-
-**Hint:** You may find `%in%`, `installed.packages()`, `install.packages()`, and `library()` useful.
 
 ---
 
@@ -29,40 +27,32 @@ Use three control samples and three treated samples.
 
 Then:
 
-1. Convert the vector to a factor.
-2. Use `str()` to inspect its structure.
-3. Use `levels()` to check its categories.
+1. Use `str()` to inspect its structure. 
+2. Convert the vector to a factor.
+3. re-use `str()` to re-inspect its structure.
+4. Use `levels()` to check its categories.
 
 ---
 
 ## 3. Create a Small Data Frame
 
-Create a data frame called `glucose_data` with **6 rows and 2 columns**.
+Create a data frame called `glucose_data` with **6 rows and 3 columns**.
 
 The columns should be:
 
+- `sample`: a categorical variable containing sample IDs like `"sample_1"` and `"sample_2"`, etc
 - `status`: a categorical variable containing `"control"` and `"treated"`
 - `glucose_level`: a numerical variable containing glucose measurements
 
-For example, your data might represent:
-
-| status | glucose_level |
-|---|---:|
-| control | ? |
-| control | ? |
-| control | ? |
-| treated | ? |
-| treated | ? |
-| treated | ? |
-
-Choose your own numerical glucose values.
-
 After creating the data frame:
 
-1. Display the data frame.
+1. Print the data frame.
 2. Use `str()` to inspect its structure.
 3. Use `dim()` to check its dimensions.
 4. Use `colnames()` to check the column names.
+5. check class(glucose_data$glucose_level), if its not numeric convert it to numeric
+6. Choose your one or more of the numerical glucose values to print out in your console by defining a treshold value.
+7. Convert the sample IDs as rownames of the dataframe and then remove the `sample` column
 
 ---
 
@@ -75,31 +65,45 @@ Create a numeric matrix called `gene_expression` with:
 - 6 rows
 - 6 columns
 - numerical values only
+- values filled **column by column** rather than row by row
 
-Each row should represent a gene and each column should represent a sample.
+Each **row** should represent a gene, and each **column** should represent a sample.
 
-Then:
+Then complete the following tasks:
 
 1. Display the matrix.
+
 2. Use `dim()` to check its dimensions.
-3. Use `str()` to inspect the object.
-4. Extract the value from **row 2, column 4**.
 
----
+3. Use `str()` to inspect the structure of the matrix.
 
-## 5. Identify the R Objects
+4. Rename the rows as:
 
-After completing the exercises above, determine the object type of each of the following:
+   - `"gene_1"`
+   - `"gene_2"`
+   - `"gene_3"`
+   - ...
+   - `"gene_6"`
 
-- `treatment_group`
-- `glucose_data`
-- `gene_expression`
+   Rename the columns as:
 
-Use an R function to check your answers.
+   - `"sample_1"`
+   - `"sample_2"`
+   - `"sample_3"`
+   - ...
+   - `"sample_6"`
 
-Think about the difference between:
+5. Extract the value located at **row 2, column 4**.
 
-- a vector
-- a factor
-- a data frame
-- a matrix
+6. Create a smaller matrix from `gene_expression` containing:
+
+   - the **first 4 genes**
+   - the **first 3 samples**
+
+7. Replace the expression values in the smaller matrix with **random integer values between 50 and 200**.
+
+8. Convert the smaller matrix into a **data frame**.
+
+9. Use `str()` to compare the structure of the smaller matrix before and after converting it to a data frame.
+
+-----
