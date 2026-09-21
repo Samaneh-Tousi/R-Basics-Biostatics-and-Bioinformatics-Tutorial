@@ -1,5 +1,5 @@
 # IMPORTANT
-Join us in the [**`r-course-2026` Slack channel**](https://join.slack.com/share/enQtMTIxMDUwNzQzNDQ5MTUtZmQ1MDIwMzZkOTY4OGIzYzFkNDk3MTlmNGZiNjA1YmVjODA0ZGFjMDY3YTgyOWE3MTg1ZGQxOTRjZjA5OGMwMA) to practice R, work on the monthly exercises, and ask questions along the way. Feel free to send your completed R script to me via a private Slack message.
+Join us in the [**`r-course-2026` Slack channel**](https://join.slack.com/share/enQtMTIxMDUwNzQzNDQ5MTUtZmQ1MDIwMzZkOTY4OGIzYzFkNDk3MTlmNGZiNjA1YmVjODA0ZGFjMDY3YTgyOWE3MTg1ZGQxOTRjZjA5OGMwMA) to practice R, work on the monthly exercises, and ask questions along the way.
 
 
 # R Basics, Biostatistics, and Bioinformatics Tutorial
