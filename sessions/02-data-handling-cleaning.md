@@ -19,45 +19,29 @@ The `dplyr` and `tidyr` packages from the **tidyverse** provide powerful tools f
 
 In this tutorial, you will learn how to:
 
-- import biomedical datasets
+- import biomedical datasets from CSV, text, and Excel files
 - inspect data structures
 - manipulate data using `dplyr`
 - reshape data using `tidyr`
-- handle missing values
-- remove duplicates
-- build reproducible cleaning workflows
-
----
-
-# Learning Objectives
-
-By the end of this tutorial, you will be able to:
-
-- import CSV, text, and Excel files
-- inspect imported datasets
-- use `dplyr` for data manipulation
-- use `tidyr` for reshaping data
 - clean messy biomedical datasets
 - handle missing values
-- remove duplicated rows
+- remove duplicates
 - export cleaned datasets
 
 ---
 
 # Installing and Loading Packages
 
-Install the package once:
-
-```r
-install.packages("tidyverse")
-```
+First check if the required package is already installed.
 
 > You only need to install packages once.  
 > After installation, simply load them using `library()`.
 
-Load the package:
-
 ```r
+if (!requireNamespace("tidyverse", quietly = TRUE)) 
+{install.packages("tidyverse")
+}
+
 library(tidyverse)
 ```
 
