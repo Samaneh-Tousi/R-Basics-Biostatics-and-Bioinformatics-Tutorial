@@ -1,6 +1,6 @@
 # Practice Questions for sessions 00 (installation) and 01 (R basics)
 
-Use the R console or an R script to complete the following exercises.
+Create a new R script in RStudio to complete the following exercises. Save the script in the r_project folder you created during the first session and name the file practice_00_01.R.
 
 ## 1. Checking and Installing a Package
 
