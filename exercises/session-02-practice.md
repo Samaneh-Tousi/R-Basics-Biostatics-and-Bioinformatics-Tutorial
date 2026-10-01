@@ -1,25 +1,14 @@
-````markdown
 # Session 02 Practice: Data Handling and Cleaning
 
 In this exercise, you will work with a deliberately messy human health dataset and prepare it for further analysis.
-
-The goal is to decide **which R functions and steps are appropriate yourself**, based on what you learned in Session 02.
 
 ---
 
 ## Getting the Dataset
 
-The dataset is available in the `assets` folder of this GitHub repository.
+The dataset is available in the `assets` folder of this GitHub repository. For finding the file and downloading th efile click here [`messy human health data`](https://github.com/Samaneh-Tousi/R-Basics-Biostatics-and-Bioinformatics-Tutorial/blob/main/assets/messy_human_health_data.csv)
 
-1. Open the course repository on GitHub.
-2. Open the **`assets`** folder.
-3. Find the file:
-
-```text
-messy_human_health_data.csv
-```
-
-4. Download the file and save it inside the `assets` folder of your own R project.
+Download the file and save it inside the `assets` folder of your own R project.
 
 Your project structure should look similar to:
 
