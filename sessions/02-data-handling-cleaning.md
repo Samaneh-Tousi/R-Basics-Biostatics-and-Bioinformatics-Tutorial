@@ -347,6 +347,19 @@ gene_expr %>%
   select(Sample_ID, Patient_ID, Condition, Gene)
 ```
 
+`%>%` is called the *pipe operator* in R. It is mainly used to make code easier to read by passing the result of one step into the next step.
+
+In modern R, we can use `|>` as the built-in pipe operator without loading any package first. The `%>%` operator comes originally from the `magrittr` package and is also commonly available when using packages such as `dplyr` or `tidyverse`.
+
+So, you can run the following code instead:
+
+```r
+gene_expr |>
+  select(Sample_ID, Patient_ID, Condition, Gene)
+```
+
+This uses the base R pipe `|>` and passes `gene_expr` into `select()`.
+
 ---
 
 # Filtering Rows
