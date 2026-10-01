@@ -49,7 +49,7 @@ library(tidyverse)
 
 # Understanding the Tidyverse
 
-The **tidyverse** is a collection of packages designed for data science in R.
+The **tidyverse** is a collection of packages designed for data science in R, when it's loaded, all the sub-packages are also loaded at once.
 
 Important packages include:
 
@@ -92,7 +92,7 @@ or empty cells.
 
 ## Importing CSV Files
 
-The `readr` package is included in the tidyverse.
+The `readr` package is included in the tidyverse. You dont need to load it separately when `tidyverse` is already loaded.
 
 Use `read_csv()` to import a standard comma-separated file:
 
@@ -165,7 +165,10 @@ Excel files can be imported using the `readxl` package.
 Install it once:
 
 ```r
+if (!requireNamespace("readxl", quietly = TRUE)) {
 install.packages("readxl")
+}
+
 ```
 
 Load the package:
@@ -194,7 +197,7 @@ gene_data <- read_excel(
 After importing an Excel file, always inspect the result:
 
 ```r
-head(gene_data)
+head(gene_data, n = 1)
 str(gene_data)
 ```
 
@@ -255,7 +258,7 @@ For large datasets, it is often faster to inspect only the first rows.
 ## View the first rows
 
 ```r
-head(gene_expr)
+head(gene_expr, head = 3)
 ```
 
 ---
@@ -296,7 +299,7 @@ The second number is the number of columns or variables.
 colnames(gene_expr)
 ```
 
-You can also use:
+or You can also use:
 
 ```r
 names(gene_expr)
