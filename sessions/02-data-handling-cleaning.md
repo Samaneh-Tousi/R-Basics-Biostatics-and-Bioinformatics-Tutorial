@@ -1,5 +1,6 @@
 # IMPORTANT
-Join the [**`r-course-2026` Slack channel**](https://join.slack.com/share/enQtMTIxMDUwNzQzNDQ5MTUtZmQ1MDIwMzZkOTY4OGIzYzFkNDk3MTlmNGZiNjA1YmVjODA0ZGFjMDY3YTgyOWE3MTg1ZGQxOTRjZjA5OGMwMA) to practice R, work on the monthly exercises [**session-02-practice**](https://github.com/Samaneh-Tousi/R-Basics-Biostatics-and-Bioinformatics-Tutorial/blob/main/exercises/session-02-practice.md), and ask questions along the way.
+
+**Reminder**: After completing this session, work on the monthly [`session-02-practice`](https://github.com/Samaneh-Tousi/R-Basics-Biostatics-and-Bioinformatics-Tutorial/blob/main/exercises/session-02-practice.md) exercise. If you have not joined yet, join the [`r-course-2026` Slack channel](https://join.slack.com/share/enQtMTIxMDUwNzQzNDQ5MTUtZmQ1MDIwMzZkOTY4OGIzYzFkNDk3MTlmNGZiNjA1YmVjODA0ZGFjMDY3YTgyOWE3MTg1ZGQxOTRjZjA5OGMwMA) to share your practice, ask questions, and discuss any difficulties along the way.
 
 # Data Handling & Cleaning in R with dplyr and tidyr
 
