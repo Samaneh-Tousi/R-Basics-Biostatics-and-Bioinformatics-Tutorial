@@ -351,7 +351,7 @@ gene_expr %>%
 
 # Filtering Rows
 
-Use `filter()` to keep rows that satisfy conditions.
+Use `filter()` to keep rows that match a specific condition.
 
 ```r
 gene_expr %>%
