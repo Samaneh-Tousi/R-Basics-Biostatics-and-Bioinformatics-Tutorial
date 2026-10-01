@@ -343,7 +343,7 @@ Main functions include:
 Use `select()` to keep specific columns.
 
 ```r
-gene_expr %>%
+gene_expr_spec_col <- gene_expr %>%
   select(Sample_ID, Patient_ID, Condition, Gene)
 ```
 
@@ -354,7 +354,7 @@ In modern R, we can use `|>` as the built-in pipe operator without loading any p
 So, you can run the following code instead:
 
 ```r
-gene_expr |>
+gene_expr_spec_col <- gene_expr |>
   select(Sample_ID, Patient_ID, Condition, Gene)
 ```
 
@@ -369,14 +369,14 @@ From this point onward, you can use either `%>%` or `|>` in the following exerci
 Use `filter()` to keep rows that match a specific condition.
 
 ```r
-gene_expr %>%
+gene_expr_treated <- gene_expr %>%
   filter(Condition == "Treated")
 ```
 
 Filter using multiple conditions:
 
 ```r
-gene_expr %>%
+gene_expr_treated_blood <- gene_expr %>%
   filter(
     Condition == "Treated",
     Tissue == "Blood"
@@ -390,7 +390,7 @@ gene_expr %>%
 Use `mutate()` to create new variables.
 
 ```r
-gene_expr %>%
+gene_expr_with_mean <- gene_expr %>%
   mutate(
     mean_expression = (Expression_Rep1 + Expression_Rep2) / 2
   )
@@ -405,14 +405,14 @@ Sort rows using `arrange()`.
 Ascending order:
 
 ```r
-gene_expr %>%
+gene_expr_Rep2_order <- gene_expr %>%
   arrange(Expression_Rep2)
 ```
 
 Descending order:
 
 ```r
-gene_expr %>%
+gene_expr_reverse_order <- gene_expr %>%
   arrange(desc(Expression_Rep2))
 ```
 
@@ -423,7 +423,7 @@ gene_expr %>%
 Use `rename()` to improve column names.
 
 ```r
-gene_expr %>%
+gene_expr_renamed_col <- gene_expr %>%
   rename(
     sample_id = Sample_ID,
     patient_id = Patient_ID,
@@ -438,7 +438,7 @@ gene_expr %>%
 Use `group_by()` with `summarise()`.
 
 ```r
-gene_expr %>%
+gene_expr_grouped_summerized <- gene_expr %>%
   group_by(Condition, Gene) %>%
   summarise(
     mean_expression_rep2 = mean(Expression_Rep2, na.rm = TRUE),
@@ -453,14 +453,14 @@ gene_expr %>%
 Count samples by condition.
 
 ```r
-gene_expr %>%
+gene_expr_count_Condition <- gene_expr %>%
   count(Condition)
 ```
 
 Count genes by condition.
 
 ```r
-gene_expr %>%
+gene_expr_gene_count_Condition <- gene_expr %>%
   count(Gene, Condition)
 ```
 
@@ -468,7 +468,7 @@ gene_expr %>%
 
 # Using Pipes
 
-The pipe operator `%>%` passes output from one step to the next.
+So, we learned that the pipe operator `%>%` passes the output from one step to the next.
 
 ```r
 gene_expr %>%
@@ -843,8 +843,6 @@ Below is a complete reproducible cleaning workflow.
 ```r
 library(tidyverse)
 
-gene_expr <- read_csv("data/messy_gene_expression.csv")
-
 clean_gene_expr <- gene_expr %>%
   
   # Rename columns
@@ -950,7 +948,7 @@ Save cleaned data:
 ```r
 write_csv(
   clean_gene_expr,
-  "data/clean_gene_expression.csv"
+  "your_r_projet_directory/clean_gene_expression.csv"
 )
 ```
 
