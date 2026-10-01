@@ -360,7 +360,7 @@ gene_expr |>
 
 This uses the base R pipe `|>` and passes `gene_expr` into `select()`.
 
-From this point onward, you can use either %>% or |> in the following exercises, depending on which pipe operator you prefer.
+From this point onward, you can use either `%>%` or `|>` in the following exercises, depending on which pipe operator you prefer.
 
 ---
 
