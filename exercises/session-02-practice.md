@@ -8,7 +8,7 @@ In this exercise, you will work with a deliberately messy human health dataset a
 
 The dataset is available in the `assets` folder of this GitHub repository. For finding and downloading the file, you can click here [`messy human health data`](https://github.com/Samaneh-Tousi/R-Basics-Biostatics-and-Bioinformatics-Tutorial/blob/main/assets/messy_human_health_data.csv)
 
-Download and save it inside the `assets` folder of your own R project at your pc/laptop.
+Download and save it inside the `assets` folder of your own R project at your PC/laptop.
 
 Your project structure should look similar to:
 
@@ -24,13 +24,13 @@ You can now import the CSV file into R and start the exercises below.
 
 ---
 
-## Practice 1 — Import and Explore the Dataset
+## Practice 1. Import and Explore the Dataset
 
 Import `messy_human_health_data.csv` as an object called `health_data`, inspect its dimensions, column names, variable types, summary statistics, and missing values, and confirm that the original dataset contains **30 rows and 10 columns**.
 
 ---
 
-## Practice 2 — Organize the Variables
+## Practice 2. Organize the Variables
 
 Create a new data frame called `health_selected` with consistently named columns and keep only the following variables:
 
@@ -46,7 +46,7 @@ Your resulting data frame should contain **30 rows and 7 columns**.
 
 ---
 
-## Practice 3 — Clean the Dataset
+## Practice 3. Clean the Dataset
 
 Starting from the full dataset, create a new data frame called `health_clean` in which completely duplicated records are removed and missing categorical information in variables such as `sex`, `smoking_status`, and `alcohol_usage` is recorded as `"Unknown"` rather than left missing.
 
@@ -54,7 +54,7 @@ After removing the duplicated records, your cleaned dataset should contain **27 
 
 ---
 
-## Practice 4 — Create a Specific Subgroup
+## Practice 4. Create a Specific Subgroup
 
 From `health_clean`, create a new data frame called `high_risk_group` containing only samples that meet **all** of the following conditions:
 
@@ -81,7 +81,7 @@ If your filtering is correct, the resulting data frame should contain **7 sample
 
 ---
 
-## Practice 5 — Create a Group Summary
+## Practice 5. Create a Group Summary
 
 Using `health_clean`, create a summary data frame with **one row for each smoking-status category**:
 
@@ -101,7 +101,7 @@ Make sure that missing numerical measurements do not prevent the calculation of 
 
 ---
 
-## Practice 6 — Reshape and Export the Data
+## Practice 6. Reshape and Export the Data
 
 Create a long-format data frame containing:
 
