@@ -6,9 +6,9 @@ In this exercise, you will work with a deliberately messy human health dataset a
 
 ## Getting the Dataset
 
-The dataset is available in the `assets` folder of this GitHub repository. For finding the file and downloading th efile click here [`messy human health data`](https://github.com/Samaneh-Tousi/R-Basics-Biostatics-and-Bioinformatics-Tutorial/blob/main/assets/messy_human_health_data.csv)
+The dataset is available in the `assets` folder of this GitHub repository. For finding and downloading the file, you can click here [`messy human health data`](https://github.com/Samaneh-Tousi/R-Basics-Biostatics-and-Bioinformatics-Tutorial/blob/main/assets/messy_human_health_data.csv)
 
-Download the file and save it inside the `assets` folder of your own R project.
+Download and save it inside the `assets` folder of your own R project at your pc/laptop.
 
 Your project structure should look similar to:
 
