@@ -787,6 +787,7 @@ sample_parts_combined <- sample_parts %>%
     sep = "_"
   )
 ```
+---
 
 ### Now a quick quiz! What is a tibble?
 
@@ -799,8 +800,7 @@ gene_data <- tibble(
   Gene = c("TP53", "BRCA1", "MYC"),
   Expression = c(12.5, 8.7, 22.1)
 )
-
-
+```
 ---
 
 # Understanding Missing Values
