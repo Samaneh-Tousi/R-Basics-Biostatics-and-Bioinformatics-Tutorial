@@ -759,7 +759,7 @@ sample_info <- tibble(
   sample_label = c("Control_Blood", "Treated_Liver")
 )
 
-sample_info %>%
+sample_info_separated <- sample_info %>%
   separate(
     sample_label,
     into = c("condition", "tissue"),
