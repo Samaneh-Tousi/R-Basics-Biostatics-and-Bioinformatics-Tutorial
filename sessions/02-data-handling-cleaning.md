@@ -748,8 +748,6 @@ gene_expr_wide <- gene_expr_long_clean %>%
 
 In this example, the warning from `pivot_wider()` is useful because it helps us detect a possible **data-quality issue**.
 
-> In simple terms: R is telling us that more than one value would need to be placed into the same cell.
-
 ---
 
 # Separating Columns
