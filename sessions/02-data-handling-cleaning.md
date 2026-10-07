@@ -611,7 +611,7 @@ gene_expr_extended <- rbind(
 
 The new row must contain the same columns as the original data frame.
 
-For most data-cleaning tasks in this tutorial, we will mainly use the tidyverse functions because they are easier to read in longer workflows.
+For most data-cleaning tasks in this tutorial, we will mainly use the **`tidyverse`** functions because they are easier to read in longer workflows.
 
 ---
 
@@ -681,6 +681,74 @@ gene_expr_wide <- gene_expr_long %>%
 
 gene_expr_wide
 ```
+
+### Why does `pivot_wider()` give a warning?
+
+When we run:
+
+```r
+gene_expr_wide <- gene_expr_long %>%
+  pivot_wider(
+    names_from = replicate,
+    values_from = expression
+  )
+```
+
+we may receive this warning:
+
+```text
+Values from `expression` are not uniquely identified;
+output will contain list-cols.
+```
+
+This happens because `pivot_wider()` expects **one value for each unique combination of sample information and replicate**.
+
+In our dataset, one row for sample `S05` is duplicated. After converting the data to long format, this duplication is also present in `gene_expr_long`.
+
+Therefore, `pivot_wider()` finds more than one value that would need to go into the same cell.
+
+We can check for these duplicated combinations using:
+
+```r
+gene_expr_long %>%
+  count(
+    Sample_ID,
+    Patient_ID,
+    Condition,
+    Tissue,
+    Gene,
+    Collection_Date,
+    replicate
+  ) %>%
+  filter(n > 1)
+```
+
+Here, `n > 1` means that the same combination appears more than once.
+
+### If the duplicated row is accidental
+
+If the duplicated row was added by mistake, we can remove exact duplicates using:
+
+```r
+gene_expr_long_clean <- gene_expr_long %>%
+  distinct()
+```
+
+Then reshape the cleaned dataset:
+
+```r
+gene_expr_wide <- gene_expr_long_clean %>%
+  pivot_wider(
+    names_from = replicate,
+    values_from = expression
+  )
+```
+
+> **Important:** Do not automatically remove duplicates just because R gives this warning. First check why the duplicates exist. If they represent real repeated measurements, they may need to be kept and handled appropriately.
+
+In this example, the warning from `pivot_wider()` is useful because it helps us detect a possible **data-quality issue**.
+
+> In simple terms: R is telling us that more than one value would need to be placed into the same cell.
 
 ---
 
