@@ -850,15 +850,29 @@ gene_expr %>%
 Use `replace_na()`.
 
 ```r
-gene_expr %>%
+gene_expr_with_Zero <- gene_expr %>%
   mutate(
     Expression_Rep1 = replace_na(Expression_Rep1, 0),
     Expression_Rep2 = replace_na(Expression_Rep2, 0)
   )
 ```
 
-> Replacing missing values with `0` is shown here only as an example of how `replace_na()` works.  
-> In real biomedical analyses, whether a missing value should be replaced with zero depends on what the missing value represents.
+Replacing missing values with `0` is shown here only as an example of how `replace_na()` works.  
+
+In real biomedical analyses, whether a missing value should be replaced with zero depends on what the missing value represents.
+
+As an point we learned here that `mutate()` can act as a function for creating new columns or modifying existing columns.
+
+Now, if you want to replace the `0` values back with `NA`, a clean way is to use `na_if()` inside `mutate()`:
+
+```r
+gene_expr_with_NA <- gene_expr_with_Zero %>%
+  mutate(
+    Expression_Rep1 = na_if(Expression_Rep1, 0),
+    Expression_Rep2 = na_if(Expression_Rep2, 0)
+  )
+  
+```  
 
 ---
 
