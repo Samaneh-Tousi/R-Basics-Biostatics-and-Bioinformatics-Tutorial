@@ -779,7 +779,7 @@ sample_parts <- tibble(
   tissue = c("Blood", "Liver")
 )
 
-sample_parts %>%
+sample_parts_combined <- sample_parts %>%
   unite(
     "sample_group",
     condition,
