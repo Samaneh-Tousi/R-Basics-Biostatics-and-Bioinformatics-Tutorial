@@ -447,6 +447,8 @@ gene_expr_grouped_summerized <- gene_expr %>%
   )
 ```
 
+Here, `"drop"` **does not** delete any rows or columns. It only removes the grouping structure after summarising.
+
 ---
 
 # Counting Observations
