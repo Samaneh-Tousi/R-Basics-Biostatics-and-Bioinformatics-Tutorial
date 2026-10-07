@@ -682,7 +682,7 @@ gene_expr_wide <- gene_expr_long %>%
 gene_expr_wide
 ```
 
-### Why does `pivot_wider()` give a warning?
+### Why does `pivot_wider()` give a warning here?
 
 When we run:
 
