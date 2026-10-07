@@ -788,6 +788,19 @@ sample_parts_combined <- sample_parts %>%
   )
 ```
 
+### Now a quick quiz! What is a tibble?
+
+A **tibble** is a modern version of a data frame in R. It is commonly used with `tidyverse` packages.
+
+We can create a tibble using `tibble()`:
+
+```r
+gene_data <- tibble(
+  Gene = c("TP53", "BRCA1", "MYC"),
+  Expression = c(12.5, 8.7, 22.1)
+)
+
+
 ---
 
 # Understanding Missing Values
