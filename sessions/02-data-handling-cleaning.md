@@ -259,7 +259,7 @@ For large datasets, it is often faster to inspect only the first rows.
 ## View the first rows
 
 ```r
-head(gene_expr, head = 3)
+head(gene_expr, n = 3)
 ```
 
 ---
