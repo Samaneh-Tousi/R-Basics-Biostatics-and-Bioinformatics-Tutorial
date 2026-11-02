@@ -3,7 +3,7 @@
 In Session 02, you cleaned and organized the human health dataset.  
 In this session, you will use that cleaned dataset to explore the data visually and create figures that could be used in a scientific report.
 
-**Important Note**: This is a **small example** dataset created for practice purposes. Any patterns or conclusions observed here **should not** be generalized to larger populations or interpreted as evidence from a population-level study.
+<span style="color:red">**Important Note:** This is a **small example** dataset created for practice purposes. Any patterns or conclusions observed here **should not** be generalized to larger populations or interpreted as evidence from a population-level study.</span>
 
 Use your cleaned file at your assets folder within the r tutorial project at your own computer:
 
