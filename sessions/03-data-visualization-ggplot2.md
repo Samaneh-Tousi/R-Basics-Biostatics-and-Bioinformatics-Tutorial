@@ -1,5 +1,5 @@
 # IMPORTANT
-Join us in the [**`r-course-2026` Slack channel**](https://join.slack.com/share/enQtMTIxMDUwNzQzNDQ5MTUtZmQ1MDIwMzZkOTY4OGIzYzFkNDk3MTlmNGZiNjA1YmVjODA0ZGFjMDY3YTgyOWE3MTg1ZGQxOTRjZjA5OGMwMA) to practice R, work on the monthly exercises, and ask questions along the way.
+Join us in the [**`r-course-2026` Slack channel**](https://join.slack.com/t/bioinformatic-eqi8910/shared_invite/zt-4fog5mvxc-UNZ7iWtLK_Neq0PathH1Rg) to practice R, work on the monthly exercises, and ask questions along the way.
 
 # Data Visualization with ggplot2
 
@@ -47,35 +47,23 @@ ggplot(data = df, aes(x = group, y = expression)) +
 
 # 2. Installing and Loading Required Packages
 
-## 2.1 Install packages
+## 2.1 Install and load the required packages
 
 You only need to install packages **one time** on your computer.
 
-Do not reinstall packages every time you open RStudio. Reinstalling packages repeatedly can sometimes cause problems, especially if the package is already loaded or if R is using it during installation.
-
 ```r
-install.packages("ggplot2")
-install.packages("dplyr")
-install.packages("tidyr")
-install.packages("readr")
-install.packages("patchwork")
+packages <- c("ggplot2", "dplyr", "tidyr", "readr", "patchwork")
+
+for (pkg in packages) {
+  # Install the package if it is missing
+  if (!requireNamespace(pkg, quietly = TRUE)) {
+    install.packages(pkg)
+  }
+
+  # Load the package
+  library(pkg, character.only = TRUE)
+}
 ```
-
----
-
-## 2.2 Load packages
-
-After installation, you only need to load the packages when starting a new R session.
-
-```r
-library(ggplot2)
-library(dplyr)
-library(tidyr)
-library(readr)
-library(patchwork)
-```
-
----
 
 # 3. Creating an Example Biomedical Dataset
 
@@ -117,43 +105,12 @@ head(expression_data)
 
 # 4. Understanding the Dataset
 
-Before making plots, always inspect the dataset.
-We need to know the column names, the type of data in each column, and the size of the dataset.
-This is important because plots only work when we use the correct column names and the correct type of data.
-
-For example, if we want to plot `gene_A` by `group`, we need to check that:
-
-- `gene_A` exists in the dataset
-- `gene_A` contains numeric values
-- `group` exists in the dataset
-- `group` contains categories such as `Control` and `Treatment`
-
 ---
-
 ## 4.1 Check the Structure of the Dataset
-
-The `str()` function shows the structure of the dataset.
-
-It tells us:
-
-- how many rows the dataset has
-- how many columns the dataset has
-- the name of each column
-- the data type of each column
-- a few example values from each column
 
 ```r
 str(expression_data)
 ```
-
-This helps us check whether each variable is stored correctly.
-
-For example:
-
-- `group` should be a character or factor variable
-- `gene_A` should be a numeric variable
-- `age` should be a numeric variable
-
 ---
 
 ## 4.2 Check Summary Statistics
@@ -163,21 +120,6 @@ The `summary()` function gives a summary of each column.
 ```r
 summary(expression_data)
 ```
-
-For numeric columns, it shows values such as:
-
-- minimum
-- median
-- mean
-- maximum
-
-This helps us understand the range of the data.
-
-For example, for `gene_A`, we can check whether the expression values look reasonable.
-
-The `summary()` function can also help us find missing values.  
-Missing values are shown as `NA`.
-
 ---
 
 ## 4.3 Check the Number of Rows and Columns
@@ -187,26 +129,6 @@ The `dim()` function shows the dimensions of the dataset.
 ```r
 dim(expression_data)
 ```
-
-The output gives two numbers:
-
-```text
-number_of_rows number_of_columns
-```
-
-For example, if the output is:
-
-```text
-60 9
-```
-
-this means the dataset has:
-
-- 60 rows
-- 9 columns
-
-In this example, each row represents one sample or patient, and each column represents one variable.
-
 ---
 
 ## 4.4 Check the Column Names
@@ -216,28 +138,6 @@ The `colnames()` function shows the names of all columns in the dataset.
 ```r
 colnames(expression_data)
 ```
-
-This is useful because we need column names when making plots with `ggplot2`.
-
-For example:
-
-```r
-ggplot(expression_data, aes(x = group, y = gene_A)) +
-  geom_boxplot()
-```
-
-This code uses the columns `group` and `gene_A`.
-
-If the column name is misspelled, the plot will not work.
-
-For example, R treats these as different names:
-
-```text
-group
-Group
-```
-
-R is case-sensitive, so capital letters matter.
 
 ---
 
