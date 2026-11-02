@@ -1498,4 +1498,3 @@ In this tutorial, you learned how to:
 - Combine plots using `patchwork`
 - Save plots using `ggsave()`
 
----
