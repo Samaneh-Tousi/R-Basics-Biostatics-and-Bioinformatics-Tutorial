@@ -3,7 +3,7 @@
 In Session 02, you cleaned and organized the human health dataset.  
 In this session, you will use that cleaned dataset to explore the data visually and create figures that could be used in a scientific report.
 
-Use your cleaned file:
+Use your cleaned file at your assets folder within the r tutorial project at your own computer:
 
 ```text
 assets/clean_human_health_data.csv
@@ -19,7 +19,7 @@ Before plotting, briefly inspect the dataset and make sure the variables needed 
 
 ---
 
-## Practice 1 — Who Is in Our Study Population?
+## Practice 1. Who Is in Our Study Population?
 
 Create a figure showing the **number of samples in each smoking-status category** and use `sex` to make the composition of each smoking group visible.
 
@@ -36,7 +36,7 @@ From the figure, determine which smoking-status group contains the largest numbe
 
 ---
 
-## Practice 2 — Explore the Distribution of BMI
+## Practice 2. Explore the Distribution of BMI
 
 Create a figure showing the **distribution of BMI values** in the study population.
 
@@ -55,7 +55,7 @@ Consider whether the BMI distributions appear similar or different between the g
 
 ---
 
-## Practice 3 — Compare LDL Levels Between Smoking Groups
+## Practice 3. Compare LDL Levels Between Smoking Groups
 
 Create a figure that allows you to compare the **distribution of LDL levels** among the different `smoking_status` groups.
 
@@ -72,7 +72,7 @@ Which smoking group appears to have the highest LDL levels in this small dataset
 
 ---
 
-## Practice 4 — Explore the Relationship Between Blood Sugar and LDL
+## Practice 4. Explore the Relationship Between Blood Sugar and LDL
 
 Investigate whether participants with higher **blood sugar** also tend to have higher **LDL levels**.
 
@@ -88,7 +88,7 @@ Based only on the visualization, describe in one or two sentences whether you no
 
 ---
 
-## Practice 5 — Prepare a Figure for a Scientific Report
+## Practice 5. Prepare a Figure for a Scientific Report
 
 Choose **two of the figures** created above and improve them so that they would be suitable for presentation in a report or research meeting.
 
