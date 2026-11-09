@@ -674,7 +674,25 @@ head(expression_data)
 
 The genes `gene_A`, `gene_B`, and `gene_C` are currently stored in separate columns.
 
-For many ggplot2 plots, it is better to reshape the data into long format.
+So, for this type of dataframes, it is better to reshape the data into long format in some cases!
+
+
+Converting data to **long format** is especially useful when several columns in the original data frame represent the **same type of measurement**, such as `gene_A`, `gene_B`, and `gene_C`.
+
+After converting to long format, these measurements can be stored in:
+
+- one column containing the **gene name**
+- one column containing the corresponding **expression value**
+
+This structure makes it easier to map the `gene` variable to visual properties such as **colour**, **fill**, or **facets** in `ggplot2`.
+
+In contrast, **wide format** can be more convenient when different variables have different roles in a plot. For example:
+
+- `blood_sugar` on the x-axis
+- `ldl_level` on the y-axis
+- `smoking_status` mapped to colour
+
+So, long format is not always better; the most useful format depends on the type of analysis or visualization you want to create.
 
 ---
 
