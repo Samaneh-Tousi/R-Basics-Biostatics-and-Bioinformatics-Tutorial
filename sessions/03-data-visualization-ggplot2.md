@@ -879,7 +879,7 @@ This means:
 
 ---
 
-### Lower Quartile — Q1
+### Lower Quartile, Q1
 
 The lower edge of the box represents the **first quartile (`Q1`)**, also called the **25th percentile**.
 
@@ -887,7 +887,7 @@ Approximately 25% of the observations are below this value.
 
 ---
 
-### Upper Quartile — Q3
+### Upper Quartile, Q3
 
 The upper edge of the box represents the **third quartile (`Q3`)**, also called the **75th percentile**.
 
@@ -895,7 +895,7 @@ Approximately 75% of the observations are below this value.
 
 ---
 
-### Interquartile Range — IQR
+### Interquartile Range, IQR
 
 The distance between `Q1` and `Q3` is called the **interquartile range (`IQR`)**:
 
@@ -1053,27 +1053,6 @@ Here:
 
 Using both layers is particularly helpful for small biological datasets because the boxplot alone can hide how many observations are actually present.
 
-
----
-
-## 7.1 Boxplot with Colors
-
-```r
-ggplot(expression_data, aes(x = group, y = gene_A, fill = group)) +
-  geom_boxplot()
-```
-
----
-
-## 7.2 Boxplot with Individual Data Points
-
-Adding individual points helps show the actual data distribution.
-
-```r
-ggplot(expression_data, aes(x = group, y = gene_A, fill = group)) +
-  geom_boxplot(alpha = 0.6) +
-  geom_jitter(width = 0.15, size = 2)
-```
 
 <p align="center">
   <img src="../assets/ggplot2/geom_jitter_boxplot.png" width="700">
