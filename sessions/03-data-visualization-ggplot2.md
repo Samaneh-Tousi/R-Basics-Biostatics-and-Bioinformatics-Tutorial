@@ -890,21 +890,87 @@ ggplot(expression_data, aes(x = group, y = gene_A, fill = group)) +
 
 # 8. Violin Plot
 
-Violin plots show the distribution shape of the data.
+A violin plot shows the **distribution shape** of a numerical variable for one or more groups.
+
+For example:
 
 ```r
-ggplot(expression_data, aes(x = group, y = gene_A, fill = group)) +
+ggplot(
+  expression_data,
+  aes(
+    x = group,
+    y = gene_A,
+    fill = group
+  )
+) +
   geom_violin(alpha = 0.7)
 ```
+
+In this plot:
+
+- the x-axis shows the groups
+- the y-axis shows the `gene_A` expression values
+- the shape of each violin shows how the values are distributed within that group
+
+---
+
+## What Does the Shape of a Violin Plot Mean?
+
+The **width of the violin** indicates how densely the observations are concentrated at different values.
+
+A wider part of the violin means that **more observations are concentrated around that range**.
+
+A narrower part means that **fewer observations occur around that range**.
+
+For example:
+
+- a wide section around low expression values means many samples have low expression
+- a wide section around high expression values means many samples have high expression
+- a narrow section means relatively few samples fall in that region
+
+The violin shape therefore helps us see features of the distribution that may not be obvious from a boxplot alone.
+
+For example, it can help us notice whether the distribution is:
+
+- approximately symmetric
+- skewed toward higher or lower values
+- concentrated around one main value
+- spread across a wide range
+- showing more than one concentration of observations
+
+> [!IMPORTANT]
+> The width of a violin does **not** represent the number of observations directly in the same way as the height of a bar in a bar plot.
+>
+> It represents the estimated **density** of the data at different values.
+
+The violin shape is based on a smoothed estimate of the distribution, called a **kernel density estimate**.
+
+This means that the outline is not drawn directly around the individual data points. Instead, it is a smooth representation of where observations are more or less concentrated.
+
+For small datasets, the violin shape should therefore be interpreted cautiously, because a small number of observations can strongly influence the estimated distribution.
 
 ---
 
 ## 8.1 Violin Plot with Boxplot
 
+A violin plot shows the overall distribution shape, but it does not clearly show summary statistics such as the median or quartiles.
+
+We can therefore combine it with a boxplot:
+
 ```r
-ggplot(expression_data, aes(x = group, y = gene_A, fill = group)) +
+ggplot(
+  expression_data,
+  aes(
+    x = group,
+    y = gene_A,
+    fill = group
+  )
+) +
   geom_violin(alpha = 0.6) +
-  geom_boxplot(width = 0.15, outlier.shape = NA) +
+  geom_boxplot(
+    width = 0.15,
+    outlier.shape = NA
+  ) +
   labs(
     title = "Gene A Expression Distribution",
     x = "Group",
@@ -916,6 +982,31 @@ ggplot(expression_data, aes(x = group, y = gene_A, fill = group)) +
 <p align="center">
   <img src="../assets/ggplot2/Violin_boxplot.png" width="700">
 </p>
+
+The two plot layers provide different information:
+
+- the **violin** shows the overall shape and density of the distribution
+- the **boxplot** shows the median and the spread of the central part of the data
+
+Together, they give a more complete picture of how the values are distributed within each group.
+
+---
+
+## Interpreting the Shape
+
+When comparing violin plots between groups, look at:
+
+- where the violin is widest
+- whether the distribution is symmetric or skewed
+- whether one group has a wider spread than another
+- whether there are one or several regions where values are concentrated
+
+For example, if the treated group has a wider violin around higher `gene_A` expression values than the control group, this may suggest that more treated samples have relatively high expression values.
+
+However, this should be interpreted as a visual observation from the dataset rather than a statistical conclusion.
+
+> [!NOTE]
+> For very small sample sizes, boxplots together with individual points are often easier to interpret than violin plots, because the smooth violin shape can suggest more detail in the distribution than the data actually support.
 
 ---
 
