@@ -587,7 +587,7 @@ By default, this represents a **95% confidence interval around the estimated reg
 >
 > It represents **uncertainty** around the **estimated mean regression line**, not the expected range of individual observations.
 >
-> The width of the shaded confidence interval reflects the uncertainty around the estimated regression line. A wider shaded area indicates greater uncertainty, while a narrower area indicates a more precise estimate.
+> A wider shaded area indicates greater uncertainty, while a narrower area indicates a more precise estimate.
 >
 > The band often becomes wider near the ends of the x-axis, especially when there are fewer observations there.
 >
