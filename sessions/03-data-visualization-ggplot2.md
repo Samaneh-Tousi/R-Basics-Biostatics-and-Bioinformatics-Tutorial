@@ -405,10 +405,26 @@ ggplot(expression_data, aes(x = gene_A, y = clinical_score)) +
 
 ## 6.1 Scatter Plot with Color Groups
 
-We can color the points by treatment group.
+A scatter plot is useful for exploring the relationship between **two numerical variables**.
+
+Here, we investigate whether `gene_A` expression is related to `clinical_score`.
+
+Each point represents one sample:
+
+- the x-position represents `gene_A` expression
+- the y-position represents the `clinical_score`
+
+We can also use colour to distinguish the treatment groups.
 
 ```r
-ggplot(expression_data, aes(x = gene_A, y = clinical_score, color = group)) +
+ggplot(
+  expression_data,
+  aes(
+    x = gene_A,
+    y = clinical_score,
+    color = group
+  )
+) +
   geom_point()
 ```
 
@@ -416,37 +432,222 @@ ggplot(expression_data, aes(x = gene_A, y = clinical_score, color = group)) +
   <img src="../assets/ggplot2/gene_A_scatter_plot.png" width="700">
 </p>
 
+Because `color = group` is placed inside `aes()`, the colour of each point is determined by the sample's treatment group.
+
+This allows us to explore both:
+
+- the overall relationship between `gene_A` expression and clinical score
+- whether the pattern appears different between the control and treatment groups
+
+When looking at a scatter plot:
+
+- an upward pattern may suggest a **positive relationship**
+- a downward pattern may suggest a **negative relationship**
+- no clear pattern may suggest little or no obvious relationship
+
+At this stage, these are only **visual observations** from the dataset.
+
 ---
 
 ## 6.2 Scatter Plot with Larger Points
 
+We can change the appearance of the points using arguments inside `geom_point()`.
+
+For example:
+
 ```r
-ggplot(expression_data, aes(x = gene_A, y = clinical_score, color = group)) +
+ggplot(
+  expression_data,
+  aes(
+    x = gene_A,
+    y = clinical_score,
+    color = group
+  )
+) +
   geom_point(size = 4)
 ```
 
----
-
-## 6.3 Scatter Plot with Regression Line
+Here:
 
 ```r
-ggplot(expression_data, aes(x = gene_A, y = clinical_score, color = group)) +
+size = 4
+```
+
+makes all points larger.
+
+Notice the difference between:
+
+```r
+aes(color = group)
+```
+
+and:
+
+```r
+size = 4
+```
+
+`color = group` is placed inside `aes()` because the colour depends on a variable in the dataset.
+
+`size = 4` is placed outside `aes()` because we want all points to have the same fixed size.
+
+---
+
+## 6.3 Scatter Plot with a Regression Line
+
+A scatter plot helps us visually explore a relationship, but we can also add a line that summarizes the estimated linear trend.
+
+We can do this using `geom_smooth()`:
+
+```r
+ggplot(
+  expression_data,
+  aes(
+    x = gene_A,
+    y = clinical_score,
+    color = group
+  )
+) +
   geom_point(size = 3) +
-  geom_smooth(method = "lm", se = TRUE)
+  geom_smooth(
+    method = "lm",
+    se = TRUE
+  )
 ```
 
 <p align="center">
   <img src="../assets/ggplot2/geneA_scatter_regression.png" width="700">
 </p>
 
+Here:
+
+- `geom_point()` displays the individual samples
+- `method = "lm"` fits a **linear model**
+- `se = TRUE` displays a confidence interval around the fitted regression line
+
+`lm` stands for **linear model**.
+
+Conceptually, a simple linear relationship can be written as:
+
+```text
+clinical_score = intercept + slope × gene_A
+```
+
+The **slope** describes how the predicted clinical score changes as `gene_A` expression increases.
+
+### Why Are There Separate Regression Lines?
+
+In this example:
+
+```r
+aes(
+  x = gene_A,
+  y = clinical_score,
+  color = group
+)
+```
+
+is defined in the main `ggplot()` call.
+
+Therefore, the `group` information is inherited by both:
+
+```r
+geom_point()
+```
+
+and:
+
+```r
+geom_smooth()
+```
+
+As a result, `ggplot2` fits a **separate regression line for each treatment group**.
+
+For example:
+
+- one regression line is fitted for the control group
+- another regression line is fitted for the treated group
+
+This can be useful when we want to explore whether the relationship between gene expression and clinical score appears different between groups.
+
+### What Does the Shaded Area Mean?
+
+Because we use:
+
+```r
+se = TRUE
+```
+
+a shaded area is displayed around each regression line.
+
+By default, this represents a **95% confidence interval around the estimated regression line**.
+
+> [!IMPORTANT]
+> The confidence interval does **not** mean that 95% of the individual data points should fall inside the shaded area.
+>
+> It represents uncertainty around the **estimated mean regression line**, not the expected range of individual observations.
+
+If you do not want to display the confidence interval, use:
+
+```r
+geom_smooth(
+  method = "lm",
+  se = FALSE
+)
+```
+
+### Fit One Overall Regression Line Instead
+
+Sometimes we want to colour the points by treatment group but fit **one regression line using all samples together**.
+
+In that case, move `color = group` into `geom_point()`:
+
+```r
+ggplot(
+  expression_data,
+  aes(
+    x = gene_A,
+    y = clinical_score
+  )
+) +
+  geom_point(
+    aes(color = group),
+    size = 3
+  ) +
+  geom_smooth(
+    method = "lm",
+    se = TRUE,
+    color = "black"
+  )
+```
+
+Now:
+
+- the points are coloured according to `group`
+- one overall regression line is fitted using all samples
+
+So the location of an aesthetic mapping can affect more than just the appearance of the plot.
+
 ---
 
 ## 6.4 Scatter Plot with Labels
 
+Finally, we can make the figure easier to understand by adding an informative title, subtitle, axis labels, and legend title.
+
 ```r
-ggplot(expression_data, aes(x = gene_A, y = clinical_score, color = group)) +
+ggplot(
+  expression_data,
+  aes(
+    x = gene_A,
+    y = clinical_score,
+    color = group
+  )
+) +
   geom_point(size = 3) +
-  geom_smooth(method = "lm", se = TRUE) +
+  geom_smooth(
+    method = "lm",
+    se = TRUE
+  ) +
   labs(
     title = "Relationship Between Gene A Expression and Clinical Score",
     subtitle = "Comparison between control and treatment groups",
@@ -455,6 +656,21 @@ ggplot(expression_data, aes(x = gene_A, y = clinical_score, color = group)) +
     color = "Group"
   )
 ```
+
+Because `color = group` is still defined in the main `ggplot()` call, this figure contains a separate regression line for each treatment group.
+
+When interpreting the figure, it is appropriate to describe what is observed in the dataset, for example:
+
+> "In this sample dataset, higher Gene A expression appears to be associated with higher clinical scores."
+
+However, the visualization alone does not establish:
+
+- statistical significance
+- causation
+- a relationship that necessarily applies to a larger population
+
+> [!IMPORTANT]
+> Especially for small example datasets, describe patterns as **observations from the dataset** rather than general conclusions.
 
 ---
 
