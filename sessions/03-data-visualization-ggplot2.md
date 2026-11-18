@@ -637,6 +637,173 @@ Now:
 
 So the location of an aesthetic mapping can affect more than just the appearance of the plot.
 
+
+### Other Smoothing Methods
+
+So far, we have used:
+
+```r
+geom_smooth(
+  method = "lm",
+  se = TRUE
+)
+```
+
+`lm` stands for **linear model** and fits a straight regression line through the data.
+
+However, not every biological relationship follows a straight line. `geom_smooth()` can also use other methods to explore different types of patterns.
+
+---
+
+#### Linear Model: `lm`
+
+```r
+ggplot(
+  expression_data,
+  aes(
+    x = gene_A,
+    y = clinical_score
+  )
+) +
+  geom_point() +
+  geom_smooth(
+    method = "lm",
+    se = TRUE
+  )
+```
+
+`method = "lm"` fits a **straight line**.
+
+This is useful when we want to explore whether the relationship between two variables is approximately linear.
+
+For example:
+
+- Does clinical score increase as gene expression increases?
+- Does the response decrease as concentration increases?
+
+The fitted line summarizes the estimated linear trend.
+
+---
+
+#### Local Smoothing: `loess`
+
+We can also use:
+
+```r
+ggplot(
+  expression_data,
+  aes(
+    x = gene_A,
+    y = clinical_score
+  )
+) +
+  geom_point() +
+  geom_smooth(
+    method = "loess",
+    se = TRUE
+  )
+```
+
+`loess` stands for **locally estimated scatterplot smoothing**.
+
+Unlike `lm`, LOESS does not force the relationship to follow a straight line.
+
+Instead, it fits small local trends across different parts of the data and combines them into a smooth curve.
+
+This can help us explore whether the relationship may be **non-linear**.
+
+For example, the relationship might:
+
+- increase at first and then level off
+- increase and then decrease
+- change differently across different ranges of the x-axis
+
+---
+
+### Comparing `lm` and `loess`
+
+The main difference is:
+
+| Method | Shape | Main Use |
+|---|---|---|
+| `lm` | Straight line | Explore a linear relationship |
+| `loess` | Flexible smooth curve | Explore a possible non-linear relationship |
+
+For example:
+
+```r
+# Linear relationship
+geom_smooth(
+  method = "lm",
+  se = TRUE
+)
+
+# Flexible relationship
+geom_smooth(
+  method = "loess",
+  se = TRUE
+)
+```
+
+> [!IMPORTANT]
+> A curved LOESS line does not automatically mean that a true biological non-linear relationship exists.
+>
+> Especially with small datasets, the shape of the curve can be strongly influenced by individual observations.
+
+The smoothing method should therefore be chosen based on the **research question and characteristics of the data**, rather than simply choosing the line that looks best.
+
+---
+
+### What Happens If We Do Not Specify a Method?
+
+We can also write:
+
+```r
+ggplot(
+  expression_data,
+  aes(
+    x = gene_A,
+    y = clinical_score
+  )
+) +
+  geom_point() +
+  geom_smooth()
+```
+
+In this case, `ggplot2` automatically chooses a smoothing method based partly on the size of the dataset.
+
+For teaching and reproducible analysis, however, it is often clearer to specify the method explicitly:
+
+```r
+method = "lm"
+```
+
+or:
+
+```r
+method = "loess"
+```
+
+This makes it clear which model is being used.
+
+---
+
+### Other Methods
+
+`geom_smooth()` can also work with other statistical models.
+
+For example:
+
+- `method = "gam"` — **generalized additive model**, useful for flexible smooth relationships, particularly in larger datasets
+- `method = "glm"` — **generalized linear model**, useful for outcomes that require models other than ordinary linear regression
+
+These methods are more advanced and will depend on the type of data and statistical question.
+
+For now, the most important distinction is:
+
+> `lm` fits a **straight linear trend**, while `loess` allows a **flexible curved trend**.
+
+
 ---
 
 ## 6.4 Scatter Plot with Labels
