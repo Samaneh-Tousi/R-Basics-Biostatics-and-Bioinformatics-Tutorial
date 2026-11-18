@@ -177,39 +177,134 @@ This shows how often each age occurs in the dataset.
 
 ## 4.6 Relative and Cumulative Frequencies
 
-A frequency table gives the number of observations in each category.
+A **frequency table** tells us how many observations belong to each category or value.
 
-To calculate **relative frequencies**, or proportions, use `prop.table()`:
+For example:
+
+```r
+table(expression_data$group)
+```
+
+This gives the number of samples in each group.
+
+---
+
+### Relative Frequencies
+
+Sometimes, instead of the number of observations, we want to know the **proportion** of observations in each group.
+
+We can calculate this using `prop.table()`:
 
 ```r
 prop.table(table(expression_data$group))
 ```
 
-The proportions add up to `1`.
+A proportion represents the fraction of the total dataset belonging to each group.
 
-To express them as percentages:
+For example, if the result is:
+
+```text
+control treated
+0.50    0.50
+```
+
+this means that:
+
+- 50% of the samples are in the control group
+- 50% of the samples are in the treated group
+
+The proportions always add up to `1`.
+
+To express the proportions as percentages:
 
 ```r
 prop.table(table(expression_data$group)) * 100
 ```
 
-For ordered numeric values, we can also calculate cumulative frequencies.
+Now the values add up to `100`.
 
-For example:
+---
+
+### Cumulative Frequencies
+
+For variables that have a meaningful order, such as age, we can also calculate **cumulative frequencies**.
+
+First, create a frequency table:
 
 ```r
 age_frequency <- table(expression_data$age)
 
+age_frequency
+```
+
+Then calculate the cumulative frequency:
+
+```r
 cumsum(age_frequency)
 ```
 
-To calculate cumulative proportions:
+`cumsum()` means **cumulative sum**.
+
+Instead of showing only how many observations have each exact age, it shows how many observations have that age **or a lower age**.
+
+For example, imagine we have:
+
+```text
+Age        20   30   40   50
+Frequency   2    3    4    1
+```
+
+The cumulative frequency would be:
+
+```text
+Age                   20   30   40   50
+Cumulative frequency   2    5    9   10
+```
+
+This means:
+
+- 2 participants are aged **20 or younger**
+- 5 participants are aged **30 or younger**
+- 9 participants are aged **40 or younger**
+- all 10 participants are aged **50 or younger**
+
+---
+
+### Cumulative Proportions
+
+We can also calculate the same information as a **proportion of the total dataset**.
 
 ```r
 cumsum(prop.table(age_frequency))
 ```
 
-You can combine this information into one table:
+The cumulative proportion tells us the proportion of observations that are **at or below each value**.
+
+Using the previous example:
+
+```text
+Age                    20    30    40    50
+Cumulative proportion  0.2   0.5   0.9   1.0
+```
+
+This means:
+
+- `0.2` → 20% of participants are aged **20 or younger**
+- `0.5` → 50% are aged **30 or younger**
+- `0.9` → 90% are aged **40 or younger**
+- `1.0` → 100% are aged **50 or younger**
+
+Notice that the final cumulative proportion is always `1`, or 100%.
+
+> [!NOTE]
+> Cumulative frequencies and cumulative proportions are most meaningful for variables with a **natural order**, such as age, time, concentration, or measurement values.  
+> They are usually not meaningful for unordered categories such as sample ID or treatment names.
+
+---
+
+### Combine Everything Into One Table
+
+We can combine the frequency, proportion, cumulative frequency, and cumulative proportion into one table:
 
 ```r
 age_frequency_table <- cbind(
@@ -222,7 +317,14 @@ age_frequency_table <- cbind(
 age_frequency_table
 ```
 
-This can be useful for exploring a variable before deciding how to visualize it.
+This allows us to answer several questions at once:
+
+- How many observations have each value?
+- What proportion of the dataset has each value?
+- How many observations are at or below each value?
+- What proportion of observations are at or below each value?
+
+These summaries can be useful for exploring a variable before deciding how to visualize or further analyse it.
 
 ---
 
