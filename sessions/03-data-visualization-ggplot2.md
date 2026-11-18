@@ -74,6 +74,8 @@ The dataset contains gene expression values for different patients, treatment gr
 ```r
 set.seed(123)
 
+# set.seed(123) makes random-number generation in R reproducible.
+
 expression_data <- data.frame(
   sample_id = paste0("S", sprintf("%02d", 1:60)),
   patient_id = paste0("P", sprintf("%02d", 1:60)),
