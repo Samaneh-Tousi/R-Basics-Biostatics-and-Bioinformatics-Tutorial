@@ -1306,10 +1306,164 @@ Choosing different bin widths can change how the distribution appears, so it is 
 
 ## 10.2 Histogram by Group
 
+We can compare the distribution of `gene_A` expression between groups by mapping:
+
 ```r
-ggplot(expression_data, aes(x = gene_A, fill = group)) +
-  geom_histogram(binwidth = 0.5, alpha = 0.7, position = "identity")
+fill = group
 ```
+
+There are different ways to position the histogram bars for multiple groups.
+
+### Stacked Histograms
+
+```r
+ggplot(
+  expression_data,
+  aes(
+    x = gene_A,
+    fill = group
+  )
+) +
+  geom_histogram(
+    binwidth = 0.5,
+    position = "stack"
+  )
+```
+
+With:
+
+```r
+position = "stack"
+```
+
+the counts from the different groups are placed **on top of each other** within each bin.
+
+This makes it easy to see the **total number of observations** in each interval and how each group contributes to that total.
+
+However, comparing the exact distribution shape of the groups can be more difficult because the bars are stacked.
+
+---
+
+### Side-by-Side Histograms
+
+We can place the group bars next to each other using:
+
+```r
+position = "dodge"
+```
+
+```r
+ggplot(
+  expression_data,
+  aes(
+    x = gene_A,
+    fill = group
+  )
+) +
+  geom_histogram(
+    binwidth = 0.5,
+    position = "dodge"
+  )
+```
+
+With:
+
+```r
+position = "dodge"
+```
+
+the bars for the groups are displayed **side by side within each bin**.
+
+This can make the group counts easier to compare directly.
+
+However, because each bin is divided between the groups, the bars become narrower and the overall distribution shape may be less easy to see.
+
+---
+
+### Overlapping Histograms
+
+Another option is:
+
+```r
+position = "identity"
+```
+
+```r
+ggplot(
+  expression_data,
+  aes(
+    x = gene_A,
+    fill = group
+  )
+) +
+  geom_histogram(
+    binwidth = 0.5,
+    alpha = 0.6,
+    position = "identity"
+  )
+```
+
+With:
+
+```r
+position = "identity"
+```
+
+the histograms keep the **same x-axis positions** and are drawn directly on top of each other.
+
+Because the bars overlap, we usually add transparency:
+
+```r
+alpha = 0.6
+```
+
+This allows us to see both groups where their distributions overlap.
+
+The `alpha` value controls transparency:
+
+```text
+alpha = 0   → completely transparent
+alpha = 1   → completely opaque
+```
+
+Overlapping histograms can be particularly useful when we want to compare the **shape, position, and overlap of two distributions**.
+
+---
+
+### Comparing the Three Positions
+
+| Position | What happens? | Useful for |
+|---|---|---|
+| `"stack"` | Group bars are stacked | Seeing total counts and group contributions |
+| `"dodge"` | Group bars are side by side | Comparing counts within each bin |
+| `"identity"` | Group bars overlap | Comparing distribution shapes and overlap |
+
+For example:
+
+```r
+# Stacked
+geom_histogram(
+  binwidth = 0.5,
+  position = "stack"
+)
+
+# Side by side
+geom_histogram(
+  binwidth = 0.5,
+  position = "dodge"
+)
+
+# Overlapping
+geom_histogram(
+  binwidth = 0.5,
+  alpha = 0.6,
+  position = "identity"
+)
+```
+
+> [!NOTE]
+> There is no single best position for every dataset. The choice depends on what you want to emphasize in the visualization.
+
 
 <p align="center">
   <img src="../assets/ggplot2/histogram.png" width="700">
