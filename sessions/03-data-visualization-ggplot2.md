@@ -772,20 +772,6 @@ ggplot(
 
 In this case, `ggplot2` automatically chooses a smoothing method based partly on the size of the dataset.
 
-For teaching and reproducible analysis, however, it is often clearer to specify the method explicitly:
-
-```r
-method = "lm"
-```
-
-or:
-
-```r
-method = "loess"
-```
-
-This makes it clear which model is being used.
-
 ---
 
 ### Other Methods
