@@ -838,12 +838,221 @@ However, the visualization alone does not establish:
 
 # 7. Boxplot
 
-Boxplots are useful for comparing distributions between groups.
+Boxplots are useful for comparing the **distribution of numerical values between groups**.
+
+For example:
 
 ```r
-ggplot(expression_data, aes(x = group, y = gene_A)) +
+ggplot(
+  expression_data,
+  aes(
+    x = group,
+    y = gene_A
+  )
+) +
   geom_boxplot()
 ```
+
+A boxplot summarizes several important features of a numerical variable, including:
+
+- the median
+- the lower and upper quartiles
+- the spread of the middle 50% of the data
+- possible unusually high or low observations
+
+---
+
+## Understanding the Parts of a Boxplot
+
+A boxplot contains several components.
+
+### Median
+
+The horizontal line inside the box represents the **median**, also called the second quartile (`Q2`).
+
+The median is the middle value when the observations are ordered from smallest to largest.
+
+This means:
+
+- approximately 50% of the observations are below the median
+- approximately 50% are above the median
+
+---
+
+### Lower Quartile — Q1
+
+The lower edge of the box represents the **first quartile (`Q1`)**, also called the **25th percentile**.
+
+Approximately 25% of the observations are below this value.
+
+---
+
+### Upper Quartile — Q3
+
+The upper edge of the box represents the **third quartile (`Q3`)**, also called the **75th percentile**.
+
+Approximately 75% of the observations are below this value.
+
+---
+
+### Interquartile Range — IQR
+
+The distance between `Q1` and `Q3` is called the **interquartile range (`IQR`)**:
+
+```text
+IQR = Q3 - Q1
+```
+
+The box therefore contains the **middle 50% of the observations**.
+
+A larger box indicates greater variation in the middle half of the data, while a smaller box indicates that these observations are more closely concentrated.
+
+---
+
+### Whiskers
+
+The lines extending above and below the box are called **whiskers**.
+
+In a standard `ggplot2` boxplot, the whiskers extend to the most extreme observations that are still within:
+
+```text
+1.5 × IQR
+```
+
+below `Q1` or above `Q3`.
+
+The lower limit is based on:
+
+```text
+Q1 - 1.5 × IQR
+```
+
+and the upper limit is based on:
+
+```text
+Q3 + 1.5 × IQR
+```
+
+The whiskers extend to the most extreme **observed data values** that fall within these limits.
+
+> [!IMPORTANT]
+> The whiskers do **not necessarily represent the minimum and maximum values** of the dataset.
+
+---
+
+### Outliers
+
+Observations beyond the whiskers are plotted as individual points.
+
+These are commonly called **outliers**.
+
+An observation may be displayed as an outlier if it lies:
+
+```text
+below Q1 - 1.5 × IQR
+```
+
+or:
+
+```text
+above Q3 + 1.5 × IQR
+```
+
+However, an outlier is **not automatically an error**.
+
+In biological and biomedical datasets, an unusual value may represent:
+
+- true biological variation
+- a rare sample
+- a technical problem
+- a measurement error
+- or simply an extreme but valid observation
+
+Therefore, outliers should be investigated rather than automatically removed.
+
+---
+
+## A Simple Boxplot Summary
+
+You can think of a boxplot like this:
+
+```text
+                    possible outlier
+                           ●
+
+                     ───────
+                        │
+                        │        upper whisker
+                        │
+                  ┌───────────┐
+                  │           │
+        Q3  ──────┤           │  75th percentile
+                  │           │
+ Median / Q2 ─────┼───────────┤  50th percentile
+                  │           │
+        Q1  ──────┤           │  25th percentile
+                  └───────────┘
+                        │
+                        │        lower whisker
+                        │
+                     ───────
+
+                           ●
+                    possible outlier
+```
+
+The **box** represents the middle 50% of the data, while the **median line** shows the centre of the distribution.
+
+---
+
+## What Can We Learn from a Boxplot?
+
+When comparing groups, look at:
+
+- the position of the **median**
+- the size of the **IQR**
+- the length of the **whiskers**
+- whether the distribution appears symmetric or skewed
+- whether there are possible **outliers**
+
+For example, if the treated group has a higher median `gene_A` expression than the control group, we can say that:
+
+> In this dataset, the treated group appears to have a higher median Gene A expression.
+
+This is a visual observation from the current dataset and should not by itself be interpreted as evidence of a statistically significant difference.
+
+---
+
+## Show the Individual Observations
+
+Especially for small datasets, it is useful to show the individual observations together with the boxplot.
+
+```r
+ggplot(
+  expression_data,
+  aes(
+    x = group,
+    y = gene_A,
+    color = group
+  )
+) +
+  geom_boxplot(
+    outlier.shape = NA
+  ) +
+  geom_jitter(
+    width = 0.15,
+    size = 2
+  )
+```
+
+Here:
+
+- `geom_boxplot()` summarizes the distribution
+- `geom_jitter()` displays the individual observations
+- `width = 0.15` slightly spreads overlapping points horizontally
+
+Using both layers is particularly helpful for small biological datasets because the boxplot alone can hide how many observations are actually present.
+
 
 ---
 
